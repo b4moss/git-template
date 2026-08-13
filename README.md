@@ -14,6 +14,50 @@ Clone the branch you need — that directory is the project root.
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
 
+## What's in each branch
+
+### `bun` / `go`
+
+Shared layout; only `dev/` differs by stack.
+
+```text
+.
+├── .editorconfig
+├── .github/rulesets/     # GitHub repository rulesets
+├── .gitignore
+├── LICENSE
+├── Makefile
+├── README.md
+├── dev/                  # app root (Bun or Go)
+├── docs/
+│   ├── charter/          # development charter
+│   ├── main.md
+│   └── specs/
+└── scripts/              # ruleset create / apply helpers
+```
+
+- `bun` → `dev/` has `package.json`, `bun.lock`, `tsconfig.json`, `index.ts`
+- `go` → `dev/` has `go.mod`, `main.go`
+
+### `vituum-twig`
+
+Vite + Vituum + Twig multi-page static site starter.
+
+```text
+.
+├── .editorconfig
+├── .gitignore
+├── package.json
+├── public/
+├── src/
+│   ├── assets/           # scripts / styles
+│   ├── components/
+│   ├── layouts/
+│   └── pages/            # Twig pages (MPA entrypoints)
+├── tsconfig.json
+└── vite.config.ts
+```
+
 ## Usage
 
 ```bash

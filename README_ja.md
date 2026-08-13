@@ -14,6 +14,50 @@
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
 
+## 各ブランチの内包物
+
+### `bun` / `go`
+
+共通の骨格で、差分はほぼ `dev/` のみです。
+
+```text
+.
+├── .editorconfig
+├── .github/rulesets/     # GitHub リポジトリ ruleset
+├── .gitignore
+├── LICENSE
+├── Makefile
+├── README.md
+├── dev/                  # アプリ本体（Bun または Go）
+├── docs/
+│   ├── charter/          # 開発憲章
+│   ├── main.md
+│   └── specs/
+└── scripts/              # ruleset 作成・適用ヘルパー
+```
+
+- `bun` → `dev/` に `package.json` / `bun.lock` / `tsconfig.json` / `index.ts`
+- `go` → `dev/` に `go.mod` / `main.go`
+
+### `vituum-twig`
+
+Vite + Vituum + Twig のマルチページ静的サイト雛形です。
+
+```text
+.
+├── .editorconfig
+├── .gitignore
+├── package.json
+├── public/
+├── src/
+│   ├── assets/           # scripts / styles
+│   ├── components/
+│   ├── layouts/
+│   └── pages/            # Twig ページ（MPA エントリ）
+├── tsconfig.json
+└── vite.config.ts
+```
+
 ## 使い方
 
 ```bash
