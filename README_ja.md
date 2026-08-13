@@ -1,36 +1,61 @@
 > **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-# slim テンプレート
+# slim-auth テンプレート
 
-[b4moss/git-template](https://github.com/b4moss/git-template) の `slim` ブランチです。最小の [Slim Framework](https://www.slimframework.com/) 4 スターターです。
+[b4moss/git-template](https://github.com/b4moss/git-template) の `slim-auth` ブランチです。**セッション認証**と**メールアダプタ**付きの Slim 4 スターターです。
 
-アプリ本体は [`dev/`](./dev/)。スタック: Slim + slim/psr7 + PHP-DI、PHPUnit スモークテスト付き。
+アプリ本体は [`dev/`](./dev/)。最小の [`slim`](https://github.com/b4moss/git-template/tree/slim) 構成を拡張しています。
 
-セッション認証 + メールアダプタは [`slim-auth`](https://github.com/b4moss/git-template/tree/slim-auth) を使ってください。
+## Auth の決定
+
+| 項目 | 選択 |
+| --- | --- |
+| Auth | 薄いセッション認証（`SessionAuth` + `SessionMiddleware`） |
+| パスワード | `password_hash` / `password_verify`（`PASSWORD_DEFAULT`） |
+| ユーザー | SQLite + PDO（`UserRepository`、スキーマ自動作成） |
+| メール | `MailAdapter` インターフェース、既定は `SymfonyMailAdapter` |
+
+パスワードリセット / OAuth / フル HTML UI は意図的に含みません。
 
 ## 前提
 
-- PHP 8.2+ と [Composer](https://getcomposer.org/)
+- PHP 8.2+（PDO SQLite）
+- [Composer](https://getcomposer.org/)
 
 ## クイックスタート
 
 ```bash
-git clone -b slim --single-branch https://github.com/b4moss/git-template.git my-api
+git clone -b slim-auth --single-branch https://github.com/b4moss/git-template.git my-api
 cd my-api
 make install
 make run
 ```
 
-- `GET /healthz`
-- `GET /hello?name=world`
+### HTTP API
+
+| メソッド | パス | 内容 |
+| --- | --- | --- |
+| `GET` | `/healthz` | 生存確認 |
+| `GET` | `/hello?name=` | サンプル JSON |
+| `POST` | `/register` | `{ "email", "password" }` → アダプタ経由で welcome メール |
+| `POST` | `/login` | `{ "email", "password" }` |
+| `POST` | `/logout` | セッション破棄 |
+| `GET` | `/me` | 現在ユーザー（未ログインは 401） |
+
+環境変数: `DB_PATH`、`MAIL_DSN`（既定 `null://null`）、`MAIL_FROM`、`APP_DEBUG`。
 
 ## 構成
 
 ```text
 dev/
-├── public/index.php     # フロントコントローラ
-├── config/              # settings / DI / routes
-├── src/Action/          # HTTP アクション
+├── public/index.php
+├── config/
+├── src/
+│   ├── Action/
+│   ├── Auth/
+│   ├── Mail/
+│   └── Middleware/
+├── var/data/            # SQLite（gitignore）
 └── tests/
 ```
 
@@ -38,8 +63,8 @@ dev/
 
 | ターゲット | 内容 |
 | --- | --- |
-| `make install` | `dev/` で `composer install` |
-| `make run` | `php -S localhost:8080 -t public` |
+| `make install` | `composer install` |
+| `make run` | PHP 組込サーバー `:8080` |
 | `make test` | PHPUnit |
 | `make ruleset-help` | GitHub ruleset ヘルパー |
 

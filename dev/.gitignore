@@ -5,3 +5,5 @@ composer.phar
 .env.local
 *.log
 .DS_Store
+/var/data/*.sqlite
+/var/data/*.sqlite-journal

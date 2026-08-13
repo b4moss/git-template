@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Middleware\SessionMiddleware;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 
@@ -15,6 +16,7 @@ $container = $containerBuilder->build();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
+$app->add(SessionMiddleware::class);
 $app->addBodyParsingMiddleware();
 $app->addRoutingMiddleware();
 $displayErrorDetails = (bool) $container->get('settings')['displayErrorDetails'];

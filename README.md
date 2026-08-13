@@ -1,36 +1,61 @@
 > **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-# slim template
+# slim-auth template
 
-Minimal [Slim Framework](https://www.slimframework.com/) 4 starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`slim` branch).
+Slim 4 starter with **session auth** and a **mail adapter** from [b4moss/git-template](https://github.com/b4moss/git-template) (`slim-auth` branch).
 
-App root: [`dev/`](./dev/). Stack: Slim + slim/psr7 + PHP-DI, PHPUnit smoke tests.
+App root: [`dev/`](./dev/). Builds on the minimal [`slim`](https://github.com/b4moss/git-template/tree/slim) layout.
 
-For session auth + mail adapter, use [`slim-auth`](https://github.com/b4moss/git-template/tree/slim-auth).
+## Auth decision
+
+| Concern | Choice |
+| --- | --- |
+| Auth | Thin session auth (`SessionAuth` + `SessionMiddleware`) |
+| Passwords | `password_hash` / `password_verify` (`PASSWORD_DEFAULT`) |
+| Users | SQLite via PDO (`UserRepository`, auto schema) |
+| Mail | `MailAdapter` interface; default `SymfonyMailAdapter` (Symfony Mailer) |
+
+Not included (on purpose): password reset, OAuth, full HTML UI.
 
 ## Prerequisites
 
-- PHP 8.2+ and [Composer](https://getcomposer.org/)
+- PHP 8.2+ with PDO SQLite
+- [Composer](https://getcomposer.org/)
 
 ## Quick start
 
 ```bash
-git clone -b slim --single-branch https://github.com/b4moss/git-template.git my-api
+git clone -b slim-auth --single-branch https://github.com/b4moss/git-template.git my-api
 cd my-api
 make install
 make run
 ```
 
-- `GET /healthz`
-- `GET /hello?name=world`
+### HTTP API
+
+| Method | Path | Body / notes |
+| --- | --- | --- |
+| `GET` | `/healthz` | liveness |
+| `GET` | `/hello?name=` | sample JSON |
+| `POST` | `/register` | `{ "email", "password" }` → welcome mail via adapter |
+| `POST` | `/login` | `{ "email", "password" }` |
+| `POST` | `/logout` | clears session |
+| `GET` | `/me` | current user or 401 |
+
+Env knobs: `DB_PATH`, `MAIL_DSN` (default `null://null`), `MAIL_FROM`, `APP_DEBUG`.
 
 ## Layout
 
 ```text
 dev/
-├── public/index.php     # front controller
-├── config/              # settings / DI / routes
-├── src/Action/          # HTTP actions
+├── public/index.php
+├── config/
+├── src/
+│   ├── Action/          # health, hello, register, login, logout, me
+│   ├── Auth/            # SessionAuth, UserRepository
+│   ├── Mail/            # MailAdapter + SymfonyMailAdapter
+│   └── Middleware/
+├── var/data/            # SQLite file (gitignored)
 └── tests/
 ```
 
@@ -38,8 +63,8 @@ dev/
 
 | Target | Description |
 | --- | --- |
-| `make install` | `composer install` in `dev/` |
-| `make run` | `php -S localhost:8080 -t public` |
+| `make install` | `composer install` |
+| `make run` | PHP built-in server `:8080` |
 | `make test` | PHPUnit |
 | `make ruleset-help` | GitHub ruleset helpers |
 
