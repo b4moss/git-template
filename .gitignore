@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+.idea/
+.fleet/
+node_modules/
+.nuxt/
+.output/
+.data/
+dist/
