@@ -20,6 +20,10 @@ Work happens on `dev-vX.Y.Z` branches; each version merges to `main` via PR, the
 | `go-web` | Go HTTP API (chi) |
 | `go-cli` | Go CLI (cobra) |
 | `go-wails-nuxt` | Desktop (Wails v2 + Nuxt 3) |
+| `laravel` | Laravel (local PHP; `make setup`) |
+| `laravel-sail` | Laravel + Sail / Docker (`make setup`) |
+| `slim` | Minimal SlimPHP 4 |
+| `slim-auth` | Slim + session auth + MailAdapter |
 | `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
 | `doc-site` | Nuxt Content documentation site |
 
@@ -55,6 +59,21 @@ Same shared shell as `go` (charter / rulesets / Make). App code stays under `dev
 - `go-web` → thin `net/http` + chi server (`cmd/server`, `/healthz`, `/hello`)
 - `go-cli` → cobra CLI (`cmd/app`, `version` / `hello`)
 - `go-wails-nuxt` → Wails v2 desktop shell + Nuxt 3 SPA frontend (`frontend/`, committed `wailsjs/`)
+
+### `laravel` / `laravel-sail`
+
+b4moss shell + Make-driven generation into `dev/` (Laravel app is **not** committed).
+
+- `laravel` → host PHP (`make setup`, `make serve`)
+- `laravel-sail` → Sail / Docker (`make setup` always installs Sail; `make up` / `make down`)
+- Optional: `LARAVEL=`, `BREEZE=1`, `STACK=blade`, `FORCE=1`
+
+### `slim` / `slim-auth`
+
+Committed Slim 4 apps under `dev/` (PHP-DI + PSR-7).
+
+- `slim` → `/healthz`, `/hello`, PHPUnit
+- `slim-auth` → session auth + SQLite users + `MailAdapter` / Symfony Mailer (`/register`, `/login`, `/logout`, `/me`)
 
 ### `npm-package`
 
@@ -134,7 +153,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-Replace `bun` with `crx-vue`, `npm-package`, `go`, `go-web`, `go-cli`, `go-wails-nuxt`, `vituum-twig`, or `doc-site` as needed.
+Replace `bun` with `crx-vue`, `npm-package`, `go`, `go-web`, `go-cli`, `go-wails-nuxt`, `laravel`, `laravel-sail`, `slim`, `slim-auth`, `vituum-twig`, or `doc-site` as needed.
 
 ## License
 

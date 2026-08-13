@@ -20,6 +20,10 @@
 | `go-web` | Go HTTP API（chi） |
 | `go-cli` | Go CLI（cobra） |
 | `go-wails-nuxt` | デスクトップ（Wails v2 + Nuxt 3） |
+| `laravel` | Laravel（ローカル PHP・`make setup`） |
+| `laravel-sail` | Laravel + Sail / Docker（`make setup`） |
+| `slim` | 最小 SlimPHP 4 |
+| `slim-auth` | Slim + セッション認証 + MailAdapter |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
 | `doc-site` | Nuxt Content ドキュメントサイト |
 
@@ -55,6 +59,21 @@
 - `go-web` → 薄い `net/http` + chi サーバー（`cmd/server`、`/healthz`、`/hello`）
 - `go-cli` → cobra CLI（`cmd/app`、`version` / `hello`）
 - `go-wails-nuxt` → Wails v2 デスクトップ + Nuxt 3 SPA（`frontend/`、`wailsjs/` コミット済み）
+
+### `laravel` / `laravel-sail`
+
+b4moss 共通殻 + Make で `dev/` に Laravel を**生成**（本体はコミットしない）。
+
+- `laravel` → ホスト PHP（`make setup` / `make serve`）
+- `laravel-sail` → Sail / Docker（`make setup` で常に Sail、`make up` / `make down`）
+- オプション: `LARAVEL=`、`BREEZE=1`、`STACK=blade`、`FORCE=1`
+
+### `slim` / `slim-auth`
+
+`dev/` に Slim 4 アプリをコミット（PHP-DI + PSR-7）。
+
+- `slim` → `/healthz`、`/hello`、PHPUnit
+- `slim-auth` → セッション認証 + SQLite + `MailAdapter` / Symfony Mailer（`/register`、`/login`、`/logout`、`/me`）
 
 ### `npm-package`
 
@@ -134,7 +153,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-`bun` の部分を `crx-vue` / `npm-package` / `go` / `go-web` / `go-cli` / `go-wails-nuxt` / `vituum-twig` / `doc-site` に差し替えてください。
+`bun` の部分を `crx-vue` / `npm-package` / `go` / `go-web` / `go-cli` / `go-wails-nuxt` / `laravel` / `laravel-sail` / `slim` / `slim-auth` / `vituum-twig` / `doc-site` に差し替えてください。
 
 ## ライセンス
 

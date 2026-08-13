@@ -6,6 +6,18 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into the purpose branch (then update `main`), then tag from `main`.
 
+## [0.6.0] — Laravel + Slim
+
+### Added
+
+- Orphan branches `laravel` / `laravel-sail`: Make-driven `composer create-project` into `dev/` (optional Breeze / version pins; Sail branch installs mysql+redis)
+- Orphan branch `slim`: minimal Slim 4 + PHP-DI (`/healthz`, `/hello`)
+- Orphan branch `slim-auth`: session auth, SQLite users, `MailAdapter` + Symfony Mailer
+
+### Notes
+
+- Purpose-branch PRs: #19 (`laravel`), #20 (`laravel-sail`), #21 (`slim`), #22 (`slim-auth`)
+
 ## [0.5.0] — Go family split + Wails
 
 ### Added
