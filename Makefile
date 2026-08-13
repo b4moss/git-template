@@ -1,21 +1,62 @@
-.PHONY: run test tidy
-
-run:
-	cd dev && go run .
-
-test:
-	cd dev && go test ./...
-
-tidy:
-	cd dev && go mod tidy
-# GitHub repository ruleset helpers.
-# Real work lives in scripts/; this Makefile is a thin wrapper.
-# Target/variable names are prefixed with ruleset- / RULESET_ so this
-# file can be vendored via git subtree without colliding with host Makefiles.
+# Laravel Sail (Docker) + namespaced ruleset helpers.
 
 SHELL := /bin/bash
-.DEFAULT_GOAL := ruleset-help
+.DEFAULT_GOAL := help
 
+# Empty LARAVEL => latest. BREEZE=1 installs Breeze; STACK defaults to blade.
+LARAVEL ?=
+BREEZE ?= 0
+STACK ?= blade
+FORCE ?= 0
+
+.PHONY: help setup up down serve test tidy
+
+help:
+	@printf '%s\n' \
+		'App (Sail / Docker):' \
+		'  make setup                 generate Laravel + Sail into dev/' \
+		'  make setup BREEZE=1        + Laravel Breeze (STACK=blade)' \
+		'  make setup LARAVEL=12.0    pin Laravel constraint' \
+		'  make setup FORCE=1         wipe existing dev/ and recreate' \
+		'  make up                    ./vendor/bin/sail up -d' \
+		'  make down                  ./vendor/bin/sail down' \
+		'  make serve                 alias for make up' \
+		'  make test                  sail artisan test / phpunit' \
+		'  make tidy                  sail composer install (or composer if sail missing)' \
+		'' \
+		'Prereqs: PHP + Composer for setup; Docker for Sail runtime.' \
+		'' \
+		'Rulesets: make ruleset-help'
+
+setup:
+	LARAVEL="$(LARAVEL)" BREEZE="$(BREEZE)" STACK="$(STACK)" FORCE="$(FORCE)" SAIL=1 \
+		"$(CURDIR)/scripts/setup-laravel.sh"
+
+up serve:
+	@test -f dev/vendor/bin/sail || { echo "error: run make setup first" >&2; exit 1; }
+	cd dev && ./vendor/bin/sail up -d
+
+down:
+	@test -f dev/vendor/bin/sail || { echo "error: run make setup first" >&2; exit 1; }
+	cd dev && ./vendor/bin/sail down
+
+test:
+	@test -f dev/artisan || { echo "error: run make setup first" >&2; exit 1; }
+	@if [[ -x dev/vendor/bin/sail ]]; then \
+		cd dev && ./vendor/bin/sail artisan test; \
+	else \
+		cd dev && php artisan test; \
+	fi
+
+tidy:
+	@test -f dev/composer.json || { echo "error: run make setup first" >&2; exit 1; }
+	@if [[ -x dev/vendor/bin/sail ]]; then \
+		cd dev && ./vendor/bin/sail composer install --no-interaction; \
+	else \
+		cd dev && composer install --no-interaction; \
+	fi
+
+# GitHub repository ruleset helpers.
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts
 
@@ -47,7 +88,6 @@ ruleset-help:
 ruleset-create:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-create RULESET_REPO=my-org/new-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/create-repo-with-rulesets.sh "$(RULESET_REPO)" "--$(RULESET_VISIBILITY)" $(RULESET_CREATE_FLAGS)
@@ -55,7 +95,6 @@ ruleset-create:
 ruleset-apply:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-apply RULESET_REPO=my-org/existing-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/apply-rulesets.sh --repo "$(RULESET_REPO)"
@@ -63,7 +102,6 @@ ruleset-apply:
 ruleset-check:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-check RULESET_REPO=my-org/existing-app RULESET_BRANCH=main" >&2; \
 		exit 1; \
 	fi
 	@echo "== ruleset list =="

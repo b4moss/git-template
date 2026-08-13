@@ -1,23 +1,16 @@
 .DS_Store
 Thumbs.db
 
-# Go
-bin/
-*.exe
-*.test
-*.out
-coverage/
+# Generated Laravel app (created by make setup)
+/dev/*
+!/dev/README.md
 
 # env
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.development
-.env.test
-.env.production
-node_modules/
+.env.*.local
+
 vendor/
+node_modules/
 .cursor/
 .vscode/
