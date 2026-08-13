@@ -6,6 +6,18 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into the purpose branch (then update `main`), then tag from `main`.
 
+## [0.7.0-doc.1] — Cross-branch sync policy
+
+### Added
+
+- `docs/sync-policy.md` / `docs/sync-policy_ja.md`: shell cherry-pick vs spec → re-implement, canonical surfaces, release/`-doc.n` practice, checklist
+- README (EN/JA) links and short sync summary
+
+### Notes
+
+- Docs-only meta release (`-doc.1`); no new purpose branches
+- Closes #9
+
 ## [0.6.0] — Laravel + Slim
 
 ### Added
