@@ -6,6 +6,18 @@
 
 開発フロー: `dev-vX.Y.Z` で作業 → 用途ブランチ向け PR（その後 `main` を更新）→ `main` からタグ。
 
+## [0.6.0] — Laravel + Slim
+
+### 追加
+
+- orphan ブランチ `laravel` / `laravel-sail`: Make で `dev/` に `composer create-project`（任意で Breeze / バージョンピン。Sail ブランチは mysql+redis）
+- orphan ブランチ `slim`: 最小 Slim 4 + PHP-DI（`/healthz`、`/hello`）
+- orphan ブランチ `slim-auth`: セッション認証、SQLite、`MailAdapter` + Symfony Mailer
+
+### 補足
+
+- 用途ブランチ向け PR: #19（`laravel`）、#20（`laravel-sail`）、#21（`slim`）、#22（`slim-auth`）
+
 ## [0.5.0] — Go 系分割 + Wails
 
 ### 追加
