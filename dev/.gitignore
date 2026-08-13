@@ -1,28 +1,9 @@
-# binaries
-bin/
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-
-# coverage
-coverage
-*.out
-*.lcov
-
-# logs
-logs/
-*.log
-
-# dotenv
+/vendor/
+/.phpunit.cache/
+composer.phar
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# IDE / OS
-.idea/
+*.log
 .DS_Store
+/var/data/*.sqlite
+/var/data/*.sqlite-journal
