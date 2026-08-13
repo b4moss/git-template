@@ -6,6 +6,9 @@ Stack-specific Git starter templates for [b4moss](https://github.com/b4moss) / [
 
 Clone the branch you need — that directory is the project root.
 
+Versioning and release notes: [CHANGELOG.md](./CHANGELOG.md).  
+Work happens on `dev-vX.Y.Z` branches; each version merges to `main` via PR, then is tagged.
+
 ## Branches
 
 | Branch | Stack |
