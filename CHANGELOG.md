@@ -6,6 +6,14 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into `main`, then tag from `main`.
 
+## [0.4.0] — npm-package
+
+### Added
+
+- Orphan branch `npm-package`: Vite library mode + `kitchen-sink/` (vituum-twig based)
+- Placeholder API `@b4moss/example` (`greet`), vitest, `exports` / types
+- Kitchen-sink aliases the local package for interactive demos (not published)
+
 ## [0.3.0] — crx-vue
 
 ### Added
