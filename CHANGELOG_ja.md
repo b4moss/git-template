@@ -6,6 +6,14 @@
 
 開発フロー: `dev-vX.Y.Z` で作業 → `main` 向け PR → `main` からタグ。
 
+## [0.4.0] — npm-package
+
+### 追加
+
+- orphan ブランチ `npm-package`: Vite library mode + `kitchen-sink/`（vituum-twig ベース）
+- プレースホルダ API `@b4moss/example`（`greet`）、vitest、`exports` / 型定義
+- kitchen-sink はローカルパッケージを alias（publish 対象外）
+
 ## [0.3.0] — crx-vue
 
 ### 追加

@@ -15,6 +15,7 @@
 | --- | --- |
 | `bun` | Bun / TypeScript |
 | `crx-vue` | Chrome MV3 + Vue 3 拡張 |
+| `npm-package` | Vite ライブラリ + vituum kitchen-sink |
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
 | `doc-site` | Nuxt Content ドキュメントサイト |
@@ -43,6 +44,20 @@
 
 - `bun` → `dev/` に `package.json` / `bun.lock` / `tsconfig.json` / `index.ts`
 - `go` → `dev/` に `go.mod` / `main.go`
+
+### `npm-package`
+
+Vite library mode の npm パッケージと、`kitchen-sink/` デモ（vituum-twig ベース。publish 対象外）です。
+
+```text
+.
+├── package.json          # @b4moss/example プレースホルダ + exports
+├── src/                  # ライブラリ本体
+├── vite.config.ts        # build.lib
+├── kitchen-sink/         # Vituum + Twig デモ（ローカルパッケージを alias）
+├── docs/charter/
+└── scripts/
+```
 
 ### `crx-vue`
 
@@ -108,7 +123,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-`bun` の部分を `crx-vue` / `go` / `vituum-twig` / `doc-site` に差し替えてください。
+`bun` の部分を `crx-vue` / `npm-package` / `go` / `vituum-twig` / `doc-site` に差し替えてください。
 
 ## ライセンス
 

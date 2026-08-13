@@ -15,6 +15,7 @@ Work happens on `dev-vX.Y.Z` branches; each version merges to `main` via PR, the
 | --- | --- |
 | `bun` | Bun / TypeScript |
 | `crx-vue` | Chrome MV3 + Vue 3 extension |
+| `npm-package` | Vite library + vituum kitchen-sink |
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
 | `doc-site` | Nuxt Content documentation site |
@@ -43,6 +44,20 @@ Shared layout; only `dev/` differs by stack.
 
 - `bun` → `dev/` has `package.json`, `bun.lock`, `tsconfig.json`, `index.ts`
 - `go` → `dev/` has `go.mod`, `main.go`
+
+### `npm-package`
+
+Vite library-mode npm package plus a `kitchen-sink/` demo (vituum-twig based; not published).
+
+```text
+.
+├── package.json          # @b4moss/example placeholder + exports
+├── src/                  # library source
+├── vite.config.ts        # build.lib
+├── kitchen-sink/         # Vituum + Twig demo (aliases local package)
+├── docs/charter/
+└── scripts/
+```
 
 ### `crx-vue`
 
@@ -108,7 +123,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-Replace `bun` with `crx-vue`, `go`, `vituum-twig`, or `doc-site` as needed.
+Replace `bun` with `crx-vue`, `npm-package`, `go`, `vituum-twig`, or `doc-site` as needed.
 
 ## License
 
