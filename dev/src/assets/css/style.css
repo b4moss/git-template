@@ -1,0 +1,98 @@
+@import "partials/variables.css";
+@import "partials/buttons.css";
+@import "partials/containers.css";
+@import "partials/forms.css";
+
+:root {
+  font-size: 62.5%;
+}
+* {
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100dvh;
+    font-feature-settings: "palt";
+  --fz: calc(var(--fz-root) * 1px);
+  font-size: var(--fz);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: "Noto Sans JP", sans-serif;
+  width: 100%;
+  container-type: inline-size;
+  font-feature-settings: "palt";
+}
+
+body * {
+  font-size: 1.5rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 7rem;
+}
+p,
+ul,
+ol,
+dl,
+li,
+figure,
+table,
+blockquote {
+  --mb: 30;
+  /* line-height分の上下をネガティブマージンで相殺 */
+  margin-top: calc(var(--fz) * ((1 - var(--body-text-lh) / 2)) * -1);
+  margin-bottom: calc(
+    var(--fz) * ((1 - var(--body-text-lh) / 2)) * -1 + (var(--mb) * 1px)
+  );
+  line-height: var(--body-text-lh);
+  text-align: justify;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+a {
+  color: var(--text-highlight);
+  text-decoration: none;
+}
+
+main {
+  a {
+    text-decoration: underline;
+  }
+}
+
+em {
+  color: var(--text-caption);
+  font-size: 75%;
+}
+
+strong {
+  color: var(--text-highlight);
+  font-weight: 900;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="seach"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"] {
+  border: 0;
+  font-size: 1.8rem;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+  width: 100%;
+  border: 1px solid var(--text-caption);
+  border-radius: calc(var(--global-radius-minor) * 1px);
+}

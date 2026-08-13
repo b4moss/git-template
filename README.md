@@ -1,43 +1,38 @@
 > **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-# bun template
+# crx-vue template
 
-Bun / TypeScript starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`bun` branch).
+Chrome MV3 extension starter (Vue 3 + Vue Router + Pinia + `@crxjs/vite-plugin`) from [b4moss/git-template](https://github.com/b4moss/git-template) (`crx-vue` branch).
 
-App code lives in [`dev/`](./dev/). Shared docs and GitHub ruleset helpers live at the repo root.
+Extension project root: [`dev/`](./dev/).
 
 ## Quick start
 
 ```bash
-git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-app
-cd my-app
+git clone -b crx-vue --single-branch https://github.com/b4moss/git-template.git my-ext
+cd my-ext
 make install
-make run
+make dev
 ```
 
-Or:
+Load the unpacked extension from `dev/dist` (after `make build`) or follow the CRXJS Vite dev workflow from `make dev`.
 
-```bash
-cd dev
-bun install
-bun run index.ts
-```
+## Surfaces included
 
-## Rename placeholders
+- Popup / options / side panel
+- Background service worker
+- Content script stub (localhost matches by default)
 
-| Location | Default | Action |
-| --- | --- | --- |
-| `dev/package.json` → `name` | `@b4moss/app` | Set your package name |
-| Root README titles | bun template | Rename for your product |
+Tighten or widen `dev/manifest.json` permissions for your product.
 
 ## Make targets
 
 | Target | Description |
 | --- | --- |
-| `make install` | `bun install` in `dev/` |
-| `make run` | Run `dev/index.ts` |
-| `make test` | `bun test` in `dev/` |
-| `make ruleset-help` | GitHub ruleset helper help |
+| `make install` | `npm install` in `dev/` |
+| `make dev` | Vite + CRXJS dev server |
+| `make build` | Production build |
+| `make ruleset-help` | GitHub ruleset helpers |
 
 ## License
 

@@ -1,30 +1,29 @@
-# App targets (Bun) + GitHub repository ruleset helpers.
-# Ruleset work lives in scripts/; ruleset-* / RULESET_* stay namespaced
-# so this Makefile can be vendored via git subtree.
+# GitHub repository ruleset helpers + CRX app targets.
 
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-.PHONY: help install run test
+.PHONY: help install dev build
 
 help:
 	@printf '%s\n' \
 		'App:' \
-		'  make install   bun install in dev/' \
-		'  make run       bun run index.ts in dev/' \
-		'  make test      bun test in dev/' \
+		'  make install   npm install in dev/' \
+		'  make dev       vite dev (CRXJS) in dev/' \
+		'  make build     production build in dev/' \
 		'' \
 		'Rulesets: make ruleset-help'
 
 install:
-	cd dev && bun install
+	cd dev && npm install
 
-run:
-	cd dev && bun run index.ts
+dev:
+	cd dev && npm run dev
 
-test:
-	cd dev && bun test
+build:
+	cd dev && npm run build
 
+# --- rulesets (namespaced) ---
 
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts
