@@ -6,6 +6,14 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into `main`, then tag from `main`.
 
+## [0.3.0] — crx-vue
+
+### Added
+
+- Orphan branch `crx-vue`: Chrome MV3 + Vue 3 + Vue Router + Pinia + `@crxjs/vite-plugin`
+- Sanitized from the prior CRX template (generic naming, tighter permissions, stub UI)
+- Bilingual README and Make targets (`install` / `dev` / `build`)
+
 ## [0.2.0] — bun polish
 
 ### Changed
