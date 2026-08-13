@@ -1,31 +1,44 @@
-# 合同会社 知的・自転車　Go開発テンプレート
+> **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-ライセンス：MIT LICSENSE
+# go-web template
 
-## 開発
+Thin Go HTTP server starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`go-web` branch).
 
-アプリ本体は [`dev/`](dev/) です。ローカルの Go を使い、バージョンは `dev/go.mod` の `go` / `toolchain` で固定します。
+Stack: `net/http` + [chi](https://github.com/go-chi/chi), graceful shutdown. No DB / auth / frontend.
 
-```bash
-cd dev
-go mod tidy
-go run .
-```
-
-またはルートから:
+## Quick start
 
 ```bash
+git clone -b go-web --single-branch https://github.com/b4moss/git-template.git my-api
+cd my-api
+make tidy
 make run
 ```
 
-## Git Subtree
+- `GET /healthz`
+- `GET /hello?name=world`
+- Listen address: `ADDR` or `PORT` (default `:8080`)
 
-- [charter](https://https://github.com/b4m-oss/charter)
+## Layout
 
-----
+```text
+dev/
+├── cmd/server/          # entrypoint
+├── internal/config/
+└── internal/http/       # router + handlers
+```
 
-以上
+Rename the module path in `dev/go.mod` (`github.com/example/app`).
 
-----
+## Make targets
 
-Copyright 2026 [Bicycle for Mind LLC.](https://b4m.co.jp/)
+| Target | Description |
+| --- | --- |
+| `make run` | `go run ./cmd/server` |
+| `make test` | `go test ./...` |
+| `make tidy` | `go mod tidy` |
+| `make ruleset-help` | GitHub ruleset helpers |
+
+## License
+
+[MIT License](./LICENSE)
