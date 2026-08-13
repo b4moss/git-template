@@ -1,31 +1,59 @@
-# 合同会社 知的・自転車　Go開発テンプレート
+> **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-ライセンス：MIT LICSENSE
+# laravel template
 
-## 開発
+Local PHP Laravel starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`laravel` branch).
 
-アプリ本体は [`dev/`](dev/) です。ローカルの Go を使い、バージョンは `dev/go.mod` の `go` / `toolchain` で固定します。
+Ships the b4moss shell (charter / rulesets / docs / scripts). The Laravel app is **generated** into [`dev/`](./dev/) by Make — not committed.
+
+For Sail / Docker, use the [`laravel-sail`](https://github.com/b4moss/git-template/tree/laravel-sail) branch instead.
+
+## Prerequisites
+
+- PHP (see current Laravel requirements) + [Composer](https://getcomposer.org/)
+- Optional for Breeze: Node.js + npm
+
+## Quick start
 
 ```bash
-cd dev
-go mod tidy
-go run .
+git clone -b laravel --single-branch https://github.com/b4moss/git-template.git my-app
+cd my-app
+make setup
+make serve
 ```
 
-またはルートから:
+### Setup options
 
-```bash
-make run
+| Invocation | Effect |
+| --- | --- |
+| `make setup` | Latest Laravel into `dev/` |
+| `make setup LARAVEL=12.0` | Pin constraint (`laravel/laravel:12.0`) |
+| `make setup BREEZE=1` | + Breeze (`STACK=blade` by default) |
+| `make setup BREEZE=1 STACK=blade` | Explicit Breeze stack |
+| `make setup FORCE=1` | Wipe existing `dev/` and recreate |
+
+Second `make setup` without `FORCE=1` fails (idempotency).
+
+## Layout
+
+```text
+.
+├── Makefile                 # setup / serve / test + rulesets
+├── scripts/setup-laravel.sh
+├── docs/charter/
+└── dev/                     # created by make setup
 ```
 
-## Git Subtree
+## Make targets
 
-- [charter](https://https://github.com/b4m-oss/charter)
+| Target | Description |
+| --- | --- |
+| `make setup` | Generate Laravel into `dev/` |
+| `make serve` | `php artisan serve` |
+| `make test` | PHPUnit / `artisan test` |
+| `make tidy` | `composer install` in `dev/` |
+| `make ruleset-help` | GitHub ruleset helpers |
 
-----
+## License
 
-以上
-
-----
-
-Copyright 2026 [Bicycle for Mind LLC.](https://b4m.co.jp/)
+[MIT License](./LICENSE)
