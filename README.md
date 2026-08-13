@@ -1,20 +1,28 @@
+> **Languages:** [English](./README.md) · [日本語](./README_ja.md)
+
 # git-template
 
-スタック別の Git スターターテンプレートです。使いたいブランチを clone すると、そのディレクトリがそのままプロジェクト root になります。
+Stack-specific Git starter templates for [b4moss](https://github.com/b4moss) / [Bicycle for Mind LLC](https://b4m.co.jp/).
 
-## ブランチ
+Clone the branch you need — that directory is the project root.
 
-| ブランチ | 内容 |
+## Branches
+
+| Branch | Stack |
 | --- | --- |
 | `bun` | Bun / TypeScript |
 | `go` | Go |
-| `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
+| `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
 
-## 使い方
+## Usage
 
 ```bash
 git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-app
 cd my-app
 ```
 
-`bun` の部分を `go` または `vituum-twig` に差し替えてください。
+Replace `bun` with `go` or `vituum-twig` as needed.
+
+## License
+
+[MIT License](./LICENSE) ([Japanese reference](./LICENSE_ja.md))
