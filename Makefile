@@ -1,4 +1,4 @@
-# Laravel local (no Sail) + namespaced ruleset helpers.
+# Laravel Sail (Docker) + namespaced ruleset helpers.
 
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
@@ -9,36 +9,52 @@ BREEZE ?= 0
 STACK ?= blade
 FORCE ?= 0
 
-.PHONY: help setup serve test tidy
+.PHONY: help setup up down serve test tidy
 
 help:
 	@printf '%s\n' \
-		'App:' \
-		'  make setup                 generate Laravel into dev/' \
+		'App (Sail / Docker):' \
+		'  make setup                 generate Laravel + Sail into dev/' \
 		'  make setup BREEZE=1        + Laravel Breeze (STACK=blade)' \
 		'  make setup LARAVEL=12.0    pin Laravel constraint' \
 		'  make setup FORCE=1         wipe existing dev/ and recreate' \
-		'  make serve                 php artisan serve (after setup)' \
-		'  make test                  php artisan test / phpunit' \
-		'  make tidy                  composer install in dev/' \
+		'  make up                    ./vendor/bin/sail up -d' \
+		'  make down                  ./vendor/bin/sail down' \
+		'  make serve                 alias for make up' \
+		'  make test                  sail artisan test / phpunit' \
+		'  make tidy                  sail composer install (or composer if sail missing)' \
+		'' \
+		'Prereqs: PHP + Composer for setup; Docker for Sail runtime.' \
 		'' \
 		'Rulesets: make ruleset-help'
 
 setup:
-	LARAVEL="$(LARAVEL)" BREEZE="$(BREEZE)" STACK="$(STACK)" FORCE="$(FORCE)" SAIL=0 \
+	LARAVEL="$(LARAVEL)" BREEZE="$(BREEZE)" STACK="$(STACK)" FORCE="$(FORCE)" SAIL=1 \
 		"$(CURDIR)/scripts/setup-laravel.sh"
 
-serve:
-	@test -f dev/artisan || { echo "error: run make setup first" >&2; exit 1; }
-	cd dev && php artisan serve
+up serve:
+	@test -f dev/vendor/bin/sail || { echo "error: run make setup first" >&2; exit 1; }
+	cd dev && ./vendor/bin/sail up -d
+
+down:
+	@test -f dev/vendor/bin/sail || { echo "error: run make setup first" >&2; exit 1; }
+	cd dev && ./vendor/bin/sail down
 
 test:
 	@test -f dev/artisan || { echo "error: run make setup first" >&2; exit 1; }
-	cd dev && (test -f vendor/bin/phpunit && ./vendor/bin/phpunit || php artisan test)
+	@if [[ -x dev/vendor/bin/sail ]]; then \
+		cd dev && ./vendor/bin/sail artisan test; \
+	else \
+		cd dev && php artisan test; \
+	fi
 
 tidy:
 	@test -f dev/composer.json || { echo "error: run make setup first" >&2; exit 1; }
-	cd dev && composer install --no-interaction
+	@if [[ -x dev/vendor/bin/sail ]]; then \
+		cd dev && ./vendor/bin/sail composer install --no-interaction; \
+	else \
+		cd dev && composer install --no-interaction; \
+	fi
 
 # GitHub repository ruleset helpers.
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
