@@ -21,3 +21,12 @@ node_modules/
 vendor/
 .cursor/
 .vscode/
+
+# Nuxt / Wails frontend build artifacts
+dev/frontend/.nuxt/
+dev/frontend/.output/
+dev/frontend/.data/
+dev/frontend/.nitro/
+dev/frontend/.cache/
+dev/frontend/dist/
+dev/build/bin/

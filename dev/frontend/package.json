@@ -1,0 +1,20 @@
+{
+  "name": "app-frontend",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^3.12.2",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
+  },
+  "keywords": [],
+  "author": "Bicycle for Mind LLC"
+}

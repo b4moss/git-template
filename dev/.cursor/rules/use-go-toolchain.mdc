@@ -1,12 +1,13 @@
 ---
-description: Use local Go with go.mod toolchain; do not introduce Node/Bun or Docker for this project.
-globs: "*.go, go.mod, go.sum"
+description: Use local Go + Wails + Node for this desktop template; avoid Docker for the default workflow.
+globs: "*.go, go.mod, go.sum, wails.json, frontend/**"
 alwaysApply: false
 ---
 
-Default to local Go. Do not use Docker, Bun, Node.js, npm, pnpm, or yarn for this project.
+Default to local toolchains. Do not introduce Docker for the default Wails workflow.
 
 - Pin the Go version with `go` and `toolchain` in `go.mod`
-- Use `go run .`, `go test ./...`, `go build`, and `go mod tidy`
-- Prefer the standard library before adding third-party modules
+- Use Wails CLI for `dev` / `build`; regenerate bindings with `wails generate module`
+- Frontend lives under `frontend/` (npm / Nuxt). Keep `wailsjs/` committed after binding changes
+- Prefer the standard library before adding third-party Go modules
 - Keep module path updates via `go mod edit -module ...`
