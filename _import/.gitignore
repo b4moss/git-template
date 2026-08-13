@@ -1,0 +1,23 @@
+.DS_Store
+Thumbs.db
+
+# Go
+bin/
+*.exe
+*.test
+*.out
+coverage/
+
+# env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.test
+.env.production
+node_modules/
+vendor/
+.cursor/
+.vscode/
