@@ -16,7 +16,10 @@ Work happens on `dev-vX.Y.Z` branches; each version merges to `main` via PR, the
 | `bun` | Bun / TypeScript |
 | `crx-vue` | Chrome MV3 + Vue 3 extension |
 | `npm-package` | Vite library + vituum kitchen-sink |
-| `go` | Go |
+| `go` | Minimal Go hello |
+| `go-web` | Go HTTP API (chi) |
+| `go-cli` | Go CLI (cobra) |
+| `go-wails-nuxt` | Desktop (Wails v2 + Nuxt 3) |
 | `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
 | `doc-site` | Nuxt Content documentation site |
 
@@ -44,6 +47,14 @@ Shared layout; only `dev/` differs by stack.
 
 - `bun` → `dev/` has `package.json`, `bun.lock`, `tsconfig.json`, `index.ts`
 - `go` → `dev/` has `go.mod`, `main.go`
+
+### `go-web` / `go-cli` / `go-wails-nuxt`
+
+Same shared shell as `go` (charter / rulesets / Make). App code stays under `dev/`.
+
+- `go-web` → thin `net/http` + chi server (`cmd/server`, `/healthz`, `/hello`)
+- `go-cli` → cobra CLI (`cmd/app`, `version` / `hello`)
+- `go-wails-nuxt` → Wails v2 desktop shell + Nuxt 3 SPA frontend (`frontend/`, committed `wailsjs/`)
 
 ### `npm-package`
 
@@ -123,7 +134,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-Replace `bun` with `crx-vue`, `npm-package`, `go`, `vituum-twig`, or `doc-site` as needed.
+Replace `bun` with `crx-vue`, `npm-package`, `go`, `go-web`, `go-cli`, `go-wails-nuxt`, `vituum-twig`, or `doc-site` as needed.
 
 ## License
 

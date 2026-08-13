@@ -4,7 +4,20 @@
 
 Versions apply to the **git-template** repository (starter inventory on `main`), not to apps cloned from template branches.
 
-Development flow: work on `dev-vX.Y.Z`, open a PR into `main`, then tag from `main`.
+Development flow: work on `dev-vX.Y.Z`, open a PR into the purpose branch (then update `main`), then tag from `main`.
+
+## [0.5.0] — Go family split + Wails
+
+### Added
+
+- Orphan branch `go-web`: thin chi HTTP server (`/healthz`, `/hello`, graceful shutdown)
+- Orphan branch `go-cli`: cobra CLI (`version`, `hello`)
+- Orphan branch `go-wails-nuxt`: Wails v2 + Nuxt 3 SPA desktop starter (committed `wailsjs/` bindings)
+- Kept minimal `go` hello template as-is
+
+### Notes
+
+- Purpose-branch PRs: #15 (`go-web`), #16 (`go-cli`), #17 (`go-wails-nuxt`)
 
 ## [0.4.0] — npm-package
 
