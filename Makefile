@@ -1,10 +1,30 @@
-# GitHub repository ruleset helpers.
-# Real work lives in scripts/; this Makefile is a thin wrapper.
-# Target/variable names are prefixed with ruleset- / RULESET_ so this
-# file can be vendored via git subtree without colliding with host Makefiles.
+# App targets (Bun) + GitHub repository ruleset helpers.
+# Ruleset work lives in scripts/; ruleset-* / RULESET_* stay namespaced
+# so this Makefile can be vendored via git subtree.
 
 SHELL := /bin/bash
-.DEFAULT_GOAL := ruleset-help
+.DEFAULT_GOAL := help
+
+.PHONY: help install run test
+
+help:
+	@printf '%s\n' \
+		'App:' \
+		'  make install   bun install in dev/' \
+		'  make run       bun run index.ts in dev/' \
+		'  make test      bun test in dev/' \
+		'' \
+		'Rulesets: make ruleset-help'
+
+install:
+	cd dev && bun install
+
+run:
+	cd dev && bun run index.ts
+
+test:
+	cd dev && bun test
+
 
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts

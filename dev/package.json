@@ -1,8 +1,12 @@
 {
-  "name": "dev",
+  "name": "@b4moss/app",
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "test": "bun test"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
