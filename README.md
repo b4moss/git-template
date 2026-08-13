@@ -1,31 +1,39 @@
-# 合同会社 知的・自転車　Go開発テンプレート
+> **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-ライセンス：MIT LICSENSE
+# go-cli template
 
-## 開発
+Go CLI starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`go-cli` branch).
 
-アプリ本体は [`dev/`](dev/) です。ローカルの Go を使い、バージョンは `dev/go.mod` の `go` / `toolchain` で固定します。
+Stack: [cobra](https://github.com/spf13/cobra) with `cmd/app` + `internal/app` subcommands.
 
-```bash
-cd dev
-go mod tidy
-go run .
-```
-
-またはルートから:
+## Quick start
 
 ```bash
+git clone -b go-cli --single-branch https://github.com/b4moss/git-template.git my-cli
+cd my-cli
+make tidy
 make run
+make run ARGS='hello gopher --shout'
 ```
 
-## Git Subtree
+## Layout
 
-- [charter](https://https://github.com/b4m-oss/charter)
+```text
+dev/
+├── cmd/app/           # main
+└── internal/app/      # cobra commands (version, hello)
+```
 
-----
+Rename the module path in `dev/go.mod` and the binary `Use:` name in `internal/app`.
 
-以上
+## Make targets
 
-----
+| Target | Description |
+| --- | --- |
+| `make run` | `go run ./cmd/app` (pass `ARGS='...'`) |
+| `make test` | `go test ./...` |
+| `make tidy` | `go mod tidy` |
 
-Copyright 2026 [Bicycle for Mind LLC.](https://b4m.co.jp/)
+## License
+
+[MIT License](./LICENSE)
