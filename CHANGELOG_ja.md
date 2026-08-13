@@ -4,7 +4,20 @@
 
 バージョンは **git-template** リポジトリ全体（`main` 上のスターター一覧）に対するものです。各テンプレブランチから作ったアプリの SemVer とは別です。
 
-開発フロー: `dev-vX.Y.Z` で作業 → `main` 向け PR → `main` からタグ。
+開発フロー: `dev-vX.Y.Z` で作業 → 用途ブランチ向け PR（その後 `main` を更新）→ `main` からタグ。
+
+## [0.5.0] — Go 系分割 + Wails
+
+### 追加
+
+- orphan ブランチ `go-web`: 薄い chi HTTP サーバー（`/healthz`、`/hello`、graceful shutdown）
+- orphan ブランチ `go-cli`: cobra CLI（`version`、`hello`）
+- orphan ブランチ `go-wails-nuxt`: Wails v2 + Nuxt 3 SPA デスクトップ雛形（`wailsjs/` コミット済み）
+- 最小の `go` hello テンプレはそのまま維持
+
+### 補足
+
+- 用途ブランチ向け PR: #15（`go-web`）、#16（`go-cli`）、#17（`go-wails-nuxt`）
 
 ## [0.4.0] — npm-package
 

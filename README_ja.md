@@ -16,7 +16,10 @@
 | `bun` | Bun / TypeScript |
 | `crx-vue` | Chrome MV3 + Vue 3 拡張 |
 | `npm-package` | Vite ライブラリ + vituum kitchen-sink |
-| `go` | Go |
+| `go` | Go 最小 hello |
+| `go-web` | Go HTTP API（chi） |
+| `go-cli` | Go CLI（cobra） |
+| `go-wails-nuxt` | デスクトップ（Wails v2 + Nuxt 3） |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
 | `doc-site` | Nuxt Content ドキュメントサイト |
 
@@ -44,6 +47,14 @@
 
 - `bun` → `dev/` に `package.json` / `bun.lock` / `tsconfig.json` / `index.ts`
 - `go` → `dev/` に `go.mod` / `main.go`
+
+### `go-web` / `go-cli` / `go-wails-nuxt`
+
+`go` と同じ共通殻（charter / rulesets / Make）。アプリ本体は `dev/` です。
+
+- `go-web` → 薄い `net/http` + chi サーバー（`cmd/server`、`/healthz`、`/hello`）
+- `go-cli` → cobra CLI（`cmd/app`、`version` / `hello`）
+- `go-wails-nuxt` → Wails v2 デスクトップ + Nuxt 3 SPA（`frontend/`、`wailsjs/` コミット済み）
 
 ### `npm-package`
 
@@ -123,7 +134,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-`bun` の部分を `crx-vue` / `npm-package` / `go` / `vituum-twig` / `doc-site` に差し替えてください。
+`bun` の部分を `crx-vue` / `npm-package` / `go` / `go-web` / `go-cli` / `go-wails-nuxt` / `vituum-twig` / `doc-site` に差し替えてください。
 
 ## ライセンス
 
