@@ -1,0 +1,29 @@
+{% extends "layouts/default.twig" %}
+
+{% block header %}
+{% include 'components/layouts/header.twig' %}
+{% endblock %}
+
+{% block main %}
+<section class="section">
+  <div class="section__inner">
+    <h1 class="section__title">Kitchen sink</h1>
+    <p>Local package demo for <code>@b4moss/example</code> (version <span id="pkg-version">…</span>).</p>
+
+    <label>
+      Name
+      <input id="greet-name" type="text" value="kitchen-sink" />
+    </label>
+    <label>
+      <input id="greet-shout" type="checkbox" />
+      Shout
+    </label>
+    <button id="greet-run" type="button">greet()</button>
+    <pre id="greet-output"></pre>
+  </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+{% include 'components/layouts/footer.twig' %}
+{% endblock %}
