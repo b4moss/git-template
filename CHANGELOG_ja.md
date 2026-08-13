@@ -6,6 +6,16 @@
 
 開発フロー: `dev-vX.Y.Z` で作業 → `main` 向け PR → `main` からタグ。
 
+## [0.2.0] — bun 整備
+
+### 変更
+
+- `bun` orphan ブランチを参照用 TypeScript / Bun スターターとして整備:
+  - 英日 README
+  - `make install` / `make run` / `make test`
+  - パッケージ名プレースホルダ `@b4moss/app`
+  - `dev/` にスモークテスト
+
 ## [0.1.0] — ベースライン
 
 ### 含むブランチ

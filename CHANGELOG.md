@@ -6,6 +6,16 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into `main`, then tag from `main`.
 
+## [0.2.0] — bun polish
+
+### Changed
+
+- Polished the `bun` orphan branch as the reference TypeScript / Bun starter:
+  - Bilingual README (EN/JA)
+  - `make install` / `make run` / `make test`
+  - Package name placeholder `@b4moss/app`
+  - Smoke test in `dev/`
+
 ## [0.1.0] — baseline
 
 ### Included branches
