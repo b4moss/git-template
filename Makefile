@@ -1,21 +1,30 @@
-.PHONY: run test tidy
-
-run:
-	cd dev && go run .
-
-test:
-	cd dev && go test ./...
-
-tidy:
-	cd dev && go mod tidy
-# GitHub repository ruleset helpers.
-# Real work lives in scripts/; this Makefile is a thin wrapper.
-# Target/variable names are prefixed with ruleset- / RULESET_ so this
-# file can be vendored via git subtree without colliding with host Makefiles.
+# Slim minimal app + namespaced ruleset helpers.
 
 SHELL := /bin/bash
-.DEFAULT_GOAL := ruleset-help
+.DEFAULT_GOAL := help
 
+.PHONY: help install run test tidy
+
+help:
+	@printf '%s\n' \
+		'App:' \
+		'  make install   composer install in dev/' \
+		'  make run       php built-in server on :8080' \
+		'  make test      phpunit in dev/' \
+		'  make tidy      composer install (alias of install)' \
+		'' \
+		'Rulesets: make ruleset-help'
+
+install tidy:
+	cd dev && composer install --no-interaction
+
+run:
+	cd dev && composer start
+
+test:
+	cd dev && composer test
+
+# GitHub repository ruleset helpers.
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts
 
@@ -47,7 +56,6 @@ ruleset-help:
 ruleset-create:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-create RULESET_REPO=my-org/new-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/create-repo-with-rulesets.sh "$(RULESET_REPO)" "--$(RULESET_VISIBILITY)" $(RULESET_CREATE_FLAGS)
@@ -55,7 +63,6 @@ ruleset-create:
 ruleset-apply:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-apply RULESET_REPO=my-org/existing-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/apply-rulesets.sh --repo "$(RULESET_REPO)"
@@ -63,7 +70,6 @@ ruleset-apply:
 ruleset-check:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-check RULESET_REPO=my-org/existing-app RULESET_BRANCH=main" >&2; \
 		exit 1; \
 	fi
 	@echo "== ruleset list =="

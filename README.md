@@ -1,31 +1,48 @@
-# 合同会社 知的・自転車　Go開発テンプレート
+> **Languages:** [English](./README.md) · [日本語](./README_ja.md)
 
-ライセンス：MIT LICSENSE
+# slim template
 
-## 開発
+Minimal [Slim Framework](https://www.slimframework.com/) 4 starter from [b4moss/git-template](https://github.com/b4moss/git-template) (`slim` branch).
 
-アプリ本体は [`dev/`](dev/) です。ローカルの Go を使い、バージョンは `dev/go.mod` の `go` / `toolchain` で固定します。
+App root: [`dev/`](./dev/). Stack: Slim + slim/psr7 + PHP-DI, PHPUnit smoke tests.
+
+For session auth + mail adapter, use [`slim-auth`](https://github.com/b4moss/git-template/tree/slim-auth).
+
+## Prerequisites
+
+- PHP 8.2+ and [Composer](https://getcomposer.org/)
+
+## Quick start
 
 ```bash
-cd dev
-go mod tidy
-go run .
-```
-
-またはルートから:
-
-```bash
+git clone -b slim --single-branch https://github.com/b4moss/git-template.git my-api
+cd my-api
+make install
 make run
 ```
 
-## Git Subtree
+- `GET /healthz`
+- `GET /hello?name=world`
 
-- [charter](https://https://github.com/b4m-oss/charter)
+## Layout
 
-----
+```text
+dev/
+├── public/index.php     # front controller
+├── config/              # settings / DI / routes
+├── src/Action/          # HTTP actions
+└── tests/
+```
 
-以上
+## Make targets
 
-----
+| Target | Description |
+| --- | --- |
+| `make install` | `composer install` in `dev/` |
+| `make run` | `php -S localhost:8080 -t public` |
+| `make test` | PHPUnit |
+| `make ruleset-help` | GitHub ruleset helpers |
 
-Copyright 2026 [Bicycle for Mind LLC.](https://b4m.co.jp/)
+## License
+
+[MIT License](./LICENSE)
