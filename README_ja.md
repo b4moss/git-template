@@ -13,6 +13,7 @@
 | `bun` | Bun / TypeScript |
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
+| `doc-site` | Nuxt Content ドキュメントサイト |
 
 ## 各ブランチの内包物
 
@@ -58,6 +59,26 @@ Vite + Vituum + Twig のマルチページ静的サイト雛形です。
 └── vite.config.ts
 ```
 
+### `doc-site`
+
+Nuxt Content ドキュメントサイト雛形です（ヘッダーユーティリティ＋フッター＋サイドバー／ページャー）。製品デモや Playground は除去済み。ナビは `app/config/docsNav.ts` で設定します。
+
+```text
+.
+├── app/
+│   ├── components/       # SiteHeader / SiteFooter / DocsSidebar / DocsPager …
+│   ├── config/docsNav.ts # サイドバー／ページャー
+│   ├── layouts/
+│   └── pages/[...slug].vue
+├── content/
+│   ├── en/               # 英語 Markdown プレースホルダ
+│   └── ja/               # 日本語 Markdown プレースホルダ
+├── i18n/locales/
+├── nuxt.config.ts        # siteName / githubUrl / footerText …
+├── package.json
+└── public/
+```
+
 ## 使い方
 
 ```bash
@@ -65,7 +86,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-`bun` の部分を `go` または `vituum-twig` に差し替えてください。
+`bun` の部分を `go` / `vituum-twig` / `doc-site` に差し替えてください。
 
 ## ライセンス
 

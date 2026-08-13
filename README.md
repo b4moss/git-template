@@ -13,6 +13,7 @@ Clone the branch you need — that directory is the project root.
 | `bun` | Bun / TypeScript |
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig (MPA static site) |
+| `doc-site` | Nuxt Content documentation site |
 
 ## What's in each branch
 
@@ -58,6 +59,26 @@ Vite + Vituum + Twig multi-page static site starter.
 └── vite.config.ts
 ```
 
+### `doc-site`
+
+Nuxt Content docs scaffold (header utilities + footer + sidebar/pager). Product demos and Playground are stripped; nav is configured in `app/config/docsNav.ts`.
+
+```text
+.
+├── app/
+│   ├── components/       # SiteHeader / SiteFooter / DocsSidebar / DocsPager …
+│   ├── config/docsNav.ts # sidebar / pager entries
+│   ├── layouts/
+│   └── pages/[...slug].vue
+├── content/
+│   ├── en/               # English Markdown placeholders
+│   └── ja/               # Japanese Markdown placeholders
+├── i18n/locales/
+├── nuxt.config.ts        # siteName / githubUrl / footerText …
+├── package.json
+└── public/
+```
+
 ## Usage
 
 ```bash
@@ -65,7 +86,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-Replace `bun` with `go` or `vituum-twig` as needed.
+Replace `bun` with `go`, `vituum-twig`, or `doc-site` as needed.
 
 ## License
 
