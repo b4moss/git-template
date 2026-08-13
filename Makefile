@@ -1,20 +1,31 @@
-.PHONY: run test tidy
+# App targets + namespaced ruleset helpers.
+
+SHELL := /bin/bash
+.DEFAULT_GOAL := help
+
+.PHONY: help run test tidy
+
+help:
+	@printf '%s\n' \
+		'App:' \
+		'  make run    go run ./cmd/server' \
+		'  make test   go test ./...' \
+		'  make tidy   go mod tidy' \
+		'' \
+		'Rulesets: make ruleset-help'
 
 run:
-	cd dev && go run .
+	cd dev && go run ./cmd/server
 
 test:
 	cd dev && go test ./...
 
 tidy:
 	cd dev && go mod tidy
-# GitHub repository ruleset helpers.
-# Real work lives in scripts/; this Makefile is a thin wrapper.
-# Target/variable names are prefixed with ruleset- / RULESET_ so this
-# file can be vendored via git subtree without colliding with host Makefiles.
 
-SHELL := /bin/bash
-.DEFAULT_GOAL := ruleset-help
+# GitHub repository ruleset helpers.
+# Target/variable names are prefixed with ruleset- / RULESET_.
+
 
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts
