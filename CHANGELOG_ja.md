@@ -6,6 +6,14 @@
 
 開発フロー: `dev-vX.Y.Z` で作業 → `main` 向け PR → `main` からタグ。
 
+## [0.3.0] — crx-vue
+
+### 追加
+
+- orphan ブランチ `crx-vue`: Chrome MV3 + Vue 3 + Vue Router + Pinia + `@crxjs/vite-plugin`
+- 既存 CRX テンプレを sanitize（汎用名、権限縮小、スタブ UI）
+- 英日 README と Make ターゲット（`install` / `dev` / `build`）
+
 ## [0.2.0] — bun 整備
 
 ### 変更

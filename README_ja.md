@@ -14,6 +14,7 @@
 | ブランチ | 内容 |
 | --- | --- |
 | `bun` | Bun / TypeScript |
+| `crx-vue` | Chrome MV3 + Vue 3 拡張 |
 | `go` | Go |
 | `vituum-twig` | Vite + Vituum + Twig（MPA 静的サイト） |
 | `doc-site` | Nuxt Content ドキュメントサイト |
@@ -42,6 +43,24 @@
 
 - `bun` → `dev/` に `package.json` / `bun.lock` / `tsconfig.json` / `index.ts`
 - `go` → `dev/` に `go.mod` / `main.go`
+
+### `crx-vue`
+
+Chrome MV3 拡張雛形です（Vue 3 + Vue Router + Pinia + CRXJS）。
+
+```text
+.
+├── Makefile
+├── README.md / README_ja.md
+├── docs/charter/
+├── scripts/                  # ruleset ヘルパー
+└── dev/                      # 拡張プロジェクト（manifest, Vite, Vue）
+    ├── manifest.json
+    ├── vite.config.ts
+    └── src/
+        ├── scripts/          # background / content / popup / side panel
+        └── views/
+```
 
 ### `vituum-twig`
 
@@ -89,7 +108,7 @@ git clone -b bun --single-branch https://github.com/b4moss/git-template.git my-a
 cd my-app
 ```
 
-`bun` の部分を `go` / `vituum-twig` / `doc-site` に差し替えてください。
+`bun` の部分を `crx-vue` / `go` / `vituum-twig` / `doc-site` に差し替えてください。
 
 ## ライセンス
 
