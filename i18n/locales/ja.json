@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "gettingStarted": "はじめに",
+    "language": "言語",
+    "menu": "メニュー",
+    "github": "GitHub",
+    "prev": "前へ",
+    "next": "次へ",
+    "pager": "ページナビゲーション",
+    "versions": "バージョン"
+  },
+  "theme": {
+    "label": "テーマ",
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
+  },
+  "collapseBox": {
+    "expand": "続きを表示",
+    "collapse": "折りたたむ"
+  }
+}
