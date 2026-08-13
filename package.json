@@ -1,0 +1,40 @@
+{
+  "name": "@b4moss/example",
+  "version": "0.1.0",
+  "description": "npm package scaffold (Vite library mode) from b4moss/git-template",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/example.cjs",
+  "module": "./dist/example.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/example.js",
+      "require": "./dist/example.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "npm run dev -w kitchen-sink",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "build:sink": "npm run build -w kitchen-sink",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "workspaces": [
+    "kitchen-sink"
+  ],
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

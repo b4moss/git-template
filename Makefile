@@ -1,30 +1,37 @@
-# App targets (Bun) + GitHub repository ruleset helpers.
-# Ruleset work lives in scripts/; ruleset-* / RULESET_* stay namespaced
-# so this Makefile can be vendored via git subtree.
+# App + package targets, then namespaced ruleset helpers.
 
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-.PHONY: help install run test
+.PHONY: help install dev build build-sink test
 
 help:
 	@printf '%s\n' \
-		'App:' \
-		'  make install   bun install in dev/' \
-		'  make run       bun run index.ts in dev/' \
-		'  make test      bun test in dev/' \
+		'Package:' \
+		'  make install      npm install (workspaces)' \
+		'  make build        Vite library build + d.ts' \
+		'  make test         vitest' \
+		'  make dev          kitchen-sink (vituum) via workspace' \
+		'  make build-sink   build kitchen-sink site' \
 		'' \
 		'Rulesets: make ruleset-help'
 
 install:
-	cd dev && bun install
+	npm install
 
-run:
-	cd dev && bun run index.ts
+dev:
+	npm run dev
+
+build:
+	npm run build
+
+build-sink:
+	npm run build:sink
 
 test:
-	cd dev && bun test
+	npm test
 
+# --- rulesets ---
 
 RULESET_ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 RULESET_SCRIPTS := $(RULESET_ROOT_DIR)/scripts
@@ -57,7 +64,6 @@ ruleset-help:
 ruleset-create:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-create RULESET_REPO=my-org/new-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/create-repo-with-rulesets.sh "$(RULESET_REPO)" "--$(RULESET_VISIBILITY)" $(RULESET_CREATE_FLAGS)
@@ -65,7 +71,6 @@ ruleset-create:
 ruleset-apply:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-apply RULESET_REPO=my-org/existing-app" >&2; \
 		exit 1; \
 	fi
 	@$(RULESET_SCRIPTS)/apply-rulesets.sh --repo "$(RULESET_REPO)"
@@ -73,11 +78,7 @@ ruleset-apply:
 ruleset-check:
 	@if [[ -z "$(RULESET_REPO)" ]]; then \
 		echo "error: RULESET_REPO=OWNER/NAME is required" >&2; \
-		echo "example: make ruleset-check RULESET_REPO=my-org/existing-app RULESET_BRANCH=main" >&2; \
 		exit 1; \
 	fi
-	@echo "== ruleset list =="
 	@gh ruleset list -R "$(RULESET_REPO)"
-	@echo
-	@echo "== ruleset check $(RULESET_BRANCH) =="
 	@gh ruleset check "$(RULESET_BRANCH)" -R "$(RULESET_REPO)"
