@@ -7,7 +7,8 @@ Stack-specific Git starter templates for [b4moss](https://github.com/b4moss) / [
 Clone the branch you need — that directory is the project root.
 
 Versioning and release notes: [CHANGELOG.md](./CHANGELOG.md).  
-Work happens on `dev-vX.Y.Z` branches; each version merges to `main` via PR, then is tagged.
+Cross-branch sync (shell cherry-pick vs spec → re-implement): [docs/sync-policy.md](./docs/sync-policy.md).  
+Feature work targets a **purpose branch** via `dev-vX.Y.Z-*` PRs; `main` gets inventory / CHANGELOG follow-ups, then tags.
 
 ## Branches
 
@@ -154,6 +155,17 @@ cd my-app
 ```
 
 Replace `bun` with `crx-vue`, `npm-package`, `go`, `go-web`, `go-cli`, `go-wails-nuxt`, `laravel`, `laravel-sail`, `slim`, `slim-auth`, `vituum-twig`, or `doc-site` as needed.
+
+## Syncing changes across branches
+
+Orphan branches do not share history like a monorepo. Summary:
+
+1. **Identical shell** (charter, rulesets, shared scripts) → cherry-pick commits across purpose branches
+2. **Cross-language behavior** → cherry-pick **specs / test specs**, then **re-implement** per branch
+3. **Canonical meta docs** (inventory, CHANGELOG, sync policy) live on **`main`**
+4. Tags are cut from **`main`**; doc-only bumps use `vX.Y.Z-doc.n`
+
+Full checklist: [docs/sync-policy.md](./docs/sync-policy.md) ([日本語](./docs/sync-policy_ja.md)).
 
 ## License
 

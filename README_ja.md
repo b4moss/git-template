@@ -7,7 +7,8 @@
 使いたいブランチを clone すると、そのディレクトリがそのままプロジェクト root になります。
 
 バージョンとリリースノート: [CHANGELOG_ja.md](./CHANGELOG_ja.md)。  
-作業は `dev-vX.Y.Z` ブランチで行い、各バージョンを PR で `main` にマージしたあとタグします。
+ブランチ間同期（共通殻の cherry-pick と、仕様 → 再実装）: [docs/sync-policy_ja.md](./docs/sync-policy_ja.md)。  
+機能は用途ブランチへ `dev-vX.Y.Z-*` PR。`main` は一覧 / CHANGELOG の追随とタグ用です。
 
 ## ブランチ
 
@@ -154,6 +155,17 @@ cd my-app
 ```
 
 `bun` の部分を `crx-vue` / `npm-package` / `go` / `go-web` / `go-cli` / `go-wails-nuxt` / `laravel` / `laravel-sail` / `slim` / `slim-auth` / `vituum-twig` / `doc-site` に差し替えてください。
+
+## ブランチ間の変更同期
+
+orphan ブランチはモノレポのように履歴を共有しません。要約:
+
+1. **同一の共通殻**（charter、rulesets、共有スクリプト）→ 用途ブランチ間で cherry-pick
+2. **言語をまたぐ振る舞い** → **仕様 / テスト仕様**を cherry-pick し、各ブランチで **再実装**
+3. **メタ文書の正本**（一覧、CHANGELOG、同期ポリシー）は **`main`**
+4. タグは **`main` から**。docs のみなら `vX.Y.Z-doc.n`
+
+チェックリスト全文: [docs/sync-policy_ja.md](./docs/sync-policy_ja.md)（[English](./docs/sync-policy.md)）。
 
 ## ライセンス
 
