@@ -6,6 +6,13 @@ Versions apply to the **git-template** repository (starter inventory on `main`),
 
 Development flow: work on `dev-vX.Y.Z`, open a PR into the purpose branch (then update `main`), then tag from `main`.
 
+## [0.7.1] — テンプレート変更・npmパッケージ更新
+
+### 追加
+
+- `doc-site`: Add corporate link
+- Update npm dependancies
+
 ## [0.7.0-doc.1] — Cross-branch sync policy
 
 ### Added
