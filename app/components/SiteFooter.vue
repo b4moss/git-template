@@ -1,15 +1,17 @@
 <script setup lang="ts">
+/*
 const config = useRuntimeConfig();
 const footerText = computed(
   () =>
     String(config.public.footerText || "") ||
-    "MIT License · 2026 Bicycle for Mind LLC.",
+    `MIT License · 2026 <a href="https://b4m.co.jp/" target="_blank">Bicycle for Mind LLC.</a>`,
 );
+*/
 </script>
 
 <template>
   <footer class="site-footer">
-    <p class="site-footer-text">{{ footerText }}</p>
+    <p class="site-footer-text">MIT License · 2026 <a href="https://b4m.co.jp/" target="_blank">Bicycle for Mind LLC.</a></p>
   </footer>
 </template>
 
