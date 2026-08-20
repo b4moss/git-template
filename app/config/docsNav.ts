@@ -9,7 +9,7 @@ export type DocsNavItem = {
 
 /**
  * Edit this list to shape the docs sidebar / pager.
- * Labels come from `i18n/locales/{ja,en}.json` → `nav.<labelKey>`.
+ * Labels come from `i18n/locales/{ja,en}.ts` → `nav.<labelKey>`.
  */
 export const docsNavItems: DocsNavItem[] = [
   { key: "home", path: "/", labelKey: "home" },
