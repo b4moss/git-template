@@ -3,6 +3,7 @@ export default {
     "home": "ホーム",
     "gettingStarted": "はじめに",
     "language": "言語",
+    "prefs": "表示設定",
     "menu": "メニュー",
     "github": "GitHub",
     "prev": "前へ",
