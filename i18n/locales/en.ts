@@ -1,4 +1,4 @@
-{
+export default {
   "nav": {
     "home": "Home",
     "gettingStarted": "Getting started",

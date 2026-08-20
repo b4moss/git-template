@@ -2,44 +2,77 @@
 const { t } = useI18n();
 const colorMode = useColorMode();
 
-const preference = computed({
-  get: () => colorMode.preference,
-  set: (value: string) => {
-    colorMode.preference = value;
-  },
-});
+const options = computed(() => [
+  { value: "system", label: t("theme.system"), compact: "Sys" },
+  { value: "light", label: t("theme.light"), compact: "Lt" },
+  { value: "dark", label: t("theme.dark"), compact: "Dk" },
+]);
+
+const current = computed(
+  () =>
+    options.value.find((item) => item.value === colorMode.preference) ??
+    options.value[0],
+);
+
+function choose(value: string, close: () => void) {
+  colorMode.preference = value;
+  close();
+}
 </script>
 
 <template>
-  <label class="theme">
-    <span class="sr-only">{{ t("theme.label") }}</span>
-    <select v-model="preference">
-      <option value="system">{{ t("theme.system") }}</option>
-      <option value="light">{{ t("theme.light") }}</option>
-      <option value="dark">{{ t("theme.dark") }}</option>
-    </select>
-  </label>
+  <HeaderDropdown
+    :label="t('theme.label')"
+    :trigger-text="current.label"
+    :compact-text="current.compact"
+  >
+    <template #default="{ close }">
+      <button
+        v-for="item in options"
+        :key="item.value"
+        type="button"
+        class="option"
+        role="option"
+        :aria-selected="item.value === colorMode.preference"
+        :data-active="item.value === colorMode.preference ? 'true' : 'false'"
+        @click="choose(item.value, close)"
+      >
+        {{ item.label }}
+      </button>
+    </template>
+  </HeaderDropdown>
 </template>
 
 <style scoped>
-.theme select {
+.option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.1rem;
+  padding: 0.4rem 0.65rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: var(--color-ink);
   font: inherit;
   font-size: 0.875rem;
-  padding: 0.35rem 0.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.35rem;
-  background: var(--color-surface);
-  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+.option:hover {
+  background: var(--color-accent-soft);
+}
+
+.option[data-active="true"] {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .option {
+    min-height: 2.4rem;
+    font-size: 0.95rem;
+  }
 }
 </style>
