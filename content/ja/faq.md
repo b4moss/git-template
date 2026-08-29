@@ -1,14 +1,53 @@
 ---
+# =============================================================================
 # JSON-LD サンプル（#40）: FAQ
-# 推奨: WebPage + FAQPage + SoftwareSourceCode（サイト共通）
-# Q/A 本体は frontmatter ではなく ::faq-list / ::faq-item（MDC）
+# 推奨 @graph: WebPage + FAQPage + SoftwareSourceCode（サイト共通）
+# Q/A 本体は frontmatter ではなく MDC（::faq-list / ::faq-item）
+# =============================================================================
+#
+# --- frontmatter（このファイル）---
+# title: string
+#   → WebPage.name / <title>
+#   （FAQPage 自体の name は現状出さない）
+# description: string（任意）
+#   → WebPage.description / meta description
+# schemaRole: "FAQPage"（必須相当・これがないと FAQPage エンティティを出さない）
+#   → extractFaqFromBody + useFaqItems で集めた Q/A を FAQPage.mainEntity へ
+#
+# --- FAQPage 自動生成（書かない）---
+# FAQPage.@type       … "FAQPage"
+# FAQPage.@id         … "{pageUrl}#faq"
+# FAQPage.isPartOf    … { "@id": pageUrl }
+# FAQPage.mainEntity  … Question[]（重複 question はスキップ）
+#
+# --- MDC 側のプロパティ（本文）---
+# ::faq-list
+#   コンテナ。開閉 UI（全部開く/閉じる）と子 FaqItem の登録先
+# :::faq-item{question="質問文"}
+#   question（属性, string, 必須相当）
+#     → Question.name
+#     → アコーディオン見出し
+#   スロット本文（Markdown 可）
+#     → Answer.text（プレーンテキスト化して JSON-LD へ）
+#     → アコーディオン本文
+# :::
+# ::
+#
+# --- Question / Answer に現状マップされるもの ---
+# Question.@type = "Question"
+# Question.name  ← faq-item.question
+# Answer.@type   = "Answer"
+# Answer.text    ← faq-item 本文
+# （Question.@id / Answer.url などは未出力）
+#
+# --- 記述例（コピー用）---
+# title: FAQ
+# description: 導入・設定・トラブルシュートのよくある質問
+# schemaRole: FAQPage
+#
 title: FAQ
 description: よくある質問のサンプル（MDC アコーディオンと FAQPage JSON-LD）
 schemaRole: FAQPage
-# 記述例:
-# schemaRole: FAQPage
-# title: FAQ
-# description: よくある質問
 ---
 
 # FAQ

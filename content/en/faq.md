@@ -1,14 +1,53 @@
 ---
+# =============================================================================
 # JSON-LD sample (#40): FAQ
-# Recommended: WebPage + FAQPage + SoftwareSourceCode (site-wide)
-# Q/A bodies live in ::faq-list / ::faq-item (MDC), not frontmatter
+# Recommended @graph: WebPage + FAQPage + SoftwareSourceCode (site-wide)
+# Q/A bodies live in MDC (::faq-list / ::faq-item), not frontmatter
+# =============================================================================
+#
+# --- frontmatter (this file) ---
+# title: string
+#   → WebPage.name / <title>
+#   (FAQPage itself has no name field today)
+# description: string (optional)
+#   → WebPage.description / meta description
+# schemaRole: "FAQPage" (effectively required to emit FAQPage)
+#   → Q/A from extractFaqFromBody + useFaqItems → FAQPage.mainEntity
+#
+# --- FAQPage auto-generated (do not author) ---
+# FAQPage.@type       … "FAQPage"
+# FAQPage.@id         … "{pageUrl}#faq"
+# FAQPage.isPartOf    … { "@id": pageUrl }
+# FAQPage.mainEntity  … Question[] (duplicate questions are skipped)
+#
+# --- MDC properties (body) ---
+# ::faq-list
+#   Container: expand/collapse UI + registration target for child FaqItems
+# :::faq-item{question="Question text"}
+#   question (attribute, string, effectively required)
+#     → Question.name
+#     → accordion heading
+#   slot body (Markdown allowed)
+#     → Answer.text (plain-textified into JSON-LD)
+#     → accordion body
+# :::
+# ::
+#
+# --- Question / Answer mapping today ---
+# Question.@type = "Question"
+# Question.name  ← faq-item.question
+# Answer.@type   = "Answer"
+# Answer.text    ← faq-item body
+# (Question.@id / Answer.url are not emitted)
+#
+# --- Copy-paste examples ---
+# title: FAQ
+# description: Common questions on setup, config, and troubleshooting
+# schemaRole: FAQPage
+#
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
-# Examples:
-# schemaRole: FAQPage
-# title: FAQ
-# description: Frequently asked questions
 ---
 
 # FAQ
