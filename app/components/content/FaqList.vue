@@ -8,6 +8,12 @@ const { t } = useI18n();
 const panelIds = ref<string[]>([]);
 const openIds = ref<Set<string>>(new Set());
 
+const allOpen = computed(
+  () =>
+    panelIds.value.length > 0 &&
+    panelIds.value.every((id) => openIds.value.has(id)),
+);
+
 function registerPanel(id: string) {
   if (!panelIds.value.includes(id)) {
     panelIds.value = [...panelIds.value, id];
@@ -37,12 +43,12 @@ function toggle(id: string) {
   openIds.value = next;
 }
 
-function expandAll() {
-  openIds.value = new Set(panelIds.value);
-}
-
-function collapseAll() {
-  openIds.value = new Set();
+function toggleAll() {
+  if (allOpen.value) {
+    openIds.value = new Set();
+  } else {
+    openIds.value = new Set(panelIds.value);
+  }
 }
 
 provide<FaqListContext>(faqListInjectionKey, {
@@ -56,11 +62,20 @@ provide<FaqListContext>(faqListInjectionKey, {
 <template>
   <div class="faq-list">
     <div class="faq-list__controls">
-      <button class="btn faq-list__btn" type="button" @click="expandAll">
-        {{ t("faq.expandAll") }}
-      </button>
-      <button class="btn faq-list__btn" type="button" @click="collapseAll">
-        {{ t("faq.collapseAll") }}
+      <button
+        class="faq-list__switch"
+        type="button"
+        role="switch"
+        :aria-checked="allOpen"
+        :aria-label="allOpen ? t('faq.collapseAll') : t('faq.expandAll')"
+        @click="toggleAll"
+      >
+        <span class="faq-list__switch-label">
+          {{ allOpen ? t("faq.collapseAll") : t("faq.expandAll") }}
+        </span>
+        <span class="faq-list__switch-track" aria-hidden="true">
+          <span class="faq-list__switch-thumb" />
+        </span>
       </button>
     </div>
     <div class="faq-list__items">
@@ -76,22 +91,57 @@ provide<FaqListContext>(faqListInjectionKey, {
 
 .faq-list__controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: flex-end;
   margin-bottom: 0.85rem;
 }
 
-.faq-list__btn {
+.faq-list__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  border: none;
   background: transparent;
-  color: var(--color-accent);
-  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.875rem;
   font-weight: 500;
-  padding: 0.4rem 0.85rem;
+  cursor: pointer;
 }
 
-.faq-list__btn:hover {
-  background: var(--color-accent-soft);
-  color: var(--color-accent-hover);
+.faq-list__switch:hover {
+  color: var(--color-ink);
+}
+
+.faq-list__switch-track {
+  position: relative;
+  width: 2.5rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: var(--color-border);
+  transition: background-color 0.22s ease;
+  flex-shrink: 0;
+}
+
+.faq-list__switch[aria-checked="true"] .faq-list__switch-track {
+  background: var(--color-accent);
+}
+
+.faq-list__switch-thumb {
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  transition: transform 0.22s ease;
+}
+
+.faq-list__switch[aria-checked="true"] .faq-list__switch-thumb {
+  transform: translateX(1.15rem);
 }
 
 .faq-list__items {
