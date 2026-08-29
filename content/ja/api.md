@@ -47,6 +47,15 @@ jsonLd:
           position: 2
           name: API リファレンス
           item: https://example.com/ja/api
+  # extra は「標準セットに無い型を丸ごと足す」枠。既定値は付かない
+  extra:
+    - "@type": ItemList
+      "@id": https://example.com/ja/api#endpoints
+      name: エンドポイント一覧
+      itemListElement:
+        - "@type": ListItem
+          position: 1
+          name: GET /health
 #
 #   title        → WebPage.name / TechArticle.headline
 #   description  → WebPage.description / TechArticle.description

@@ -12,10 +12,18 @@
 | 出したいもの | 書く場所 |
 | --- | --- |
 | `WebSite`、`SoftwareSourceCode`（全ページ共通） | `site.meta.yaml` |
+| `Organization`（自社情報・全ページ共通） | `site.meta.yaml` の `organization` |
+| 標準外のエンティティ（全ページ共通） | `site.meta.yaml` の `jsonLdExtra` |
 | `WebPage` の基本情報 | 各 Markdown の `title` / `description` |
 | 役割エンティティ（`TechArticle` など） | 各 Markdown の `schemaRole` または `jsonLd.entities` |
 | `WebPage` への追加プロパティ | 各 Markdown の `jsonLd.webPage` |
+| 標準外のエンティティ（そのページだけ） | 各 Markdown の `jsonLd.extra` |
 | FAQ の Q/A | 本文の `::faq-list` / `::faq-item`（frontmatter ではない） |
+
+用途が2種類あることに注意してください。
+
+- **(i) 標準エンティティにプロパティを足す** → `jsonLd.webPage` / `jsonLd.entities`
+- **(ii) 標準セットに無いエンティティを丸ごと足す** → `jsonLdExtra`（サイト全体）/ `jsonLd.extra`（ページ単位）
 
 ## 最小の書き方（短縮形）
 
@@ -94,6 +102,51 @@ jsonLd:
 ### `schemaRole` と併記した場合
 
 `jsonLd.entities` があるときは `schemaRole` は無視され、ビルド時に警告が出ます。どちらか一方にしてください。
+
+## 自社情報（Organization）
+
+`site.meta.yaml` に `organization` を書くと、全ページに `Organization` が出力され、`WebPage` / `WebSite` / `TechArticle` / `HowTo` に `publisher` 参照が付きます。
+
+```yaml
+organization:
+  name: Example Inc.
+  url: https://example.com/
+  logo: https://example.com/logo.png
+  sameAs:
+    - https://github.com/example
+```
+
+- `@type`（`Organization`）と `@id`（`{siteUrl}/#organization`）は自動
+- `name` / `url` の既定値は `siteName` / `siteUrl`
+- **書かなければ何も出ません。** `Organization` も `publisher` も付かないので、未設定のサイトの出力は変わりません
+- 役割エンティティに `publisher` を自分で書けば上書きできます
+
+## エスケープハッチ
+
+標準セット（`WebPage` / `WebSite` / `SoftwareSourceCode` / `Organization` / 役割エンティティ）に無い型を出したいときは、`@graph` 末尾へそのまま追加します。既定値は一切付かないので、`@type` と `@id` は自分で書いてください。
+
+サイト全体（`site.meta.yaml`）:
+
+```yaml
+jsonLdExtra:
+  - "@type": ContactPoint
+    "@id": https://example.com/#support
+    contactType: customer support
+    email: support@example.com
+```
+
+そのページだけ（frontmatter）:
+
+```yaml
+jsonLd:
+  extra:
+    - "@type": Event
+      "@id": https://example.com/ja/release#event
+      name: v1.0 リリース
+      startDate: "2026-03-01"
+```
+
+`jsonLd.entities` との使い分けは次のとおりです。既定値の恩恵を受けたいなら `entities`（`type` は任意の文字列が書けるので、未知型でも `@id` は自動で付きます）。テンプレートに一切触られたくないなら `extra` です。
 
 ## 注意点
 

@@ -7,6 +7,8 @@ export type JsonLdEntityInput = { type: string } & Record<string, unknown>;
 export type PageJsonLdInput = {
   webPage?: Record<string, unknown>;
   entities?: JsonLdEntityInput[];
+  /** Escape hatch: entities emitted verbatim, with no defaults applied. */
+  extra?: Record<string, unknown>[];
 };
 
 export type EntityBuildContext = {
@@ -17,6 +19,8 @@ export type EntityBuildContext = {
   description?: string;
   inLanguage?: string;
   faqMainEntity?: JsonLdObject[];
+  /** Set when site.meta.yaml declares an organization; used for publisher. */
+  organizationId?: string;
 };
 
 const KNOWN_FRAGMENTS: Record<string, string> = {
@@ -61,28 +65,19 @@ export function normalizeJsonLdValue(value: unknown): unknown {
 }
 
 function baseEntity(type: string, ctx: EntityBuildContext): JsonLdObject {
-  if (type === "TechArticle") {
+  if (type === "TechArticle" || type === "HowTo") {
     const entity: JsonLdObject = {
       "@type": type,
       "@id": `${ctx.pageUrl}#${fragmentFor(type)}`,
-      headline: ctx.title,
+      ...(type === "TechArticle"
+        ? { headline: ctx.title }
+        : { name: ctx.title }),
       isPartOf: { "@id": ctx.pageUrl },
       about: { "@id": `${ctx.siteUrl}/#software` },
     };
-    if (ctx.description) {
-      entity.description = ctx.description;
+    if (ctx.organizationId) {
+      entity.publisher = { "@id": ctx.organizationId };
     }
-    return entity;
-  }
-
-  if (type === "HowTo") {
-    const entity: JsonLdObject = {
-      "@type": type,
-      "@id": `${ctx.pageUrl}#${fragmentFor(type)}`,
-      name: ctx.title,
-      isPartOf: { "@id": ctx.pageUrl },
-      about: { "@id": `${ctx.siteUrl}/#software` },
-    };
     if (ctx.description) {
       entity.description = ctx.description;
     }
@@ -149,12 +144,63 @@ export function buildWebPage(
     isPartOf: { "@id": `${ctx.siteUrl}/#website` },
     about: { "@id": `${ctx.siteUrl}/#software` },
   };
+  if (ctx.organizationId) {
+    entity.publisher = { "@id": ctx.organizationId };
+  }
   if (ctx.description) {
     entity.description = ctx.description;
   }
   return {
     ...entity,
     ...(normalizeJsonLdValue(authored || {}) as JsonLdObject),
+  };
+}
+
+/**
+ * Escape hatch entries are emitted as authored. Anything that is not a plain
+ * object is dropped with a warning rather than corrupting the graph.
+ */
+export function sanitizeExtraEntities(
+  entries: unknown,
+  source: string,
+): JsonLdObject[] {
+  if (!entries) {
+    return [];
+  }
+  if (!Array.isArray(entries)) {
+    console.warn(`[doc-site] ${source} must be an array; ignoring.`);
+    return [];
+  }
+
+  const result: JsonLdObject[] = [];
+  for (const entry of entries) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+      console.warn(`[doc-site] ${source} entry is not an object; skipping.`);
+      continue;
+    }
+    result.push(normalizeJsonLdValue(entry) as JsonLdObject);
+  }
+  return result;
+}
+
+/**
+ * Site-wide Organization. Only emitted when site.meta.yaml declares one, so
+ * sites that have not filled it in keep their previous graph.
+ */
+export function buildOrganization(
+  authored: Record<string, unknown> | null | undefined,
+  siteUrl: string,
+  siteName: string,
+): JsonLdObject | null {
+  if (!authored || Object.keys(authored).length === 0) {
+    return null;
+  }
+  return {
+    "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
+    name: siteName,
+    url: `${siteUrl}/`,
+    ...(normalizeJsonLdValue(authored) as JsonLdObject),
   };
 }
 
