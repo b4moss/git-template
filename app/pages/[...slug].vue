@@ -2,10 +2,12 @@
 import { withLeadingSlash } from "ufo";
 import type { Collections } from "@nuxt/content";
 import type { SchemaRole } from "~/composables/useJsonLd";
+import { extractFaqFromBody } from "~/utils/extractFaq";
 
 const route = useRoute();
 const { locale } = useI18n();
 const config = useRuntimeConfig();
+const { clearFaqItems, upsertFaqItem } = useFaqItems();
 
 const slug = computed(() => {
   const raw = route.params.slug;
@@ -70,12 +72,20 @@ const schemaRole = computed(() => {
   return role;
 });
 
-useJsonLd({
-  pageUrl,
-  title: pageTitle,
-  description: () => page.value?.description || undefined,
-  schemaRole,
-});
+// Seed FAQ Q/A from the content AST so FAQPage JSON-LD is fixed at SSG time.
+watch(
+  () => [page.value?.body, schemaRole.value, pageUrl.value] as const,
+  () => {
+    clearFaqItems();
+    if (schemaRole.value !== "FAQPage" || !page.value?.body) {
+      return;
+    }
+    for (const item of extractFaqFromBody(page.value.body)) {
+      upsertFaqItem(item);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -83,6 +93,12 @@ useJsonLd({
     <article class="prose">
       <ContentRenderer v-if="page" :value="page" />
     </article>
+    <DocsJsonLd
+      :page-url="pageUrl"
+      :title="pageTitle"
+      :description="page?.description || undefined"
+      :schema-role="schemaRole"
+    />
     <DocsPager />
   </div>
 </template>

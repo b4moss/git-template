@@ -34,16 +34,25 @@ function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeCon
 }
 
 function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
-  const mainEntity = faqs
-    .filter((item) => item.question.trim() && item.answer.trim())
-    .map((item) => ({
+  const seen = new Set<string>();
+  const mainEntity: JsonLdObject[] = [];
+
+  for (const item of faqs) {
+    const question = item.question.trim();
+    const answer = item.answer.trim();
+    if (!question || !answer || seen.has(question)) {
+      continue;
+    }
+    seen.add(question);
+    mainEntity.push({
       "@type": "Question",
-      name: item.question.trim(),
+      name: question,
       acceptedAnswer: {
         "@type": "Answer",
-        text: item.answer.trim(),
+        text: answer,
       },
-    }));
+    });
+  }
 
   if (mainEntity.length === 0) {
     return null;
@@ -59,21 +68,11 @@ function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
 
 export function useJsonLd(options: UseJsonLdOptions) {
   const config = useRuntimeConfig();
-  const { items: faqItems, clearFaqItems } = useFaqItems();
+  const { items: faqItems } = useFaqItems();
 
   const siteUrl = String(config.public.siteUrl || "https://example.com").replace(
     /\/$/,
     "",
-  );
-
-  // Reset FAQ registry on locale / slug navigation (skip initial run so SSR items stay).
-  watch(
-    () => toValue(options.pageUrl),
-    (_url, prev) => {
-      if (prev !== undefined) {
-        clearFaqItems();
-      }
-    },
   );
 
   const graph = computed(() => {

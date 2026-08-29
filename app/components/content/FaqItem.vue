@@ -15,22 +15,22 @@ const { upsertFaqItem, removeFaqItem } = useFaqItems();
 const id = useId();
 const faqList = inject<FaqListContext | null>(faqListInjectionKey, null);
 
-const answerText = computed(() => {
-  const rendered = slots.default?.() || [];
-  return vnodeToText(rendered).replace(/\s+/g, " ").trim();
-});
-
-watch(
-  [() => props.question, answerText],
-  () => {
+/** Sync Q/A during render so slot text is available (SSR-safe). */
+function syncFaqFromSlot(): string {
+  const answer = vnodeToText(slots.default?.() || [])
+    .replace(/\s+/g, " ")
+    .trim();
+  // Prefer body-AST seeded entries when present; component ids differ.
+  // Still upsert so client-only FAQ blocks without body walk keep working.
+  if (props.question.trim() && answer) {
     upsertFaqItem({
       id,
       question: props.question,
-      answer: answerText.value,
+      answer,
     });
-  },
-  { immediate: true },
-);
+  }
+  return "";
+}
 
 onMounted(() => {
   faqList?.registerPanel(id);
@@ -50,6 +50,8 @@ function onToggle() {
 
 <template>
   <div class="faq-item" :data-open="open">
+    <!-- evaluate during render for slot text -->
+    <span hidden aria-hidden="true">{{ syncFaqFromSlot() }}</span>
     <h3 class="faq-item__question">
       <button
         class="faq-item__trigger"
