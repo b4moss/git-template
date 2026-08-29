@@ -1,45 +1,44 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): tutorial
-# Recommended @graph: WebPage + HowTo + SoftwareSourceCode (site-wide)
-# Note: HowTo entity emission is reserved only (no step extraction yet)
+# What this page should emit (#40)
+#   @graph = WebPage + HowTo + SoftwareSourceCode
+#   Today HowTo is NOT emitted yet (role reserved only).
+#   What actually appears: WebPage + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name / <title>
-#   → (future) HowTo.name
-# description: string (optional)
-#   → WebPage.description / meta description
-#   → (future) HowTo.description
-# schemaRole: "HowTo"
-#   Accepted in content.config.ts
-#   useJsonLd() does not push HowTo into @graph yet (WebPage + SoftwareSourceCode only)
+# Where to write what
 #
-# --- Planned HowTo properties (authoring them does not emit JSON-LD today) ---
-# # howTo.name / howTo.description     ← from title / description
-# # howTo.@id                          ← "{pageUrl}#howto" (planned)
-# # howTo.isPartOf                     ← WebPage
-# # howTo.about                        ← SoftwareSourceCode
-# # howTo.step[]                       ← extracted from body steps (not implemented)
-# #   HowToStep.name / text / position / url, etc.
-# # howTo.totalTime / tool / supply    ← unsupported (raw insert via #45 hatch)
-#
-# --- Copy-paste examples ---
-# title: First-time setup
-# description: From clone to dev server (about 5 minutes)
-# schemaRole: HowTo
+#   (A) OSS info   → site.meta.yaml software.*
+#   (B) Page role  → schemaRole: HowTo (accepted, but useJsonLd does not push HowTo yet)
+#   (C) Name/blurb → title / description → WebPage only for now
 #
 title: Tutorial
 description: Dummy tutorial page (JSON-LD HowTo role reserved sample)
 schemaRole: HowTo
+#
+# Planned HowTo shape (not emitted yet):
+#   {
+#     "@type": "HowTo",
+#     "@id": "https://example.com/en/tutorial#howto",
+#     "name": "Tutorial",
+#     "step": [ /* from body steps — not implemented */ ]
+#   }
+#
+# What you get today (sketch):
+# {
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/en/tutorial", "name": "Tutorial" },
+#     { "@type": "SoftwareSourceCode", "@id": "https://example.com/#software", "name": "My OSS" }
+#   ]
+# }
+# =============================================================================
 ---
 
 # Tutorial
 
-Dummy tutorial page with frontmatter `schemaRole: HowTo`.
+Dummy tutorial page.
 
-`HowTo` is reserved for now: the role is accepted, but HowTo entities are not emitted yet (`WebPage` + `SoftwareSourceCode` still are).
+**Recipe (today):** keep `schemaRole: HowTo` for the future; HowTo body is not in JSON-LD yet. OSS meta still comes from `site.meta.yaml`.
 
 1. Clone the repository
 2. Install dependencies

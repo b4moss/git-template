@@ -1,45 +1,58 @@
 ---
 # =============================================================================
-# JSON-LD サンプル（#40）: チュートリアル
-# 推奨 @graph: WebPage + HowTo + SoftwareSourceCode（サイト共通）
-# 注: HowTo エンティティの出力は予約のみ（step 抽出は未実装）
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + HowTo + SoftwareSourceCode
+#   ※ いまは HowTo エンティティはまだ出ない（ロール予約のみ）
+#     実際に出るのは WebPage + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter（このファイル）---
-# title: string
-#   → WebPage.name / <title>
-#   → （将来）HowTo.name
-# description: string（任意）
-#   → WebPage.description / meta description
-#   → （将来）HowTo.description
-# schemaRole: "HowTo"
-#   content.config.ts では受付済み
-#   useJsonLd() は現状 HowTo を @graph に積まない（WebPage + SoftwareSourceCode のみ）
+# 【どこに何を書くか】
 #
-# --- 将来 HowTo に載せる想定プロパティ（まだ書いても JSON-LD に出ない）---
-# # howTo.name / howTo.description     ← title / description から
-# # howTo.@id                          ← "{pageUrl}#howto"（想定）
-# # howTo.isPartOf                     ← WebPage
-# # howTo.about                        ← SoftwareSourceCode
-# # howTo.step[]                       ← 本文の手順から抽出（未実装）
-# #   HowToStep.name / text / position / url など
-# # howTo.totalTime / tool / supply    ← 未サポート（ハッチ #45 で生挿入可）
+#   (A) OSS 情報     → site.meta.yaml の software.*
+#   (B) ページの役割 → 下の schemaRole: HowTo
+#       content.config.ts では受付済みだが、useJsonLd() は HowTo を積まない（未実装）
+#   (C) 名前・説明   → 下の title / description → 現状は WebPage にだけ反映
 #
-# --- 記述例（コピー用）---
-# title: はじめてのセットアップ
-# description: clone から dev サーバ起動まで（約 5 分）
-# schemaRole: HowTo
-#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: チュートリアル
 description: チュートリアルのダミーページ（JSON-LD HowTo ロール予約サンプル）
 schemaRole: HowTo
+#
+#   将来 HowTo が出るようになったら、だいたいこうなる想定:
+#   {
+#     "@type": "HowTo",
+#     "@id": "https://example.com/ja/tutorial#howto",
+#     "name": "チュートリアル",           ← title
+#     "description": "…",               ← description
+#     "step": [ /* 本文の 1. 2. 3. から抽出（未実装）*/ ],
+#     "isPartOf": { "@id": "https://example.com/ja/tutorial" }
+#   }
+#
+# -----------------------------------------------------------------------------
+# いま実際に出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/ja/tutorial", "name": "チュートリアル" },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # チュートリアル
 
-ダミーのチュートリアルページです。frontmatter で `schemaRole: HowTo` を指定するサンプルです。
+ダミーのチュートリアルページです。
 
-現状、`HowTo` はロール予約のみで、手順エンティティの自動生成は行いません（`WebPage` + `SoftwareSourceCode` は出力されます）。
+**出し方（現状）:** `schemaRole: HowTo` は書いておく（将来用）。JSON-LD に HowTo 本体はまだ出ません。OSS 情報は `site.meta.yaml`。
 
 1. リポジトリを clone する
 2. 依存関係を入れる

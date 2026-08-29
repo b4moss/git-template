@@ -1,43 +1,44 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): OSS top
-# Recommended @graph: WebPage + SoftwareSourceCode (site-wide)
-# Omit schemaRole (no page-role schema)
+# What this page should emit (#40)
+#   @graph = WebPage + SoftwareSourceCode
+#   No page-role schema on the top page (no TechArticle etc.)
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string (effectively required)
-#   → WebPage.name
-#   → <title> / useSeoMeta.title
-# description: string (optional)
-#   → WebPage.description (omitted from JSON-LD if unset)
-#   → meta description
-# schemaRole: omit on the home page
-#   Allowed values: TechArticle | HowTo | FAQPage (content.config.ts)
-#   Setting it adds a role entity; usually unwanted on the top page
+# Where to write what
 #
-# --- Auto-generated (do not author) ---
-# WebPage.@context     … root "@context": "https://schema.org"
-# WebPage.@type        … "WebPage"
-# WebPage.@id          … {siteUrl}/{locale}{path}  (e.g. https://example.com/en)
-# WebPage.url          … same as @id
-# WebPage.isPartOf     … { "@id": "{siteUrl}/#website" }  (WebSite entity via #45 etc.)
-# WebPage.about        … { "@id": "{siteUrl}/#software" }
+#   (A) Site-wide OSS info  → site.meta.yaml → SoftwareSourceCode on every page
+#   (B) Page role           → omit schemaRole
+#   (C) Page name / blurb   → title / description below → WebPage only
 #
-# --- Site-wide site.meta.yaml → SoftwareSourceCode ---
-# software.name                 → name (falls back to siteName)
-# software.codeRepository       → codeRepository (falls back to githubUrl)
-# software.license              → license (e.g. MIT)
-# software.programmingLanguage  → string[] (may be empty)
-# SoftwareSourceCode.@id        … "{siteUrl}/#software" (fixed)
-#
-# --- Copy-paste examples (leave commented) ---
-# title: Home
-# description: Product documentation site
-# # schemaRole: TechArticle   # ← usually not used on the top page
+# (A) site.meta.yaml example:
+#   software:
+#     name: My OSS
+#     codeRepository: https://github.com/example/my-oss
 #
 title: Home
 description: Scaffold for a Nuxt Content documentation site
+# Do not set schemaRole here — adding it would inject TechArticle etc.
+#
+# Resulting JSON-LD (sketch):
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en",
+#       "name": "Home",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # Doc Site
@@ -51,14 +52,15 @@ This branch is a Nuxt Content documentation site starter.
 3. Add Markdown under `content/{ja,en}/` (set `schemaRole` when needed)
 4. Keep `nav.*` labels in `i18n/locales/` in sync
 
-## JSON-LD dummy pages (#40)
+## JSON-LD dummy pages (#40) — write X → get Y
 
-| Page | `schemaRole` |
-| --- | --- |
-| [Overview](./overview.md) | `TechArticle` |
-| [Install](./install.md) | `TechArticle` |
-| [API](./api.md) | `TechArticle` |
-| [Tutorial](./tutorial.md) | `HowTo` (reserved) |
-| [FAQ](./faq.md) | `FAQPage` |
+| Page | What you write | Resulting `@graph` |
+| --- | --- | --- |
+| This page (top) | no `schemaRole` + `site.meta.yaml` | WebPage + SoftwareSourceCode |
+| [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [Install](./install.md) | `schemaRole: TechArticle` | same |
+| [API](./api.md) | `schemaRole: TechArticle` | same |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo` (reserved) | WebPage + SoftwareSourceCode for now |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
 See [Getting started](./getting-started.md) for details.

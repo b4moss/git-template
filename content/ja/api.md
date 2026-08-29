@@ -1,41 +1,57 @@
 ---
 # =============================================================================
-# JSON-LD サンプル（#40）: API リファレンス
-# 推奨 @graph: WebPage + TechArticle + SoftwareSourceCode（サイト共通）
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter（このファイル）---
-# title: string
-#   → WebPage.name / TechArticle.headline / <title>
-# description: string（任意）
-#   → WebPage.description / TechArticle.description / meta description
-#   例: 対象言語・メジャーバージョンを含めると識別しやすい
-# schemaRole: "TechArticle"
-#   API リファレンスの標準ロール。関数単位の schema.org 型は出さない
+# 【どこに何を書くか】
 #
-# --- TechArticle に現状マップされるプロパティ ---
-# headline     ← title
-# description  ← description（任意）
-# @id          ← "{pageUrl}#article"（自動）
-# isPartOf     ← WebPage @id（自動）
-# about        ← SoftwareSourceCode @id（自動）
+#   (A) OSS 情報     → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割 → 下の schemaRole: TechArticle
+#   (C) 名前・説明   → 下の title / description
 #
-# --- まだ frontmatter から出さない例（必要なら #45 の jsonLdExtra）---
-# # datePublished / dateModified / author / version などはハッチ or ヘルパ拡張待ち
-#
-# --- 記述例（コピー用）---
-# title: API リファレンス
-# description: 公開 API の一覧とシグネチャ（v1）
-# schemaRole: TechArticle
-#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: API リファレンス
 description: API リファレンスのダミーページ（JSON-LD TechArticle サンプル）
 schemaRole: TechArticle
+#
+#   title        → WebPage.name / TechArticle.headline
+#   description  → WebPage.description / TechArticle.description
+#   schemaRole   → TechArticle を @graph に追加
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/ja/api", "name": "API リファレンス" },
+#     {
+#       "@type": "TechArticle",
+#       "@id": "https://example.com/ja/api#article",
+#       "headline": "API リファレンス",
+#       "isPartOf": { "@id": "https://example.com/ja/api" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+#
+# 関数ごとの schema.org 型は出さない。追加したい場合は #45 の jsonLdExtra ハッチへ
+# =============================================================================
 ---
 
 # API リファレンス
 
-ダミーの API ページです。`schemaRole: TechArticle` のサンプル。
+ダミーの API ページです。
+
+**出し方:** `schemaRole: TechArticle` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 ## `hello(name)`
 

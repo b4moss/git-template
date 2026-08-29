@@ -2,41 +2,32 @@
 # site.meta.yaml is gitignored; if missing, this example is used as fallback.
 #
 # =============================================================================
-# Site + SoftwareSourceCode properties (JSON-LD / #40)
-# Loaded by nuxt.config.ts → runtimeConfig.public → useJsonLd()
+# 【ここで書くもの】サイト共通 → 全ページの SoftwareSourceCode（#40）
+#
+#   Markdown の frontmatter には書かない。
+#   この YAML を書くと、各ページ JSON-LD の @graph にだいたいこう出る:
+#
+#   {
+#     "@type": "SoftwareSourceCode",
+#     "@id": "https://example.com/#software",
+#     "name": "My OSS",
+#     "codeRepository": "https://github.com/example/my-oss",
+#     "license": "MIT",
+#     "programmingLanguage": ["TypeScript"]
+#   }
+#
+#   各ページの WebPage / TechArticle は about: { "@id": "…/#software" } で参照する。
+#
+# フィールド:
+#   siteName / siteUrl / githubUrl … UI・URL 生成・フォールバックにも使う
+#   software.name                 → SoftwareSourceCode.name（省略時 siteName）
+#   software.codeRepository       → codeRepository（省略時 githubUrl）
+#   software.license              → license（例: MIT）
+#   software.programmingLanguage  → string[]（空 [] なら JSON-LD に出さない）
+#
+# ページ役割（TechArticle / FAQPage / HowTo）は各 Markdown の schemaRole 側。
+# FAQ の Q/A は本文の ::faq-item。詳細は content/*/overview.md や faq.md のコメントへ。
 # =============================================================================
-#
-# siteName: string
-#   → UI / defaults; SoftwareSourceCode.name fallback when software.name omitted
-# siteUrl: string (no trailing slash preferred; normalized on load)
-#   → absolute page URLs in WebPage.@id / url
-#   → SoftwareSourceCode.@id base ("{siteUrl}/#software")
-# siteVersion: string
-#   → exposed on runtimeConfig.public (not mapped into JSON-LD today)
-# description: string
-#   → site-level blurb on runtimeConfig.public (page description comes from frontmatter)
-# githubUrl: string
-#   → header GitHub link; SoftwareSourceCode.codeRepository fallback
-# footerText: string
-#   → footer copy (not JSON-LD)
-#
-# software.name: string
-#   → SoftwareSourceCode.name（省略時 siteName）
-# software.codeRepository: string (URL)
-#   → SoftwareSourceCode.codeRepository（省略時 githubUrl）
-# software.license: string
-#   → SoftwareSourceCode.license（例: MIT）。空なら license プロパティ自体を省略可だが
-#     雛形では MIT を入れる
-# software.programmingLanguage: string[]
-#   → SoftwareSourceCode.programmingLanguage
-#   例: [ TypeScript, Go ]
-#   空配列 [] のときは JSON-LD に programmingLanguage を出さない
-#
-# SoftwareSourceCode 自動:
-#   @type = SoftwareSourceCode
-#   @id   = "{siteUrl}/#software"
-#   全ページの WebPage.about / TechArticle.about から参照される
-#
 
 siteName: Doc Site
 siteUrl: https://example.com
@@ -46,10 +37,11 @@ githubUrl: https://github.com/b4moss/git-template
 footerText: "MIT License · 2026 Bicycle for Mind LLC."
 
 software:
-  # Defaults to siteName when omitted
+  # → SoftwareSourceCode.name（omit to use siteName）
   name: Doc Site
-  # Defaults to githubUrl when omitted
+  # → SoftwareSourceCode.codeRepository（omit to use githubUrl）
   codeRepository: https://github.com/b4moss/git-template
+  # → SoftwareSourceCode.license
   license: MIT
-  # Example: [ TypeScript, Vue ]
+  # → SoftwareSourceCode.programmingLanguage（e.g. [ TypeScript, Vue ]）
   programmingLanguage: []

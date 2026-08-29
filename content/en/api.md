@@ -1,41 +1,48 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): API reference
-# Recommended @graph: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# What this page should emit (#40)
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name / TechArticle.headline / <title>
-# description: string (optional)
-#   → WebPage.description / TechArticle.description / meta description
-#   Tip: include language / major version for clearer snippets
-# schemaRole: "TechArticle"
-#   Standard role for API reference. No per-function schema.org types
+# Where to write what
 #
-# --- Properties mapped into TechArticle today ---
-# headline     ← title
-# description  ← description (optional)
-# @id          ← "{pageUrl}#article" (auto)
-# isPartOf     ← WebPage @id (auto)
-# about        ← SoftwareSourceCode @id (auto)
-#
-# --- Not emitted from frontmatter yet (use #45 jsonLdExtra or helper extension) ---
-# # datePublished / dateModified / author / version, etc.
-#
-# --- Copy-paste examples ---
-# title: API reference
-# description: Public API list and signatures (v1)
-# schemaRole: TechArticle
+#   (A) OSS info   → site.meta.yaml software.*
+#   (B) Page role  → schemaRole: TechArticle
+#   (C) Name/blurb → title / description
 #
 title: API reference
 description: Dummy API reference page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
+#
+# Resulting JSON-LD (sketch):
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/en/api", "name": "API reference" },
+#     {
+#       "@type": "TechArticle",
+#       "@id": "https://example.com/en/api#article",
+#       "headline": "API reference",
+#       "isPartOf": { "@id": "https://example.com/en/api" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+#
+# No per-function schema.org types. Extra entities → #45 jsonLdExtra hatch.
+# =============================================================================
 ---
 
 # API reference
 
-Dummy API page demonstrating `schemaRole: TechArticle`.
+Dummy API page.
+
+**Recipe:** `schemaRole: TechArticle` + `title` / `description` here, plus `software.*` in `site.meta.yaml`.
 
 ## `hello(name)`
 

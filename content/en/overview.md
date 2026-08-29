@@ -1,45 +1,60 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): product overview
-# Recommended @graph: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# What this page should emit (#40)
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
+#   Not “one schema per page” — multiple entities in @graph
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name
-#   → TechArticle.headline
-#   → <title> / useSeoMeta.title
-# description: string (optional)
-#   → WebPage.description
-#   → TechArticle.description
-#   → meta description
-# schemaRole: "TechArticle" (recommended for this page type)
-#   → adds a TechArticle entity to @graph
-#   Alternatives: HowTo | FAQPage (only when the page role differs)
+# Where to write what (only three places)
 #
-# --- TechArticle auto-generated (do not author) ---
-# TechArticle.@type     … "TechArticle"
-# TechArticle.@id       … "{pageUrl}#article"
-# TechArticle.headline  … same as title
-# TechArticle.isPartOf  … { "@id": pageUrl }  (parent WebPage)
-# TechArticle.about     … { "@id": "{siteUrl}/#software" }
+#   (A) Site-wide OSS info → project-root site.meta.yaml → SoftwareSourceCode
+#   (B) Page role          → schemaRole below → adds TechArticle
+#   (C) Name / blurb       → title / description below → WebPage + TechArticle fields
 #
-# --- WebPage / SoftwareSourceCode ---
-# WebPage is on every page (@id/url/name/isPartOf/about + optional description)
-# SoftwareSourceCode comes from site.meta.yaml software.* (see index.md / .example)
-#
-# --- Copy-paste examples ---
-# title: Overview
-# description: Short product blurb (used for search + JSON-LD)
-# schemaRole: TechArticle
+# (A) site.meta.yaml:
+#   software:
+#     name: My OSS
+#     codeRepository: https://github.com/example/my-oss
 #
 title: Overview
 description: Dummy overview page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
+#
+#   title        → WebPage.name and TechArticle.headline
+#   description  → WebPage.description and TechArticle.description
+#   schemaRole   → adds TechArticle to @graph when set to TechArticle
+#
+# Resulting JSON-LD (sketch):
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en/overview",
+#       "name": "Overview",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "TechArticle",
+#       "@id": "https://example.com/en/overview#article",
+#       "headline": "Overview",
+#       "isPartOf": { "@id": "https://example.com/en/overview" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # Overview
 
-Dummy overview page. Frontmatter `schemaRole: TechArticle` yields `WebPage` + `TechArticle` + `SoftwareSourceCode` in JSON-LD.
+Dummy overview page.
+
+**Recipe:** `site.meta.yaml` for OSS meta; this frontmatter for `schemaRole: TechArticle` plus `title` / `description` → `@graph` gets WebPage + TechArticle + SoftwareSourceCode.
 
 Replace this body with your product introduction.

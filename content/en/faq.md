@@ -1,58 +1,62 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): FAQ
-# Recommended @graph: WebPage + FAQPage + SoftwareSourceCode (site-wide)
-# Q/A bodies live in MDC (::faq-list / ::faq-item), not frontmatter
+# What this page should emit (#40)
+#   @graph = WebPage + FAQPage + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name / <title>
-#   (FAQPage itself has no name field today)
-# description: string (optional)
-#   → WebPage.description / meta description
-# schemaRole: "FAQPage" (effectively required to emit FAQPage)
-#   → Q/A from extractFaqFromBody + useFaqItems → FAQPage.mainEntity
+# Where to write what (four places)
 #
-# --- FAQPage auto-generated (do not author) ---
-# FAQPage.@type       … "FAQPage"
-# FAQPage.@id         … "{pageUrl}#faq"
-# FAQPage.isPartOf    … { "@id": pageUrl }
-# FAQPage.mainEntity  … Question[] (duplicate questions are skipped)
-#
-# --- MDC properties (body) ---
-# ::faq-list
-#   Container: expand/collapse UI + registration target for child FaqItems
-# :::faq-item{question="Question text"}
-#   question (attribute, string, effectively required)
-#     → Question.name
-#     → accordion heading
-#   slot body (Markdown allowed)
-#     → Answer.text (plain-textified into JSON-LD)
-#     → accordion body
-# :::
-# ::
-#
-# --- Question / Answer mapping today ---
-# Question.@type = "Question"
-# Question.name  ← faq-item.question
-# Answer.@type   = "Answer"
-# Answer.text    ← faq-item body
-# (Question.@id / Answer.url are not emitted)
-#
-# --- Copy-paste examples ---
-# title: FAQ
-# description: Common questions on setup, config, and troubleshooting
-# schemaRole: FAQPage
+#   (A) OSS info       → site.meta.yaml software.*
+#   (B) Page role      → schemaRole: FAQPage  (required to emit FAQPage)
+#   (C) Page name/blurb→ title / description → WebPage
+#   (D) Q/A content    → body MDC (not frontmatter)
 #
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
+#
+# (D) In the body below, write:
+#   ::faq-list
+#   :::faq-item{question="Put the question here"}
+#   Put the answer here (Markdown ok)
+#   :::
+#   ::
+#
+#   question="…" → Question.name
+#   slot body    → Answer.text
+#
+# Resulting JSON-LD (sketch):
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/en/faq", "name": "FAQ" },
+#     {
+#       "@type": "FAQPage",
+#       "@id": "https://example.com/en/faq#faq",
+#       "mainEntity": [
+#         {
+#           "@type": "Question",
+#           "name": "Put the question here",
+#           "acceptedAnswer": { "@type": "Answer", "text": "Put the answer here…" }
+#         }
+#       ]
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # FAQ
 
 This page demonstrates the FAQ accordion and `FAQPage` JSON-LD.
+
+**Recipe:** frontmatter `schemaRole: FAQPage`, Q/A via `::faq-item` below, OSS meta in `site.meta.yaml`.
 
 ::faq-list
 :::faq-item{question="Where do I put site.meta.yaml?"}

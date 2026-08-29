@@ -1,38 +1,48 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): installation
-# Recommended @graph: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# What this page should emit (#40)
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name
-#   → TechArticle.headline
-#   → <title> / useSeoMeta.title
-# description: string (optional)
-#   → WebPage.description / TechArticle.description / meta description
-#   Tip: mention prerequisites / supported environments for search snippets
-# schemaRole: "TechArticle"
-#   Install guides use TechArticle in the current standard set
-#   (For HowTo-shaped steps, see tutorial.md; HowTo emission is reserved only)
+# Where to write what
 #
-# --- TechArticle auto-generated (do not author) ---
-# @type "TechArticle" / @id "{pageUrl}#article" / headline←title
-# isPartOf→WebPage / about→SoftwareSourceCode
-#
-# --- Copy-paste examples ---
-# title: Install
-# description: For Node.js 18+. Setup via npm / pnpm / bun
-# schemaRole: TechArticle
+#   (A) OSS info   → site.meta.yaml software.*
+#   (B) Page role  → schemaRole: TechArticle
+#   (C) Name/blurb → title / description
 #
 title: Install
 description: Dummy installation page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
+#
+# Resulting JSON-LD (sketch):
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     { "@type": "WebPage", "@id": "https://example.com/en/install", "name": "Install" },
+#     {
+#       "@type": "TechArticle",
+#       "@id": "https://example.com/en/install#article",
+#       "headline": "Install",
+#       "isPartOf": { "@id": "https://example.com/en/install" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+#
+# For HowTo-shaped steps see tutorial.md (HowTo emission still reserved).
+# =============================================================================
 ---
 
 # Install
 
-Dummy installation page demonstrating `schemaRole: TechArticle`.
+Dummy installation page.
+
+**Recipe:** `schemaRole: TechArticle` + `title` / `description` here, plus `software.*` in `site.meta.yaml`.
 
 ```bash
 npm install your-package
