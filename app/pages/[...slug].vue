@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { withLeadingSlash } from "ufo";
 import type { Collections } from "@nuxt/content";
+import type { SchemaRole } from "~/composables/useJsonLd";
+import { extractFaqFromBody } from "~/utils/extractFaq";
 
 const route = useRoute();
 const { locale } = useI18n();
 const config = useRuntimeConfig();
+const { clearFaqItems, upsertFaqItem } = useFaqItems();
 
 const slug = computed(() => {
   const raw = route.params.slug;
@@ -45,11 +48,44 @@ if (!page.value) {
   });
 }
 
+const pageTitle = computed(
+  () => page.value?.title || String(config.public.siteName || "Doc Site"),
+);
+
 useSeoMeta({
-  title: () =>
-    page.value?.title || String(config.public.siteName || "Doc Site"),
+  title: () => pageTitle.value,
   description: () => page.value?.description || undefined,
 });
+
+const siteUrl = computed(() =>
+  String(config.public.siteUrl || "https://example.com").replace(/\/$/, ""),
+);
+
+const pageUrl = computed(() => {
+  const path =
+    slug.value === "/" ? `/${locale.value}` : `/${locale.value}${slug.value}`;
+  return `${siteUrl.value}${path}`;
+});
+
+const schemaRole = computed(() => {
+  const role = (page.value as { schemaRole?: SchemaRole } | null)?.schemaRole;
+  return role;
+});
+
+// Seed FAQ Q/A from the content AST so FAQPage JSON-LD is fixed at SSG time.
+watch(
+  () => [page.value?.body, schemaRole.value, pageUrl.value] as const,
+  () => {
+    clearFaqItems();
+    if (schemaRole.value !== "FAQPage" || !page.value?.body) {
+      return;
+    }
+    for (const item of extractFaqFromBody(page.value.body)) {
+      upsertFaqItem(item);
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -57,6 +93,12 @@ useSeoMeta({
     <article class="prose">
       <ContentRenderer v-if="page" :value="page" />
     </article>
+    <DocsJsonLd
+      :page-url="pageUrl"
+      :title="pageTitle"
+      :description="page?.description || undefined"
+      :schema-role="schemaRole"
+    />
     <DocsPager />
   </div>
 </template>
