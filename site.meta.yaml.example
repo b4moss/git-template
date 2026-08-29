@@ -1,5 +1,42 @@
 # Copy to site.meta.yaml and edit for your project.
 # site.meta.yaml is gitignored; if missing, this example is used as fallback.
+#
+# =============================================================================
+# Site + SoftwareSourceCode properties (JSON-LD / #40)
+# Loaded by nuxt.config.ts → runtimeConfig.public → useJsonLd()
+# =============================================================================
+#
+# siteName: string
+#   → UI / defaults; SoftwareSourceCode.name fallback when software.name omitted
+# siteUrl: string (no trailing slash preferred; normalized on load)
+#   → absolute page URLs in WebPage.@id / url
+#   → SoftwareSourceCode.@id base ("{siteUrl}/#software")
+# siteVersion: string
+#   → exposed on runtimeConfig.public (not mapped into JSON-LD today)
+# description: string
+#   → site-level blurb on runtimeConfig.public (page description comes from frontmatter)
+# githubUrl: string
+#   → header GitHub link; SoftwareSourceCode.codeRepository fallback
+# footerText: string
+#   → footer copy (not JSON-LD)
+#
+# software.name: string
+#   → SoftwareSourceCode.name（省略時 siteName）
+# software.codeRepository: string (URL)
+#   → SoftwareSourceCode.codeRepository（省略時 githubUrl）
+# software.license: string
+#   → SoftwareSourceCode.license（例: MIT）。空なら license プロパティ自体を省略可だが
+#     雛形では MIT を入れる
+# software.programmingLanguage: string[]
+#   → SoftwareSourceCode.programmingLanguage
+#   例: [ TypeScript, Go ]
+#   空配列 [] のときは JSON-LD に programmingLanguage を出さない
+#
+# SoftwareSourceCode 自動:
+#   @type = SoftwareSourceCode
+#   @id   = "{siteUrl}/#software"
+#   全ページの WebPage.about / TechArticle.about から参照される
+#
 
 siteName: Doc Site
 siteUrl: https://example.com
@@ -14,4 +51,5 @@ software:
   # Defaults to githubUrl when omitted
   codeRepository: https://github.com/b4moss/git-template
   license: MIT
+  # Example: [ TypeScript, Vue ]
   programmingLanguage: []

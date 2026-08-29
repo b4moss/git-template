@@ -1,13 +1,34 @@
 ---
+# =============================================================================
 # JSON-LD sample (#40): technical article (scaffold guide)
-# Recommended: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# Recommended @graph: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# =============================================================================
+#
+# --- frontmatter (this file) ---
+# title: string
+#   → WebPage.name / TechArticle.headline / <title>
+# description: string (optional)
+#   → WebPage.description / TechArticle.description / meta description
+# schemaRole: "TechArticle"
+#   Allowed: TechArticle | HowTo | FAQPage (content.config.ts)
+#
+# --- Property mapping (what useJsonLd emits today) ---
+# WebPage
+#   @type / @id / url / name←title / description? / isPartOf / about
+# TechArticle (when schemaRole=TechArticle)
+#   @type / @id="{pageUrl}#article" / headline←title / description?
+#   isPartOf→WebPage / about→SoftwareSourceCode
+# SoftwareSourceCode (every page; from site.meta.yaml)
+#   @id="{siteUrl}/#software" / name / codeRepository / license? / programmingLanguage?
+#
+# --- Copy-paste examples ---
+# title: Getting started
+# description: How to use this documentation site scaffold
+# schemaRole: TechArticle
+#
 title: Getting started
 description: How to use this documentation site scaffold
 schemaRole: TechArticle
-# Examples:
-# schemaRole: TechArticle
-# title: Getting started
-# description: How to use this documentation site scaffold
 ---
 
 # Getting started
@@ -41,4 +62,4 @@ Output goes to `.output/public`.
 
 - Set frontmatter `schemaRole` to `TechArticle`, `FAQPage`, or `HowTo` (reserved)
 - Each page gets `WebPage` + optional role + `SoftwareSourceCode` in `@graph`
-- Role samples: [Overview](./overview.md) / [Install](./install.md) / [API](./api.md) / [Tutorial](./tutorial.md) / [FAQ](./faq.md)
+- Role samples (with property maps in frontmatter): [Overview](./overview.md) / [Install](./install.md) / [API](./api.md) / [Tutorial](./tutorial.md) / [FAQ](./faq.md)
