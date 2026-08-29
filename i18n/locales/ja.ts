@@ -3,6 +3,7 @@ export default {
     "home": "ホーム",
     "gettingStarted": "はじめに",
     "faq": "FAQ",
+    "syntaxContrast": "コントラスト検証",
     "language": "言語",
     "prefs": "表示設定",
     "menu": "メニュー",

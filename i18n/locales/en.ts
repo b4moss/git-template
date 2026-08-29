@@ -3,6 +3,7 @@ export default {
     "home": "Home",
     "gettingStarted": "Getting started",
     "faq": "FAQ",
+    "syntaxContrast": "Contrast check",
     "language": "Language",
     "prefs": "Display settings",
     "menu": "Menu",
