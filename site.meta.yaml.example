@@ -1,0 +1,17 @@
+# Copy to site.meta.yaml and edit for your project.
+# site.meta.yaml is gitignored; if missing, this example is used as fallback.
+
+siteName: Doc Site
+siteUrl: https://example.com
+siteVersion: "0.9.0"
+description: Nuxt Content documentation site scaffold
+githubUrl: https://github.com/b4moss/git-template
+footerText: "MIT License · 2026 Bicycle for Mind LLC."
+
+software:
+  # Defaults to siteName when omitted
+  name: Doc Site
+  # Defaults to githubUrl when omitted
+  codeRepository: https://github.com/b4moss/git-template
+  license: MIT
+  programmingLanguage: []

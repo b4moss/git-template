@@ -2,6 +2,12 @@ export default {
   "nav": {
     "home": "ホーム",
     "gettingStarted": "はじめに",
+    "overview": "概要",
+    "install": "インストール",
+    "api": "API",
+    "tutorial": "チュートリアル",
+    "faq": "FAQ",
+    "syntaxContrast": "コントラスト検証",
     "language": "言語",
     "prefs": "表示設定",
     "menu": "メニュー",
@@ -20,5 +26,9 @@ export default {
   "collapseBox": {
     "expand": "続きを表示",
     "collapse": "折りたたむ"
+  },
+  "faq": {
+    "expandAll": "全部開く",
+    "collapseAll": "全部閉じる"
   }
 }

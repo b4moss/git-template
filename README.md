@@ -4,12 +4,13 @@
 
 Nuxt Content documentation site scaffold (from the `doc-site` branch of [git-template](https://github.com/b4moss/git-template)).
 
-Shared shell: header utilities (language, color mode, mobile menu, optional GitHub), footer, sidebar / pager, bilingual Content collections.
+Shared shell: header utilities (language, color mode, mobile menu, optional GitHub), footer, sidebar / pager, bilingual Content collections, JSON-LD helpers, FAQ accordion.
 
 ## Quick start
 
 ```bash
 npm install
+cp site.meta.yaml.example site.meta.yaml   # optional; example is used as fallback
 npm run dev
 ```
 
@@ -21,10 +22,15 @@ npm run generate
 
 | File | Purpose |
 | --- | --- |
-| `nuxt.config.ts` → `runtimeConfig.public` | `siteName`, `siteVersion`, `githubUrl`, `footerText` |
+| `site.meta.yaml` (from `site.meta.yaml.example`) | Site name, URL, GitHub, SoftwareSourceCode meta → `runtimeConfig.public` |
+| `nuxt.config.ts` | Loads YAML, modules, prerender routes |
 | `app/config/docsNav.ts` | Sidebar / pager entries |
-| `content/{ja,en}/` | Markdown pages |
+| `content/{ja,en}/` | Markdown pages (`schemaRole`: `TechArticle` / `FAQPage` / `HowTo`) |
+| `content/*/syntax-contrast.md` | Dark code-block token contrast sample (delete if unused) |
+| `::faq-list` / `::faq-item` | FAQ accordion + `FAQPage` JSON-LD (see `content/*/faq.md`) |
 | `i18n/locales/` | UI copy (including `nav.*` labels) |
+| `server/routes/sitemap.xml.get.ts` | Sitemap from `docsNav` + locales (`siteUrl` from YAML) |
+| `server/routes/robots.txt.get.ts` | Points crawlers at `/sitemap.xml` |
 
 ## License
 

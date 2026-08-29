@@ -1,5 +1,29 @@
-import { copyFileSync } from "node:fs";
+import { copyFileSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { parse as parseYaml } from "yaml";
+import { normalizeSiteMeta, type SiteMeta } from "./app/utils/siteMeta";
+
+function loadSiteMeta(rootDir: string): SiteMeta {
+  const candidates = [
+    join(rootDir, "site.meta.yaml"),
+    join(rootDir, "site.meta.yaml.example"),
+  ];
+  for (const path of candidates) {
+    if (!existsSync(path)) continue;
+    try {
+      const raw = parseYaml(readFileSync(path, "utf8")) as Record<
+        string,
+        unknown
+      > | null;
+      return normalizeSiteMeta(raw || undefined);
+    } catch (error) {
+      console.warn(`[doc-site] Failed to parse ${path}:`, error);
+    }
+  }
+  return normalizeSiteMeta(undefined);
+}
+
+const siteMeta = loadSiteMeta(process.cwd());
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -14,10 +38,13 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
     public: {
-      siteName: "Doc Site",
-      siteVersion: "",
-      githubUrl: "https://github.com/b4moss/git-template",
-      footerText: "MIT License · 2026 Bicycle for Mind LLC.",
+      siteName: siteMeta.siteName,
+      siteUrl: siteMeta.siteUrl,
+      siteVersion: siteMeta.siteVersion,
+      description: siteMeta.description,
+      githubUrl: siteMeta.githubUrl,
+      footerText: siteMeta.footerText,
+      software: siteMeta.software,
     },
   },
   // GTM: set NUXT_PUBLIC_SCRIPTS_GOOGLE_TAG_MANAGER_ID=GTM-XXXXXXX (build-time for SSG).
@@ -39,11 +66,10 @@ export default defineNuxtConfig({
     experimental: { sqliteConnector: "native" },
     build: {
       markdown: {
+        // Always-dark code blocks (incl. light UI). High-contrast tokens so no
+        // near-black github-light colors remain on the dark pre background.
         highlight: {
-          theme: {
-            default: "github-light",
-            dark: "github-dark",
-          },
+          theme: "github-dark-high-contrast",
         },
       },
     },
@@ -91,7 +117,26 @@ export default defineNuxtConfig({
     preset: "static",
     prerender: {
       crawlLinks: true,
-      routes: ["/ja", "/en", "/ja/getting-started", "/en/getting-started"],
+      routes: [
+        "/ja",
+        "/en",
+        "/ja/getting-started",
+        "/en/getting-started",
+        "/ja/overview",
+        "/en/overview",
+        "/ja/install",
+        "/en/install",
+        "/ja/api",
+        "/en/api",
+        "/ja/tutorial",
+        "/en/tutorial",
+        "/ja/faq",
+        "/en/faq",
+        "/sitemap.xml",
+        "/robots.txt",
+        "/ja/syntax-contrast",
+        "/en/syntax-contrast",
+      ],
     },
   },
 });

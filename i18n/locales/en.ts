@@ -2,6 +2,12 @@ export default {
   "nav": {
     "home": "Home",
     "gettingStarted": "Getting started",
+    "overview": "Overview",
+    "install": "Install",
+    "api": "API",
+    "tutorial": "Tutorial",
+    "faq": "FAQ",
+    "syntaxContrast": "Contrast check",
     "language": "Language",
     "prefs": "Display settings",
     "menu": "Menu",
@@ -20,5 +26,9 @@ export default {
   "collapseBox": {
     "expand": "Show more",
     "collapse": "Show less"
+  },
+  "faq": {
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all"
   }
 }
