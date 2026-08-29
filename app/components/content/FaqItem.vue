@@ -1,34 +1,15 @@
 <script setup lang="ts">
-import { vnodeToText } from "~/utils/vnodeText";
 import {
   faqListInjectionKey,
   type FaqListContext,
 } from "~/utils/faqListContext";
 
-const props = defineProps<{
+defineProps<{
   question: string;
 }>();
 
-const slots = useSlots();
-const { upsertFaqItem, removeFaqItem } = useFaqItems();
-
 const id = useId();
 const faqList = inject<FaqListContext | null>(faqListInjectionKey, null);
-
-/** Sync Q/A during render so slot text is available (SSR-safe). */
-function syncFaqFromSlot(): string {
-  const answer = vnodeToText(slots.default?.() || [])
-    .replace(/\s+/g, " ")
-    .trim();
-  if (props.question.trim() && answer) {
-    upsertFaqItem({
-      id,
-      question: props.question,
-      answer,
-    });
-  }
-  return "";
-}
 
 onMounted(() => {
   faqList?.registerPanel(id);
@@ -36,7 +17,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   faqList?.unregisterPanel(id);
-  removeFaqItem(id);
 });
 
 const open = computed(() => faqList?.isOpen(id) ?? false);
@@ -48,7 +28,6 @@ function onToggle() {
 
 <template>
   <div class="faq-item" :data-open="open">
-    <span hidden aria-hidden="true">{{ syncFaqFromSlot() }}</span>
     <h3 class="faq-item__question">
       <button
         class="faq-item__trigger"

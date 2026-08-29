@@ -1,4 +1,5 @@
-import type { FaqQa } from "./useFaqItems";
+import type { FaqQa } from "~/utils/extractFaq";
+import type { SiteSoftwareMeta } from "~/utils/siteMeta";
 import {
   buildJsonLdEntity,
   buildOrganization,
@@ -17,6 +18,8 @@ type UseJsonLdOptions = {
   description?: MaybeRefOrGetter<string | undefined>;
   schemaRole?: MaybeRefOrGetter<SchemaRole | undefined>;
   jsonLd?: MaybeRefOrGetter<PageJsonLdInput | undefined>;
+  /** Q/A extracted from the page body; feeds FAQPage.mainEntity. */
+  faqItems?: MaybeRefOrGetter<FaqQa[] | undefined>;
 };
 
 /**
@@ -33,7 +36,7 @@ function webSiteEntity(
     "@type": "WebSite",
     "@id": `${siteUrl}/#website`,
     url: `${siteUrl}/`,
-    name: config.public.siteName || "Doc Site",
+    name: config.public.siteName,
     about: { "@id": `${siteUrl}/#software` },
   };
   if (organizationId) {
@@ -49,18 +52,14 @@ function webSiteEntity(
   return entity;
 }
 
+/** Values are already resolved by normalizeSiteMeta(), so no fallbacks here. */
 function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeConfig>) {
-  const software = (config.public.software || {}) as {
-    name?: string;
-    codeRepository?: string;
-    license?: string;
-    programmingLanguage?: string[];
-  };
+  const software = config.public.software as SiteSoftwareMeta;
   const entity: JsonLdObject = {
     "@type": "SoftwareSourceCode",
     "@id": `${siteUrl}/#software`,
-    name: software.name || config.public.siteName || "Doc Site",
-    codeRepository: software.codeRepository || config.public.githubUrl,
+    name: software.name,
+    codeRepository: software.codeRepository,
   };
   if (software.license) {
     entity.license = software.license;
@@ -100,13 +99,11 @@ type LocaleEntry = { code: string; language?: string };
 
 export function useJsonLd(options: UseJsonLdOptions) {
   const config = useRuntimeConfig();
-  const { items: faqItems } = useFaqItems();
   const { locale, locales } = useI18n();
 
-  const siteUrl = String(config.public.siteUrl || "https://example.com").replace(
-    /\/$/,
-    "",
-  );
+  // Guards against a trailing slash arriving from an env override, which
+  // normalizeSiteMeta() does not see.
+  const siteUrl = String(config.public.siteUrl).replace(/\/$/, "");
 
   /** BCP 47 tags (e.g. ja-JP) from the i18n locale config, code as fallback. */
   const localeEntries = computed(() =>
@@ -133,11 +130,10 @@ export function useJsonLd(options: UseJsonLdOptions) {
     const schemaRole = toValue(options.schemaRole);
     const jsonLd = toValue(options.jsonLd);
 
-    const siteName = String(config.public.siteName || "Doc Site");
     const organization = buildOrganization(
       config.public.organization as Record<string, unknown> | null,
       siteUrl,
-      siteName,
+      String(config.public.siteName),
     );
     const organizationId = organization
       ? String(organization["@id"])
@@ -175,7 +171,7 @@ export function useJsonLd(options: UseJsonLdOptions) {
       title,
       description,
       inLanguage: inLanguage.value,
-      faqMainEntity: faqQuestions(faqItems.value),
+      faqMainEntity: faqQuestions(toValue(options.faqItems) || []),
       organizationId,
     };
 
