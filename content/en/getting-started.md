@@ -1,7 +1,13 @@
 ---
+# JSON-LD sample (#40): technical article (scaffold guide)
+# Recommended: WebPage + TechArticle + SoftwareSourceCode (site-wide)
 title: Getting started
 description: How to use this documentation site scaffold
 schemaRole: TechArticle
+# Examples:
+# schemaRole: TechArticle
+# title: Getting started
+# description: How to use this documentation site scaffold
 ---
 
 # Getting started
@@ -35,4 +41,4 @@ Output goes to `.output/public`.
 
 - Set frontmatter `schemaRole` to `TechArticle`, `FAQPage`, or `HowTo` (reserved)
 - Each page gets `WebPage` + optional role + `SoftwareSourceCode` in `@graph`
-- For FAQ markup, see [FAQ](./faq.md) (`::faq-list` / `::faq-item`)
+- Role samples: [Overview](./overview.md) / [Install](./install.md) / [API](./api.md) / [Tutorial](./tutorial.md) / [FAQ](./faq.md)

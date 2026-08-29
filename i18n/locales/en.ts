@@ -2,6 +2,10 @@ export default {
   "nav": {
     "home": "Home",
     "gettingStarted": "Getting started",
+    "overview": "Overview",
+    "install": "Install",
+    "api": "API",
+    "tutorial": "Tutorial",
     "faq": "FAQ",
     "syntaxContrast": "Contrast check",
     "language": "Language",

@@ -14,6 +14,10 @@ export type DocsNavItem = {
 export const docsNavItems: DocsNavItem[] = [
   { key: "home", path: "/", labelKey: "home" },
   { key: "gettingStarted", path: "/getting-started", labelKey: "gettingStarted" },
+  { key: "overview", path: "/overview", labelKey: "overview" },
+  { key: "install", path: "/install", labelKey: "install" },
+  { key: "api", path: "/api", labelKey: "api" },
+  { key: "tutorial", path: "/tutorial", labelKey: "tutorial" },
   { key: "faq", path: "/faq", labelKey: "faq" },
   { key: "syntaxContrast", path: "/syntax-contrast", labelKey: "syntaxContrast" },
 ];
