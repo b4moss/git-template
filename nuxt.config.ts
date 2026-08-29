@@ -66,11 +66,10 @@ export default defineNuxtConfig({
     experimental: { sqliteConnector: "native" },
     build: {
       markdown: {
+        // Always-dark code blocks (incl. light UI). High-contrast tokens so no
+        // near-black github-light colors remain on the dark pre background.
         highlight: {
-          theme: {
-            default: "github-light",
-            dark: "github-dark",
-          },
+          theme: "github-dark-high-contrast",
         },
       },
     },
@@ -127,6 +126,8 @@ export default defineNuxtConfig({
         "/en/faq",
         "/sitemap.xml",
         "/robots.txt",
+        "/ja/syntax-contrast",
+        "/en/syntax-contrast",
       ],
     },
   },
