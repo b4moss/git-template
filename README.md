@@ -25,7 +25,8 @@ npm run generate
 | `site.meta.yaml` (from `site.meta.yaml.example`) | Site name, URL, GitHub, SoftwareSourceCode meta → `runtimeConfig.public` |
 | `nuxt.config.ts` | Loads YAML, modules, prerender routes |
 | `app/config/docsNav.ts` | Sidebar / pager entries |
-| `content/{ja,en}/` | Markdown pages (`schemaRole`: `TechArticle` / `FAQPage` / `HowTo`) |
+| `content/{ja,en}/` | Markdown pages (`schemaRole` short form, or `jsonLd` full form) |
+| `docs/jsonld.md` / `docs/jsonld_ja.md` | JSON-LD authoring guide (English summary / Japanese canonical) |
 | `content/*/syntax-contrast.md` | Dark code-block token contrast sample (delete if unused) |
 | `::faq-list` / `::faq-item` | FAQ accordion + `FAQPage` JSON-LD (see `content/*/faq.md`) |
 | `i18n/locales/` | UI copy (including `nav.*` labels) |

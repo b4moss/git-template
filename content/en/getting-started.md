@@ -1,33 +1,10 @@
 ---
-# =============================================================================
-# 【このページで出したいもの】（#40 推奨）
-#   @graph = WebPage + TechArticle + SoftwareSourceCode
-#   （雛形の使い方ドキュメントも TechArticle 扱いでよい）
-# =============================================================================
-#
-# 【どこに何を書くか】（全ページ共通のルール）
-#
-#   1ページ = 1スキーマ、ではない。
-#   ページ本体は常に WebPage。役割を足すなら schemaRole。
-#   OSS は site.meta.yaml → SoftwareSourceCode（全ページ共通）。
-#   複数エンティティは @graph に並び、関係は @id でつなぐ。
-#
-#   | 出したいもの           | 書く場所                          | 書く内容                |
-#   |------------------------|-----------------------------------|-------------------------|
-#   | SoftwareSourceCode     | site.meta.yaml → software.*       | name, codeRepository…   |
-#   | WebPage                | この frontmatter（自動＋手書き）  | title, description       |
-#   | TechArticle / HowTo /  | この frontmatter の schemaRole    | TechArticle など        |
-#   | FAQPage                | schemaRole: FAQPage + 本文 MDC    | ::faq-item{question=}   |
-#
-# -----------------------------------------------------------------------------
-# このファイル（↓が実体）
-# -----------------------------------------------------------------------------
+# @graph: WebPage + WebSite + TechArticle + SoftwareSourceCode
+# Write in: site.meta.yaml (shared) / schemaRole: TechArticle / title・description
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: Getting started
 description: How to use this documentation site scaffold
 schemaRole: TechArticle
-#
-# 出るもののイメージは overview.md / install.md と同じ（WebPage + TechArticle + SoftwareSourceCode）
-# =============================================================================
 ---
 
 # Getting started
@@ -51,21 +28,21 @@ Output goes to `.output/public`.
 
 | Location | Purpose |
 | --- | --- |
-| `site.meta.yaml`（雛形は `.example`） | サイト名・URL・GitHub・**SoftwareSourceCode** |
-| 各 Markdown の frontmatter | `title` / `description` / **`schemaRole`** |
-| FAQ 本文の `::faq-item` | **FAQPage** の Question / Answer |
-| `app/config/docsNav.ts` | サイドバー／ページャー |
-| `i18n/locales/` | UI 文言（ナビラベル含む） |
+| `site.meta.yaml` (from `.example`) | Site name, URL, GitHub, **SoftwareSourceCode** |
+| Each Markdown frontmatter | `title` / `description` / **`schemaRole`** or **`jsonLd`** |
+| FAQ body `::faq-item` | **FAQPage** Question / Answer |
+| `app/config/docsNav.ts` | Sidebar / pager |
+| `i18n/locales/` | UI copy (including nav labels) |
 
-## JSON-LD — 「何を書くと何が出るか」ダミー
+## JSON-LD — what you write vs what you get
 
-各ファイル先頭のコメントに、**書く場所 → 出る `@graph`** の例があります。
+See [docs/jsonld.md](../../docs/jsonld.md) for the full authoring guide (Japanese canonical: [docs/jsonld_ja.md](../../docs/jsonld_ja.md)).
 
-| Page | 書くこと | 出る `@graph` |
+| Page | What to write | Resulting `@graph` |
 | --- | --- | --- |
-| [Home](./index.md) | `schemaRole` なし | WebPage + SoftwareSourceCode |
+| [Home](./index.md) | No `schemaRole` | WebPage + SoftwareSourceCode |
 | [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
-| [Install](./install.md) | 同上 | 同上 |
-| [API](./api.md) | 同上 | 同上 |
-| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | 現状 WebPage + SoftwareSourceCode（HowTo は予約） |
+| [Install](./install.md) | Same | Same |
+| [API](./api.md) | `jsonLd` (full form) | WebPage + TechArticle + BreadcrumbList + … |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
 | [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
