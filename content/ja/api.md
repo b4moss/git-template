@@ -15,11 +15,42 @@
 # -----------------------------------------------------------------------------
 title: API リファレンス
 description: API リファレンスのダミーページ（JSON-LD TechArticle サンプル）
-schemaRole: TechArticle
+
+# schemaRole: TechArticle だけでも動くが、ここでは詳細記法の見本として
+# jsonLd を使い、規約で自動生成される値にプロパティを足している。
+# 記法の全体像は docs/jsonld_ja.md を参照。
+jsonLd:
+  webPage:
+    # WebPage 自体に足す（自動生成分の上に重ねる）。
+    # 実体は下の BreadcrumbList で、ここは @id 参照でつなぐ
+    breadcrumb:
+      "@id": https://example.com/ja/api#breadcrumb
+  entities:
+    # 既知型: 規約の @id / headline / isPartOf / about に下記が足される
+    - type: TechArticle
+      # 日付は必ずクォートする（YAML が Date に解釈するため）
+      datePublished: "2026-01-01"
+      dateModified: "2026-01-15"
+      proficiencyLevel: Expert
+      author:
+        "@type": Organization
+        name: Example Inc.
+    # 未知型: @type と @id だけが自動。関係はすべて自分で書く
+    - type: BreadcrumbList
+      "@id": https://example.com/ja/api#breadcrumb
+      itemListElement:
+        - "@type": ListItem
+          position: 1
+          name: ホーム
+          item: https://example.com/ja
+        - "@type": ListItem
+          position: 2
+          name: API リファレンス
+          item: https://example.com/ja/api
 #
 #   title        → WebPage.name / TechArticle.headline
 #   description  → WebPage.description / TechArticle.description
-#   schemaRole   → TechArticle を @graph に追加
+#   jsonLd.entities[].type → @graph に追加するエンティティ
 #
 # -----------------------------------------------------------------------------
 # 出る JSON-LD（イメージ）

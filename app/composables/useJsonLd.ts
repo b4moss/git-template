@@ -1,14 +1,20 @@
 import type { FaqQa } from "./useFaqItems";
+import {
+  buildJsonLdEntity,
+  buildWebPage,
+  resolveEntityInputs,
+  type JsonLdObject,
+  type PageJsonLdInput,
+} from "~/utils/jsonLdEntities";
 
 export type SchemaRole = "TechArticle" | "HowTo" | "FAQPage";
-
-type JsonLdObject = Record<string, unknown>;
 
 type UseJsonLdOptions = {
   pageUrl: MaybeRefOrGetter<string>;
   title: MaybeRefOrGetter<string>;
   description?: MaybeRefOrGetter<string | undefined>;
   schemaRole?: MaybeRefOrGetter<SchemaRole | undefined>;
+  jsonLd?: MaybeRefOrGetter<PageJsonLdInput | undefined>;
 };
 
 /**
@@ -59,7 +65,8 @@ function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeCon
   return entity;
 }
 
-function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
+/** Q/A pairs collected from MDC, deduplicated by question text. */
+function faqQuestions(faqs: FaqQa[]): JsonLdObject[] {
   const seen = new Set<string>();
   const mainEntity: JsonLdObject[] = [];
 
@@ -80,16 +87,7 @@ function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
     });
   }
 
-  if (mainEntity.length === 0) {
-    return null;
-  }
-
-  return {
-    "@type": "FAQPage",
-    "@id": `${pageUrl}#faq`,
-    isPartOf: { "@id": pageUrl },
-    mainEntity,
-  };
+  return mainEntity;
 }
 
 type LocaleEntry = { code: string; language?: string };
@@ -127,19 +125,22 @@ export function useJsonLd(options: UseJsonLdOptions) {
     const title = toValue(options.title);
     const description = toValue(options.description);
     const schemaRole = toValue(options.schemaRole);
+    const jsonLd = toValue(options.jsonLd);
 
-    const webPage: JsonLdObject = {
-      "@type": "WebPage",
-      "@id": pageUrl,
-      url: pageUrl,
-      name: title,
-      inLanguage: inLanguage.value,
-      isPartOf: { "@id": `${siteUrl}/#website` },
-      about: { "@id": `${siteUrl}/#software` },
-    };
-    if (description) {
-      webPage.description = description;
-    }
+    const webPage = buildWebPage(
+      {
+        pageUrl,
+        siteUrl,
+        title,
+        description,
+        inLanguage: inLanguage.value,
+      },
+      jsonLd?.webPage,
+    );
+
+    // Authored props may override the page @id, so resolve it before the role
+    // entities that reference it.
+    const resolvedPageUrl = String(webPage["@id"] || pageUrl);
 
     const entities: JsonLdObject[] = [
       webPage,
@@ -147,26 +148,19 @@ export function useJsonLd(options: UseJsonLdOptions) {
       softwareEntity(siteUrl, config),
     ];
 
-    if (schemaRole === "TechArticle") {
-      const article: JsonLdObject = {
-        "@type": "TechArticle",
-        "@id": `${pageUrl}#article`,
-        headline: title,
-        isPartOf: { "@id": pageUrl },
-        about: { "@id": `${siteUrl}/#software` },
-      };
-      if (description) {
-        article.description = description;
-      }
-      entities.push(article);
-    }
+    const entityContext = {
+      pageUrl: resolvedPageUrl,
+      siteUrl,
+      title,
+      description,
+      inLanguage: inLanguage.value,
+      faqMainEntity: faqQuestions(faqItems.value),
+    };
 
-    // HowTo: type reserved on frontmatter only; entity emission deferred.
-
-    if (schemaRole === "FAQPage") {
-      const faq = faqPageEntity(pageUrl, faqItems.value);
-      if (faq) {
-        entities.push(faq);
+    for (const input of resolveEntityInputs(schemaRole, jsonLd)) {
+      const entity = buildJsonLdEntity(input, entityContext);
+      if (entity) {
+        entities.push(entity);
       }
     }
 
