@@ -1,58 +1,78 @@
 ---
 # =============================================================================
-# JSON-LD サンプル（#40）: FAQ
-# 推奨 @graph: WebPage + FAQPage + SoftwareSourceCode（サイト共通）
-# Q/A 本体は frontmatter ではなく MDC（::faq-list / ::faq-item）
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + FAQPage + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter（このファイル）---
-# title: string
-#   → WebPage.name / <title>
-#   （FAQPage 自体の name は現状出さない）
-# description: string（任意）
-#   → WebPage.description / meta description
-# schemaRole: "FAQPage"（必須相当・これがないと FAQPage エンティティを出さない）
-#   → extractFaqFromBody + useFaqItems で集めた Q/A を FAQPage.mainEntity へ
+# 【どこに何を書くか】覚えるのは次の4つ
 #
-# --- FAQPage 自動生成（書かない）---
-# FAQPage.@type       … "FAQPage"
-# FAQPage.@id         … "{pageUrl}#faq"
-# FAQPage.isPartOf    … { "@id": pageUrl }
-# FAQPage.mainEntity  … Question[]（重複 question はスキップ）
+#   (A) OSS 情報         → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割     → 下の schemaRole: FAQPage  （これがないと FAQPage が出ない）
+#   (C) ページ名・説明   → 下の title / description → WebPage 用
+#   (D) 質問と回答の中身 → 本文の MDC（frontmatter には書かない）
 #
-# --- MDC 側のプロパティ（本文）---
-# ::faq-list
-#   コンテナ。開閉 UI（全部開く/閉じる）と子 FaqItem の登録先
-# :::faq-item{question="質問文"}
-#   question（属性, string, 必須相当）
-#     → Question.name
-#     → アコーディオン見出し
-#   スロット本文（Markdown 可）
-#     → Answer.text（プレーンテキスト化して JSON-LD へ）
-#     → アコーディオン本文
-# :::
-# ::
-#
-# --- Question / Answer に現状マップされるもの ---
-# Question.@type = "Question"
-# Question.name  ← faq-item.question
-# Answer.@type   = "Answer"
-# Answer.text    ← faq-item 本文
-# （Question.@id / Answer.url などは未出力）
-#
-# --- 記述例（コピー用）---
-# title: FAQ
-# description: 導入・設定・トラブルシュートのよくある質問
-# schemaRole: FAQPage
-#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイルの frontmatter（↓が実体）
+# -----------------------------------------------------------------------------
 title: FAQ
 description: よくある質問のサンプル（MDC アコーディオンと FAQPage JSON-LD）
 schemaRole: FAQPage
+#
+# -----------------------------------------------------------------------------
+# (D) 本文にこう書く（このファイルの下のほう）
+# -----------------------------------------------------------------------------
+#   ::faq-list
+#   :::faq-item{question="質問文はここに書く"}
+#   回答文はここに書く（Markdown 可）
+#   :::
+#   ::
+#
+#   question="…"  → Question.name（アコーディオン見出しにもなる）
+#   スロット本文   → Answer.text（JSON-LD ではプレーンテキスト化）
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/ja/faq",
+#       "name": "FAQ",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "FAQPage",
+#       "@id": "https://example.com/ja/faq#faq",
+#       "isPartOf": { "@id": "https://example.com/ja/faq" },
+#       "mainEntity": [
+#         {
+#           "@type": "Question",
+#           "name": "質問文はここに書く",
+#           "acceptedAnswer": {
+#             "@type": "Answer",
+#             "text": "回答文はここに書く…"
+#           }
+#         }
+#       ]
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # FAQ
 
 このページは FAQ アコーディオンと `FAQPage` JSON-LD のサンプルです。
+
+**出し方:** frontmatter で `schemaRole: FAQPage`、Q/A は下の `::faq-item`、OSS 情報は `site.meta.yaml`。
 
 ::faq-list
 :::faq-item{question="site.meta.yaml はどこに置きますか？"}

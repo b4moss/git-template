@@ -1,43 +1,57 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): OSS top
-# Recommended @graph: WebPage + SoftwareSourceCode (site-wide)
-# Omit schemaRole (no page-role schema)
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + SoftwareSourceCode
+#   ※ トップは「役割」スキーマを付けない（TechArticle 等なし）
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string (effectively required)
-#   → WebPage.name
-#   → <title> / useSeoMeta.title
-# description: string (optional)
-#   → WebPage.description (omitted from JSON-LD if unset)
-#   → meta description
-# schemaRole: omit on the home page
-#   Allowed values: TechArticle | HowTo | FAQPage (content.config.ts)
-#   Setting it adds a role entity; usually unwanted on the top page
+# 【どこに何を書くか】
 #
-# --- Auto-generated (do not author) ---
-# WebPage.@context     … root "@context": "https://schema.org"
-# WebPage.@type        … "WebPage"
-# WebPage.@id          … {siteUrl}/{locale}{path}  (e.g. https://example.com/en)
-# WebPage.url          … same as @id
-# WebPage.isPartOf     … { "@id": "{siteUrl}/#website" }  (WebSite entity via #45 etc.)
-# WebPage.about        … { "@id": "{siteUrl}/#software" }
+#   (A) サイト共通の OSS 情報  →  site.meta.yaml（全ページの SoftwareSourceCode）
+#   (B) このページの役割      →  schemaRole は書かない（省略）
+#   (C) ページの名前・説明    →  下の title / description → WebPage のみに使われる
 #
-# --- Site-wide site.meta.yaml → SoftwareSourceCode ---
-# software.name                 → name (falls back to siteName)
-# software.codeRepository       → codeRepository (falls back to githubUrl)
-# software.license              → license (e.g. MIT)
-# software.programmingLanguage  → string[] (may be empty)
-# SoftwareSourceCode.@id        … "{siteUrl}/#software" (fixed)
+# -----------------------------------------------------------------------------
+# (A) site.meta.yaml の例 → SoftwareSourceCode（全ページ共通）
+# -----------------------------------------------------------------------------
+#   software:
+#     name: My OSS
+#     codeRepository: https://github.com/example/my-oss
 #
-# --- Copy-paste examples (leave commented) ---
-# title: Home
-# description: Product documentation site
-# # schemaRole: TechArticle   # ← usually not used on the top page
-#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイルに書くもの（↓が実体）
+# -----------------------------------------------------------------------------
 title: Home
 description: Scaffold for a Nuxt Content documentation site
+# schemaRole は書かない  ← 書くと TechArticle 等が追加されるのでトップでは通常不要
+#
+#   title        → WebPage.name
+#   description  → WebPage.description（任意）
+#   schemaRole   → なし → WebPage + SoftwareSourceCode だけ
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en",
+#       "url": "https://example.com/en",
+#       "name": "Home",
+#       "description": "Scaffold for …",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # Doc Site
@@ -51,14 +65,15 @@ This branch is a Nuxt Content documentation site starter.
 3. Add Markdown under `content/{ja,en}/` (set `schemaRole` when needed)
 4. Keep `nav.*` labels in `i18n/locales/` in sync
 
-## JSON-LD dummy pages (#40)
+## JSON-LD ダミーページ（#40）— 何を書くと何が出るか
 
-| Page | `schemaRole` |
-| --- | --- |
-| [Overview](./overview.md) | `TechArticle` |
-| [Install](./install.md) | `TechArticle` |
-| [API](./api.md) | `TechArticle` |
-| [Tutorial](./tutorial.md) | `HowTo` (reserved) |
-| [FAQ](./faq.md) | `FAQPage` |
+| Page | 書く場所の要点 | 出る `@graph` |
+| --- | --- | --- |
+| This page (top) | `schemaRole` なし + `site.meta.yaml` | WebPage + SoftwareSourceCode |
+| [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [Install](./install.md) | `schemaRole: TechArticle` | 同上 |
+| [API](./api.md) | `schemaRole: TechArticle` | 同上 |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo`（出力は予約） | 現状 WebPage + SoftwareSourceCode |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
 See [Getting started](./getting-started.md) for details.

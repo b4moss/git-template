@@ -1,38 +1,64 @@
 ---
 # =============================================================================
-# JSON-LD サンプル（#40）: インストール
-# 推奨 @graph: WebPage + TechArticle + SoftwareSourceCode（サイト共通）
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter（このファイル）---
-# title: string
-#   → WebPage.name
-#   → TechArticle.headline
-#   → <title> / useSeoMeta.title
-# description: string（任意）
-#   → WebPage.description / TechArticle.description / meta description
-#   例: 前提条件・対応環境を一文で書くと検索スニペット向き
-# schemaRole: "TechArticle"
-#   インストール手順でも現状の標準ロールは TechArticle
-#   （手順そのものを HowTo にしたい場合は tutorial.md を参照。HowTo 出力は予約のみ）
+# 【どこに何を書くか】
 #
-# --- TechArticle 自動生成（書かない）---
-# @type "TechArticle" / @id "{pageUrl}#article" / headline←title
-# isPartOf→WebPage / about→SoftwareSourceCode
+#   (A) OSS 情報     → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割 → 下の schemaRole: TechArticle
+#   (C) 名前・説明   → 下の title / description
 #
-# --- 記述例（コピー用）---
-# title: インストール
-# description: Node.js 18+ 向け。npm / pnpm / bun での導入手順
-# schemaRole: TechArticle
+# (A) の書き方・出方は overview.md / site.meta.yaml.example を参照
 #
+# -----------------------------------------------------------------------------
+# (B)(C) このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: インストール
 description: インストール手順のダミーページ（JSON-LD TechArticle サンプル）
 schemaRole: TechArticle
+#
+#   title        → WebPage.name / TechArticle.headline
+#   description  → WebPage.description / TechArticle.description
+#   schemaRole   → TechArticle を @graph に追加
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/ja/install",
+#       "name": "インストール",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "TechArticle",
+#       "@id": "https://example.com/ja/install#article",
+#       "headline": "インストール",
+#       "isPartOf": { "@id": "https://example.com/ja/install" }
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+#
+# 手順そのものを HowTo にしたい場合は tutorial.md（HowTo は現状ロール予約のみ）
+# =============================================================================
 ---
 
 # インストール
 
-ダミーのインストールページです。`schemaRole: TechArticle` のサンプル。
+ダミーのインストールページです。
+
+**出し方:** `schemaRole: TechArticle` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 ```bash
 npm install your-package

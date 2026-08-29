@@ -1,34 +1,33 @@
 ---
 # =============================================================================
-# JSON-LD サンプル（#40）: 技術文書（雛形の使い方）
-# 推奨 @graph: WebPage + TechArticle + SoftwareSourceCode（サイト共通）
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + TechArticle + SoftwareSourceCode
+#   （雛形の使い方ドキュメントも TechArticle 扱いでよい）
 # =============================================================================
 #
-# --- frontmatter（このファイル）---
-# title: string
-#   → WebPage.name / TechArticle.headline / <title>
-# description: string（任意）
-#   → WebPage.description / TechArticle.description / meta description
-# schemaRole: "TechArticle"
-#   取りうる値: TechArticle | HowTo | FAQPage（content.config.ts）
+# 【どこに何を書くか】（全ページ共通のルール）
 #
-# --- プロパティ対応（現状 useJsonLd が実際に出すもの）---
-# WebPage
-#   @type / @id / url / name←title / description? / isPartOf / about
-# TechArticle（schemaRole=TechArticle のとき）
-#   @type / @id="{pageUrl}#article" / headline←title / description?
-#   isPartOf→WebPage / about→SoftwareSourceCode
-# SoftwareSourceCode（全ページ・site.meta.yaml）
-#   @id="{siteUrl}/#software" / name / codeRepository / license? / programmingLanguage?
+#   1ページ = 1スキーマ、ではない。
+#   ページ本体は常に WebPage。役割を足すなら schemaRole。
+#   OSS は site.meta.yaml → SoftwareSourceCode（全ページ共通）。
+#   複数エンティティは @graph に並び、関係は @id でつなぐ。
 #
-# --- 記述例（コピー用）---
-# title: はじめに
-# description: ドキュメントサイト雛形の使い方
-# schemaRole: TechArticle
+#   | 出したいもの           | 書く場所                          | 書く内容                |
+#   |------------------------|-----------------------------------|-------------------------|
+#   | SoftwareSourceCode     | site.meta.yaml → software.*       | name, codeRepository…   |
+#   | WebPage                | この frontmatter（自動＋手書き）  | title, description       |
+#   | TechArticle / HowTo /  | この frontmatter の schemaRole    | TechArticle など        |
+#   | FAQPage                | schemaRole: FAQPage + 本文 MDC    | ::faq-item{question=}   |
 #
+# -----------------------------------------------------------------------------
+# このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: はじめに
 description: ドキュメントサイト雛形の使い方
 schemaRole: TechArticle
+#
+# 出るもののイメージは overview.md / install.md と同じ（WebPage + TechArticle + SoftwareSourceCode）
+# =============================================================================
 ---
 
 # はじめに
@@ -52,14 +51,21 @@ npm run generate
 
 | 場所 | 内容 |
 | --- | --- |
-| `site.meta.yaml`（雛形は `.example`） | サイト名・URL・GitHub・SoftwareSourceCode 用メタ |
-| `nuxt.config.ts` | YAML 取り込み、`runtimeConfig.public`、prerender ルート |
+| `site.meta.yaml`（雛形は `.example`） | サイト名・URL・GitHub・**SoftwareSourceCode** |
+| 各 Markdown の frontmatter | `title` / `description` / **`schemaRole`** |
+| FAQ 本文の `::faq-item` | **FAQPage** の Question / Answer |
 | `app/config/docsNav.ts` | サイドバー／ページャー |
-| `content/{ja,en}/` | Markdown 本文（`schemaRole` で JSON-LD 役割） |
 | `i18n/locales/` | UI 文言（ナビラベル含む） |
 
-## JSON-LD
+## JSON-LD — 「何を書くと何が出るか」ダミー
 
-- frontmatter の `schemaRole` に `TechArticle` / `FAQPage` / `HowTo`（予約）を指定できます
-- 各ページに `WebPage` +（任意の役割）+ `SoftwareSourceCode` が `@graph` で入ります
-- 役割別ダミー（frontmatter にプロパティ対応表あり）: [概要](./overview.md) / [インストール](./install.md) / [API](./api.md) / [チュートリアル](./tutorial.md) / [FAQ](./faq.md)
+各ファイル先頭のコメントに、**書く場所 → 出る `@graph`** の例があります。
+
+| ページ | 書くこと | 出る `@graph` |
+| --- | --- | --- |
+| [ホーム](./index.md) | `schemaRole` なし | WebPage + SoftwareSourceCode |
+| [概要](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [インストール](./install.md) | 同上 | 同上 |
+| [API](./api.md) | 同上 | 同上 |
+| [チュートリアル](./tutorial.md) | `schemaRole: HowTo` | 現状 WebPage + SoftwareSourceCode（HowTo は予約） |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |

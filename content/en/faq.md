@@ -1,58 +1,78 @@
 ---
 # =============================================================================
-# JSON-LD sample (#40): FAQ
-# Recommended @graph: WebPage + FAQPage + SoftwareSourceCode (site-wide)
-# Q/A bodies live in MDC (::faq-list / ::faq-item), not frontmatter
+# 【このページで出したいもの】（#40 推奨）
+#   @graph = WebPage + FAQPage + SoftwareSourceCode
 # =============================================================================
 #
-# --- frontmatter (this file) ---
-# title: string
-#   → WebPage.name / <title>
-#   (FAQPage itself has no name field today)
-# description: string (optional)
-#   → WebPage.description / meta description
-# schemaRole: "FAQPage" (effectively required to emit FAQPage)
-#   → Q/A from extractFaqFromBody + useFaqItems → FAQPage.mainEntity
+# 【どこに何を書くか】覚えるのは次の4つ
 #
-# --- FAQPage auto-generated (do not author) ---
-# FAQPage.@type       … "FAQPage"
-# FAQPage.@id         … "{pageUrl}#faq"
-# FAQPage.isPartOf    … { "@id": pageUrl }
-# FAQPage.mainEntity  … Question[] (duplicate questions are skipped)
+#   (A) OSS 情報         → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割     → 下の schemaRole: FAQPage  （これがないと FAQPage が出ない）
+#   (C) ページ名・説明   → 下の title / description → WebPage 用
+#   (D) 質問と回答の中身 → 本文の MDC（frontmatter には書かない）
 #
-# --- MDC properties (body) ---
-# ::faq-list
-#   Container: expand/collapse UI + registration target for child FaqItems
-# :::faq-item{question="Question text"}
-#   question (attribute, string, effectively required)
-#     → Question.name
-#     → accordion heading
-#   slot body (Markdown allowed)
-#     → Answer.text (plain-textified into JSON-LD)
-#     → accordion body
-# :::
-# ::
-#
-# --- Question / Answer mapping today ---
-# Question.@type = "Question"
-# Question.name  ← faq-item.question
-# Answer.@type   = "Answer"
-# Answer.text    ← faq-item body
-# (Question.@id / Answer.url are not emitted)
-#
-# --- Copy-paste examples ---
-# title: FAQ
-# description: Common questions on setup, config, and troubleshooting
-# schemaRole: FAQPage
-#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイルの frontmatter（↓が実体）
+# -----------------------------------------------------------------------------
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
+#
+# -----------------------------------------------------------------------------
+# (D) 本文にこう書く（このファイルの下のほう）
+# -----------------------------------------------------------------------------
+#   ::faq-list
+#   :::faq-item{question="質問文はここに書く"}
+#   回答文はここに書く（Markdown 可）
+#   :::
+#   ::
+#
+#   question="…"  → Question.name（アコーディオン見出しにもなる）
+#   スロット本文   → Answer.text（JSON-LD ではプレーンテキスト化）
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
+# {
+#   "@context": "https://schema.org",
+#   "@graph": [
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en/faq",
+#       "name": "FAQ",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
+#     {
+#       "@type": "FAQPage",
+#       "@id": "https://example.com/en/faq#faq",
+#       "isPartOf": { "@id": "https://example.com/en/faq" },
+#       "mainEntity": [
+#         {
+#           "@type": "Question",
+#           "name": "質問文はここに書く",
+#           "acceptedAnswer": {
+#             "@type": "Answer",
+#             "text": "回答文はここに書く…"
+#           }
+#         }
+#       ]
+#     },
+#     {
+#       "@type": "SoftwareSourceCode",
+#       "@id": "https://example.com/#software",
+#       "name": "My OSS",
+#       "codeRepository": "https://github.com/example/my-oss"
+#     }
+#   ]
+# }
+# =============================================================================
 ---
 
 # FAQ
 
 This page demonstrates the FAQ accordion and `FAQPage` JSON-LD.
+
+**出し方:** frontmatter で `schemaRole: FAQPage`、Q/A は下の `::faq-item`、OSS 情報は `site.meta.yaml`。
 
 ::faq-list
 :::faq-item{question="Where do I put site.meta.yaml?"}
