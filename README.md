@@ -26,6 +26,7 @@ npm run generate
 | `nuxt.config.ts` | Loads YAML, modules, prerender routes |
 | `app/config/docsNav.ts` | Sidebar / pager entries |
 | `content/{ja,en}/` | Markdown pages (`schemaRole`: `TechArticle` / `FAQPage` / `HowTo`) |
+| `content/*/syntax-contrast.md` | Dark code-block token contrast sample (delete if unused) |
 | `::faq-list` / `::faq-item` | FAQ accordion + `FAQPage` JSON-LD (see `content/*/faq.md`) |
 | `i18n/locales/` | UI copy (including `nav.*` labels) |
 
