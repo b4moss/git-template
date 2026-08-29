@@ -12,18 +12,25 @@ const route = useRoute();
 const { locale } = useI18n();
 const config = useRuntimeConfig();
 
+/**
+ * Content paths and useAsyncData keys must not depend on whether the static
+ * host served `/ja/faq` or `/ja/faq/`. Trailing-slash drift after hydration
+ * remounts the page with a new key, misses the payload cache, and throws 404 —
+ * which removes the FAQ DOM (and looks like "tap does nothing" on mobile).
+ */
 const slug = computed(() => {
   const raw = route.params.slug;
   if (!raw || (Array.isArray(raw) && raw.length === 0)) {
     return "/";
   }
   const joined = Array.isArray(raw) ? raw.join("/") : String(raw);
-  return withLeadingSlash(joined);
+  const withSlash = withLeadingSlash(joined);
+  return withSlash === "/" ? "/" : withSlash.replace(/\/+$/, "");
 });
 
 /** Ignore browser / tooling asset probes (e.g. manifest.webmanifest). */
 const isAssetPath = computed(() =>
-  /\.[a-z0-9]{2,8}$/i.test(slug.value.replace(/\/$/, "")),
+  /\.[a-z0-9]{2,8}$/i.test(slug.value),
 );
 
 if (isAssetPath.value) {
