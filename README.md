@@ -29,6 +29,8 @@ npm run generate
 | `content/*/syntax-contrast.md` | Dark code-block token contrast sample (delete if unused) |
 | `::faq-list` / `::faq-item` | FAQ accordion + `FAQPage` JSON-LD (see `content/*/faq.md`) |
 | `i18n/locales/` | UI copy (including `nav.*` labels) |
+| `server/routes/sitemap.xml.get.ts` | Sitemap from `docsNav` + locales (`siteUrl` from YAML) |
+| `server/routes/robots.txt.get.ts` | Points crawlers at `/sitemap.xml` |
 
 ## License
 
