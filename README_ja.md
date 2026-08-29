@@ -25,7 +25,8 @@ npm run generate
 | `site.meta.yaml`（雛形は `site.meta.yaml.example`） | サイト名・URL・GitHub・SoftwareSourceCode → `runtimeConfig.public` |
 | `nuxt.config.ts` | YAML 取り込み、モジュール、prerender ルート |
 | `app/config/docsNav.ts` | サイドバー／ページャー |
-| `content/{ja,en}/` | Markdown 本文（`schemaRole`: `TechArticle` / `FAQPage` / `HowTo`） |
+| `content/{ja,en}/` | Markdown 本文（`schemaRole` 短縮形、または `jsonLd` 詳細記法） |
+| `docs/jsonld_ja.md` / `docs/jsonld.md` | JSON-LD の書き方（日本語正典 / 英語要約） |
 | `content/*/syntax-contrast.md` | 暗いコードブロックのトークンコントラスト確認用（不要なら削除） |
 | `::faq-list` / `::faq-item` | FAQ アコーディオン + `FAQPage` JSON-LD（`content/*/faq.md` 参照） |
 | `i18n/locales/` | UI 文言（`nav.*` ラベル含む） |

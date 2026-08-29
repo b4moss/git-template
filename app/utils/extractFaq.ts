@@ -1,4 +1,8 @@
-import type { FaqQa } from "~/composables/useFaqItems";
+export type FaqQa = {
+  id: string;
+  question: string;
+  answer: string;
+};
 
 /** Flatten minimark / MDC node trees to plain text. */
 export function minimarkToText(input: unknown): string {
@@ -28,9 +32,9 @@ export function minimarkToText(input: unknown): string {
 }
 
 /**
- * Collect FAQ Q/A pairs from a Nuxt Content page body (minimark).
- * Used so FAQPage JSON-LD is available at SSG time without relying on
- * slot render order.
+ * Collect FAQ Q/A pairs from a Nuxt Content page body (minimark). This is the
+ * only source of FAQPage JSON-LD, so the output does not depend on component
+ * render order.
  */
 export function extractFaqFromBody(body: unknown): FaqQa[] {
   const results: FaqQa[] = [];

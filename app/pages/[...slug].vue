@@ -2,12 +2,15 @@
 import { withLeadingSlash } from "ufo";
 import type { Collections } from "@nuxt/content";
 import type { SchemaRole } from "~/composables/useJsonLd";
-import { extractFaqFromBody } from "~/utils/extractFaq";
+import { extractFaqFromBody, type FaqQa } from "~/utils/extractFaq";
+import {
+  includesEntityType,
+  type PageJsonLdInput,
+} from "~/utils/jsonLdEntities";
 
 const route = useRoute();
 const { locale } = useI18n();
 const config = useRuntimeConfig();
-const { clearFaqItems, upsertFaqItem } = useFaqItems();
 
 const slug = computed(() => {
   const raw = route.params.slug;
@@ -72,20 +75,22 @@ const schemaRole = computed(() => {
   return role;
 });
 
-// Seed FAQ Q/A from the content AST so FAQPage JSON-LD is fixed at SSG time.
-watch(
-  () => [page.value?.body, schemaRole.value, pageUrl.value] as const,
-  () => {
-    clearFaqItems();
-    if (schemaRole.value !== "FAQPage" || !page.value?.body) {
-      return;
-    }
-    for (const item of extractFaqFromBody(page.value.body)) {
-      upsertFaqItem(item);
-    }
-  },
-  { immediate: true },
+const jsonLd = computed(
+  () => (page.value as { jsonLd?: PageJsonLdInput } | null)?.jsonLd,
 );
+
+const hasFaqEntity = computed(() =>
+  includesEntityType("FAQPage", schemaRole.value, jsonLd.value),
+);
+
+// Read from the content AST, not from rendered components, so the JSON-LD is
+// per-page and settled before render.
+const faqItems = computed<FaqQa[]>(() => {
+  if (!hasFaqEntity.value || !page.value?.body) {
+    return [];
+  }
+  return extractFaqFromBody(page.value.body);
+});
 </script>
 
 <template>
@@ -98,6 +103,8 @@ watch(
       :title="pageTitle"
       :description="page?.description || undefined"
       :schema-role="schemaRole"
+      :json-ld="jsonLd"
+      :faq-items="faqItems"
     />
     <DocsPager />
   </div>

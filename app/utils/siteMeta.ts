@@ -13,6 +13,10 @@ export type SiteMeta = {
   githubUrl: string;
   footerText: string;
   software: SiteSoftwareMeta;
+  /** Authored Organization properties; null disables the entity entirely. */
+  organization: Record<string, unknown> | null;
+  /** Raw JSON-LD entities appended to every page. */
+  jsonLdExtra: Record<string, unknown>[];
 };
 
 export const defaultSiteMeta: SiteMeta = {
@@ -28,11 +32,17 @@ export const defaultSiteMeta: SiteMeta = {
     license: "MIT",
     programmingLanguage: [],
   },
+  organization: null,
+  jsonLdExtra: [],
 };
 
 type RawSiteMeta = Partial<Omit<SiteMeta, "software">> & {
   software?: Partial<SiteSoftwareMeta>;
 };
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
 
 export function normalizeSiteMeta(raw: RawSiteMeta | null | undefined): SiteMeta {
   const base = { ...defaultSiteMeta, ...(raw || {}) };
@@ -55,5 +65,11 @@ export function normalizeSiteMeta(raw: RawSiteMeta | null | undefined): SiteMeta
         ? softwareRaw.programmingLanguage.map(String)
         : [],
     },
+    organization: isPlainObject(raw?.organization)
+      ? (raw.organization as Record<string, unknown>)
+      : null,
+    jsonLdExtra: Array.isArray(raw?.jsonLdExtra)
+      ? (raw.jsonLdExtra as Record<string, unknown>[])
+      : [],
   };
 }
