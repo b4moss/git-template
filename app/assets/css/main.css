@@ -78,10 +78,11 @@ code {
   border-radius: 0.25rem;
 }
 
-/* Intentionally dark in both light and dark UI themes. */
+/* Intentionally dark in both light and dark UI themes.
+   Paired with Shiki `github-dark-high-contrast` (not github-light). */
 pre {
-  background: #0d1117;
-  color: #e6edf3;
+  background: #0a0c10;
+  color: #f0f3f6;
   padding: 1rem 1.15rem;
   border-radius: 0.5rem;
   overflow-x: auto;
