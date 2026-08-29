@@ -1,8 +1,10 @@
 import type { FaqQa } from "./useFaqItems";
 import {
   buildJsonLdEntity,
+  buildOrganization,
   buildWebPage,
   resolveEntityInputs,
+  sanitizeExtraEntities,
   type JsonLdObject,
   type PageJsonLdInput,
 } from "~/utils/jsonLdEntities";
@@ -25,6 +27,7 @@ function webSiteEntity(
   siteUrl: string,
   config: ReturnType<typeof useRuntimeConfig>,
   languages: string[],
+  organizationId?: string,
 ) {
   const entity: JsonLdObject = {
     "@type": "WebSite",
@@ -33,6 +36,9 @@ function webSiteEntity(
     name: config.public.siteName || "Doc Site",
     about: { "@id": `${siteUrl}/#software` },
   };
+  if (organizationId) {
+    entity.publisher = { "@id": organizationId };
+  }
   const description = config.public.description;
   if (description) {
     entity.description = description;
@@ -127,6 +133,16 @@ export function useJsonLd(options: UseJsonLdOptions) {
     const schemaRole = toValue(options.schemaRole);
     const jsonLd = toValue(options.jsonLd);
 
+    const siteName = String(config.public.siteName || "Doc Site");
+    const organization = buildOrganization(
+      config.public.organization as Record<string, unknown> | null,
+      siteUrl,
+      siteName,
+    );
+    const organizationId = organization
+      ? String(organization["@id"])
+      : undefined;
+
     const webPage = buildWebPage(
       {
         pageUrl,
@@ -134,6 +150,7 @@ export function useJsonLd(options: UseJsonLdOptions) {
         title,
         description,
         inLanguage: inLanguage.value,
+        organizationId,
       },
       jsonLd?.webPage,
     );
@@ -144,9 +161,13 @@ export function useJsonLd(options: UseJsonLdOptions) {
 
     const entities: JsonLdObject[] = [
       webPage,
-      webSiteEntity(siteUrl, config, languages.value),
+      webSiteEntity(siteUrl, config, languages.value, organizationId),
       softwareEntity(siteUrl, config),
     ];
+
+    if (organization) {
+      entities.push(organization);
+    }
 
     const entityContext = {
       pageUrl: resolvedPageUrl,
@@ -155,6 +176,7 @@ export function useJsonLd(options: UseJsonLdOptions) {
       description,
       inLanguage: inLanguage.value,
       faqMainEntity: faqQuestions(faqItems.value),
+      organizationId,
     };
 
     for (const input of resolveEntityInputs(schemaRole, jsonLd)) {
@@ -163,6 +185,11 @@ export function useJsonLd(options: UseJsonLdOptions) {
         entities.push(entity);
       }
     }
+
+    entities.push(
+      ...sanitizeExtraEntities(config.public.jsonLdExtra, "site.meta.yaml jsonLdExtra"),
+      ...sanitizeExtraEntities(jsonLd?.extra, "frontmatter jsonLd.extra"),
+    );
 
     return {
       "@context": "https://schema.org",

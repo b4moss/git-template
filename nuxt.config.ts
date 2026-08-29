@@ -45,6 +45,8 @@ export default defineNuxtConfig({
       githubUrl: siteMeta.githubUrl,
       footerText: siteMeta.footerText,
       software: siteMeta.software,
+      organization: siteMeta.organization,
+      jsonLdExtra: siteMeta.jsonLdExtra,
     },
   },
   // GTM: set NUXT_PUBLIC_SCRIPTS_GOOGLE_TAG_MANAGER_ID=GTM-XXXXXXX (build-time for SSG).

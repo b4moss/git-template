@@ -16,6 +16,8 @@ const pageSchema = z.object({
     .object({
       webPage: z.record(z.unknown()).optional(),
       entities: z.array(jsonLdEntitySchema).optional(),
+      /** Emitted verbatim; no defaults are applied. */
+      extra: z.array(z.record(z.unknown())).optional(),
     })
     .optional(),
 });
