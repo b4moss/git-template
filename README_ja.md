@@ -28,6 +28,8 @@ npm run generate
 | `content/{ja,en}/` | Markdown 本文（`schemaRole`: `TechArticle` / `FAQPage` / `HowTo`） |
 | `::faq-list` / `::faq-item` | FAQ アコーディオン + `FAQPage` JSON-LD（`content/*/faq.md` 参照） |
 | `i18n/locales/` | UI 文言（`nav.*` ラベル含む） |
+| `server/routes/sitemap.xml.get.ts` | `docsNav` + ロケールから sitemap（`siteUrl` は YAML） |
+| `server/routes/robots.txt.get.ts` | `/sitemap.xml` を案内 |
 
 ## ライセンス
 

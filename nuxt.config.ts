@@ -125,6 +125,8 @@ export default defineNuxtConfig({
         "/en/getting-started",
         "/ja/faq",
         "/en/faq",
+        "/sitemap.xml",
+        "/robots.txt",
       ],
     },
   },
