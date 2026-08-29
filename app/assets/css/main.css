@@ -9,11 +9,15 @@
   --color-accent-hover: #0a5441;
   --color-bg-glow-1: #dceee8;
   --color-bg-glow-2: #e8eef5;
+  /* Match github-light / github-dark Shiki themes */
+  --color-code-bg: #ffffff;
+  --color-code-fg: #24292e;
   --font-sans: "IBM Plex Sans", "Hiragino Sans", "Noto Sans JP", sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
   --max-width: 52rem;
   --header-height: 3.5rem;
   --sidebar-width: 15.5rem;
+  accent-color: var(--color-accent);
 }
 
 .dark {
@@ -27,6 +31,8 @@
   --color-accent-hover: #5fd0ad;
   --color-bg-glow-1: #122820;
   --color-bg-glow-2: #152030;
+  --color-code-bg: #0d1117;
+  --color-code-fg: #e6edf3;
 }
 
 *,
@@ -35,8 +41,13 @@
   box-sizing: border-box;
 }
 
+/* Follow the active theme so native checkbox/radio match light vs dark. */
 html {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -73,8 +84,9 @@ code {
 }
 
 pre {
-  background: #0d1117;
-  color: #e6edf3;
+  background: var(--color-code-bg);
+  color: var(--color-code-fg);
+  border: 1px solid var(--color-border);
   padding: 1rem 1.15rem;
   border-radius: 0.5rem;
   overflow-x: auto;
@@ -86,6 +98,16 @@ pre code {
   background: transparent;
   padding: 0;
   color: inherit;
+}
+
+/* Light-mode native controls (task lists, future forms). */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 0.35em 0 0;
+  vertical-align: middle;
+  accent-color: var(--color-accent);
 }
 
 .site-shell {
