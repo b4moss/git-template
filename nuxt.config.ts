@@ -66,11 +66,9 @@ export default defineNuxtConfig({
     experimental: { sqliteConnector: "native" },
     build: {
       markdown: {
+        // Always dark code blocks (including light UI mode) — pair with dark pre CSS.
         highlight: {
-          theme: {
-            default: "github-light",
-            dark: "github-dark",
-          },
+          theme: "github-dark",
         },
       },
     },
