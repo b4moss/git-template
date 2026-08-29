@@ -1,7 +1,14 @@
 ---
+# JSON-LD sample (#40): FAQ
+# Recommended: WebPage + FAQPage + SoftwareSourceCode (site-wide)
+# Q/A bodies live in ::faq-list / ::faq-item (MDC), not frontmatter
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
+# Examples:
+# schemaRole: FAQPage
+# title: FAQ
+# description: Frequently asked questions
 ---
 
 # FAQ

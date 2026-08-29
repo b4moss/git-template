@@ -2,6 +2,10 @@ export default {
   "nav": {
     "home": "ホーム",
     "gettingStarted": "はじめに",
+    "overview": "概要",
+    "install": "インストール",
+    "api": "API",
+    "tutorial": "チュートリアル",
     "faq": "FAQ",
     "syntaxContrast": "コントラスト検証",
     "language": "言語",

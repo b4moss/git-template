@@ -1,7 +1,13 @@
 ---
+# JSON-LD サンプル（#40）: 技術文書（雛形の使い方）
+# 推奨: WebPage + TechArticle + SoftwareSourceCode（サイト共通）
 title: はじめに
 description: ドキュメントサイト雛形の使い方
 schemaRole: TechArticle
+# 記述例:
+# schemaRole: TechArticle
+# title: はじめに
+# description: ドキュメントサイト雛形の使い方
 ---
 
 # はじめに
@@ -35,4 +41,4 @@ npm run generate
 
 - frontmatter の `schemaRole` に `TechArticle` / `FAQPage` / `HowTo`（予約）を指定できます
 - 各ページに `WebPage` +（任意の役割）+ `SoftwareSourceCode` が `@graph` で入ります
-- FAQ は [FAQ](./faq.md) の `::faq-list` / `::faq-item` を参照
+- 役割別ダミー: [概要](./overview.md) / [インストール](./install.md) / [API](./api.md) / [チュートリアル](./tutorial.md) / [FAQ](./faq.md)

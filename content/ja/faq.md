@@ -1,7 +1,14 @@
 ---
+# JSON-LD サンプル（#40）: FAQ
+# 推奨: WebPage + FAQPage + SoftwareSourceCode（サイト共通）
+# Q/A 本体は frontmatter ではなく ::faq-list / ::faq-item（MDC）
 title: FAQ
 description: よくある質問のサンプル（MDC アコーディオンと FAQPage JSON-LD）
 schemaRole: FAQPage
+# 記述例:
+# schemaRole: FAQPage
+# title: FAQ
+# description: よくある質問
 ---
 
 # FAQ
