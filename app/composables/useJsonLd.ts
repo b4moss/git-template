@@ -11,6 +11,32 @@ type UseJsonLdOptions = {
   schemaRole?: MaybeRefOrGetter<SchemaRole | undefined>;
 };
 
+/**
+ * Site-level WebSite node. Every WebPage points at it via isPartOf, so it has
+ * to exist in the graph for that reference to resolve.
+ */
+function webSiteEntity(
+  siteUrl: string,
+  config: ReturnType<typeof useRuntimeConfig>,
+  languages: string[],
+) {
+  const entity: JsonLdObject = {
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: `${siteUrl}/`,
+    name: config.public.siteName || "Doc Site",
+    about: { "@id": `${siteUrl}/#software` },
+  };
+  const description = config.public.description;
+  if (description) {
+    entity.description = description;
+  }
+  if (languages.length) {
+    entity.inLanguage = languages;
+  }
+  return entity;
+}
+
 function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeConfig>) {
   const software = (config.public.software || {}) as {
     name?: string;
@@ -66,14 +92,35 @@ function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
   };
 }
 
+type LocaleEntry = { code: string; language?: string };
+
 export function useJsonLd(options: UseJsonLdOptions) {
   const config = useRuntimeConfig();
   const { items: faqItems } = useFaqItems();
+  const { locale, locales } = useI18n();
 
   const siteUrl = String(config.public.siteUrl || "https://example.com").replace(
     /\/$/,
     "",
   );
+
+  /** BCP 47 tags (e.g. ja-JP) from the i18n locale config, code as fallback. */
+  const localeEntries = computed(() =>
+    (locales.value as Array<string | LocaleEntry>).map((entry) =>
+      typeof entry === "string" ? { code: entry } : entry,
+    ),
+  );
+
+  const languages = computed(() =>
+    localeEntries.value.map((entry) => entry.language || entry.code),
+  );
+
+  const inLanguage = computed(() => {
+    const current = localeEntries.value.find(
+      (entry) => entry.code === locale.value,
+    );
+    return current?.language || String(locale.value);
+  });
 
   const graph = computed(() => {
     const pageUrl = toValue(options.pageUrl);
@@ -86,6 +133,7 @@ export function useJsonLd(options: UseJsonLdOptions) {
       "@id": pageUrl,
       url: pageUrl,
       name: title,
+      inLanguage: inLanguage.value,
       isPartOf: { "@id": `${siteUrl}/#website` },
       about: { "@id": `${siteUrl}/#software` },
     };
@@ -95,6 +143,7 @@ export function useJsonLd(options: UseJsonLdOptions) {
 
     const entities: JsonLdObject[] = [
       webPage,
+      webSiteEntity(siteUrl, config, languages.value),
       softwareEntity(siteUrl, config),
     ];
 
