@@ -36,7 +36,7 @@ Output goes to `.output/public`.
 
 ## JSON-LD — what you write vs what you get
 
-See [docs/jsonld.md](../../docs/jsonld.md) for the full authoring guide (Japanese canonical: [docs/jsonld_ja.md](../../docs/jsonld_ja.md)).
+See the repo file `docs/jsonld.md` for the full authoring guide (Japanese canonical: `docs/jsonld_ja.md`).
 
 | Page | What to write | Resulting `@graph` |
 | --- | --- | --- |

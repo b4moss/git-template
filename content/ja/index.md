@@ -28,4 +28,4 @@ description: Nuxt Content ドキュメントサイトのスキャフォールド
 | [チュートリアル](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
 | [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
-詳しくは [はじめに](./getting-started.md) と [docs/jsonld_ja.md](../../docs/jsonld_ja.md) を参照してください。
+詳しくは [はじめに](./getting-started.md) とリポジトリの `docs/jsonld_ja.md` を参照してください。

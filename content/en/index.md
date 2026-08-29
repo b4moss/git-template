@@ -28,4 +28,4 @@ This branch is a Nuxt Content documentation site starter.
 | [Tutorial](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
 | [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
-See [Getting started](./getting-started.md) and [docs/jsonld.md](../../docs/jsonld.md) for details.
+See [Getting started](./getting-started.md) and the repo file `docs/jsonld.md` for details.

@@ -36,7 +36,7 @@ npm run generate
 
 ## JSON-LD — 「何を書くと何が出るか」ダミー
 
-詳しい記法は [docs/jsonld_ja.md](../../docs/jsonld_ja.md) を参照してください。
+詳しい記法はリポジトリの `docs/jsonld_ja.md` を参照してください。
 
 | ページ | 書くこと | 出る `@graph` |
 | --- | --- | --- |
