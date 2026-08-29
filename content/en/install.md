@@ -1,24 +1,40 @@
 ---
 # =============================================================================
-# What this page should emit (#40)
+# 【このページで出したいもの】（#40 推奨）
 #   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# Where to write what
+# 【どこに何を書くか】
 #
-#   (A) OSS info   → site.meta.yaml software.*
-#   (B) Page role  → schemaRole: TechArticle
-#   (C) Name/blurb → title / description
+#   (A) OSS 情報     → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割 → 下の schemaRole: TechArticle
+#   (C) 名前・説明   → 下の title / description
 #
+# (A) の書き方・出方は overview.md / site.meta.yaml.example を参照
+#
+# -----------------------------------------------------------------------------
+# (B)(C) このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: Install
 description: Dummy installation page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
 #
-# Resulting JSON-LD (sketch):
+#   title        → WebPage.name / TechArticle.headline
+#   description  → WebPage.description / TechArticle.description
+#   schemaRole   → TechArticle を @graph に追加
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
 # {
 #   "@context": "https://schema.org",
 #   "@graph": [
-#     { "@type": "WebPage", "@id": "https://example.com/en/install", "name": "Install" },
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en/install",
+#       "name": "Install",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
 #     {
 #       "@type": "TechArticle",
 #       "@id": "https://example.com/en/install#article",
@@ -34,7 +50,7 @@ schemaRole: TechArticle
 #   ]
 # }
 #
-# For HowTo-shaped steps see tutorial.md (HowTo emission still reserved).
+# 手順そのものを HowTo にしたい場合は tutorial.md（HowTo は現状ロール予約のみ）
 # =============================================================================
 ---
 
@@ -42,7 +58,7 @@ schemaRole: TechArticle
 
 Dummy installation page.
 
-**Recipe:** `schemaRole: TechArticle` + `title` / `description` here, plus `software.*` in `site.meta.yaml`.
+**出し方:** `schemaRole: TechArticle` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 ```bash
 npm install your-package

@@ -1,33 +1,46 @@
 ---
 # =============================================================================
-# What this page should emit (#40)
+# 【このページで出したいもの】（#40 推奨）
 #   @graph = WebPage + SoftwareSourceCode
-#   No page-role schema on the top page (no TechArticle etc.)
+#   ※ トップは「役割」スキーマを付けない（TechArticle 等なし）
 # =============================================================================
 #
-# Where to write what
+# 【どこに何を書くか】
 #
-#   (A) Site-wide OSS info  → site.meta.yaml → SoftwareSourceCode on every page
-#   (B) Page role           → omit schemaRole
-#   (C) Page name / blurb   → title / description below → WebPage only
+#   (A) サイト共通の OSS 情報  →  site.meta.yaml（全ページの SoftwareSourceCode）
+#   (B) このページの役割      →  schemaRole は書かない（省略）
+#   (C) ページの名前・説明    →  下の title / description → WebPage のみに使われる
 #
-# (A) site.meta.yaml example:
+# -----------------------------------------------------------------------------
+# (A) site.meta.yaml の例 → SoftwareSourceCode（全ページ共通）
+# -----------------------------------------------------------------------------
 #   software:
 #     name: My OSS
 #     codeRepository: https://github.com/example/my-oss
 #
+# -----------------------------------------------------------------------------
+# (B)(C) このファイルに書くもの（↓が実体）
+# -----------------------------------------------------------------------------
 title: Home
 description: Scaffold for a Nuxt Content documentation site
-# Do not set schemaRole here — adding it would inject TechArticle etc.
+# schemaRole は書かない  ← 書くと TechArticle 等が追加されるのでトップでは通常不要
 #
-# Resulting JSON-LD (sketch):
+#   title        → WebPage.name
+#   description  → WebPage.description（任意）
+#   schemaRole   → なし → WebPage + SoftwareSourceCode だけ
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
 # {
 #   "@context": "https://schema.org",
 #   "@graph": [
 #     {
 #       "@type": "WebPage",
 #       "@id": "https://example.com/en",
+#       "url": "https://example.com/en",
 #       "name": "Home",
+#       "description": "Scaffold for …",
 #       "about": { "@id": "https://example.com/#software" }
 #     },
 #     {
@@ -52,15 +65,15 @@ This branch is a Nuxt Content documentation site starter.
 3. Add Markdown under `content/{ja,en}/` (set `schemaRole` when needed)
 4. Keep `nav.*` labels in `i18n/locales/` in sync
 
-## JSON-LD dummy pages (#40) — write X → get Y
+## JSON-LD ダミーページ（#40）— 何を書くと何が出るか
 
-| Page | What you write | Resulting `@graph` |
+| Page | 書く場所の要点 | 出る `@graph` |
 | --- | --- | --- |
-| This page (top) | no `schemaRole` + `site.meta.yaml` | WebPage + SoftwareSourceCode |
+| This page (top) | `schemaRole` なし + `site.meta.yaml` | WebPage + SoftwareSourceCode |
 | [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
-| [Install](./install.md) | `schemaRole: TechArticle` | same |
-| [API](./api.md) | `schemaRole: TechArticle` | same |
-| [Tutorial](./tutorial.md) | `schemaRole: HowTo` (reserved) | WebPage + SoftwareSourceCode for now |
+| [Install](./install.md) | `schemaRole: TechArticle` | 同上 |
+| [API](./api.md) | `schemaRole: TechArticle` | 同上 |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo`（出力は予約） | 現状 WebPage + SoftwareSourceCode |
 | [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
 See [Getting started](./getting-started.md) for details.

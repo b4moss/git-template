@@ -1,20 +1,29 @@
 ---
 # =============================================================================
-# What this page should emit (#40)
+# 【このページで出したいもの】（#40 推奨）
 #   @graph = WebPage + TechArticle + SoftwareSourceCode
 # =============================================================================
 #
-# Where to write what
+# 【どこに何を書くか】
 #
-#   (A) OSS info   → site.meta.yaml software.*
-#   (B) Page role  → schemaRole: TechArticle
-#   (C) Name/blurb → title / description
+#   (A) OSS 情報     → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割 → 下の schemaRole: TechArticle
+#   (C) 名前・説明   → 下の title / description
 #
+# -----------------------------------------------------------------------------
+# (B)(C) このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: API reference
 description: Dummy API reference page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
 #
-# Resulting JSON-LD (sketch):
+#   title        → WebPage.name / TechArticle.headline
+#   description  → WebPage.description / TechArticle.description
+#   schemaRole   → TechArticle を @graph に追加
+#
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
 # {
 #   "@context": "https://schema.org",
 #   "@graph": [
@@ -34,7 +43,7 @@ schemaRole: TechArticle
 #   ]
 # }
 #
-# No per-function schema.org types. Extra entities → #45 jsonLdExtra hatch.
+# 関数ごとの schema.org 型は出さない。追加したい場合は #45 の jsonLdExtra ハッチへ
 # =============================================================================
 ---
 
@@ -42,7 +51,7 @@ schemaRole: TechArticle
 
 Dummy API page.
 
-**Recipe:** `schemaRole: TechArticle` + `title` / `description` here, plus `software.*` in `site.meta.yaml`.
+**出し方:** `schemaRole: TechArticle` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 ## `hello(name)`
 

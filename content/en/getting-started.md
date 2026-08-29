@@ -1,28 +1,32 @@
 ---
 # =============================================================================
-# What this page should emit (#40)
+# 【このページで出したいもの】（#40 推奨）
 #   @graph = WebPage + TechArticle + SoftwareSourceCode
+#   （雛形の使い方ドキュメントも TechArticle 扱いでよい）
 # =============================================================================
 #
-# Shared rule (every docs page)
+# 【どこに何を書くか】（全ページ共通のルール）
 #
-#   Not one schema per page.
-#   Page itself = WebPage. Add a role via schemaRole.
-#   OSS = site.meta.yaml → SoftwareSourceCode (site-wide).
-#   Entities sit in @graph and link via @id.
+#   1ページ = 1スキーマ、ではない。
+#   ページ本体は常に WebPage。役割を足すなら schemaRole。
+#   OSS は site.meta.yaml → SoftwareSourceCode（全ページ共通）。
+#   複数エンティティは @graph に並び、関係は @id でつなぐ。
 #
-#   | Want this              | Write it here                         | What to write              |
-#   |------------------------|---------------------------------------|----------------------------|
-#   | SoftwareSourceCode     | site.meta.yaml → software.*           | name, codeRepository, …    |
-#   | WebPage                | this frontmatter                      | title, description         |
-#   | TechArticle / HowTo /… | schemaRole                            | TechArticle etc.           |
-#   | FAQPage                | schemaRole: FAQPage + body MDC        | ::faq-item{question=}      |
+#   | 出したいもの           | 書く場所                          | 書く内容                |
+#   |------------------------|-----------------------------------|-------------------------|
+#   | SoftwareSourceCode     | site.meta.yaml → software.*       | name, codeRepository…   |
+#   | WebPage                | この frontmatter（自動＋手書き）  | title, description       |
+#   | TechArticle / HowTo /  | この frontmatter の schemaRole    | TechArticle など        |
+#   | FAQPage                | schemaRole: FAQPage + 本文 MDC    | ::faq-item{question=}   |
 #
+# -----------------------------------------------------------------------------
+# このファイル（↓が実体）
+# -----------------------------------------------------------------------------
 title: Getting started
 description: How to use this documentation site scaffold
 schemaRole: TechArticle
 #
-# Same shape as overview.md / install.md (WebPage + TechArticle + SoftwareSourceCode)
+# 出るもののイメージは overview.md / install.md と同じ（WebPage + TechArticle + SoftwareSourceCode）
 # =============================================================================
 ---
 
@@ -47,21 +51,21 @@ Output goes to `.output/public`.
 
 | Location | Purpose |
 | --- | --- |
-| `site.meta.yaml` (from `.example`) | Site name, URL, GitHub, **SoftwareSourceCode** |
-| Each Markdown frontmatter | `title` / `description` / **`schemaRole`** |
-| FAQ body `::faq-item` | **FAQPage** Question / Answer |
-| `app/config/docsNav.ts` | Sidebar / pager |
-| `i18n/locales/` | UI copy (including nav labels) |
+| `site.meta.yaml`（雛形は `.example`） | サイト名・URL・GitHub・**SoftwareSourceCode** |
+| 各 Markdown の frontmatter | `title` / `description` / **`schemaRole`** |
+| FAQ 本文の `::faq-item` | **FAQPage** の Question / Answer |
+| `app/config/docsNav.ts` | サイドバー／ページャー |
+| `i18n/locales/` | UI 文言（ナビラベル含む） |
 
-## JSON-LD — write X → get Y samples
+## JSON-LD — 「何を書くと何が出るか」ダミー
 
-Each sample file’s frontmatter comments show **where to write → resulting `@graph`**.
+各ファイル先頭のコメントに、**書く場所 → 出る `@graph`** の例があります。
 
-| Page | What you write | Resulting `@graph` |
+| Page | 書くこと | 出る `@graph` |
 | --- | --- | --- |
-| [Home](./index.md) | no `schemaRole` | WebPage + SoftwareSourceCode |
+| [Home](./index.md) | `schemaRole` なし | WebPage + SoftwareSourceCode |
 | [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
-| [Install](./install.md) | same | same |
-| [API](./api.md) | same | same |
-| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | WebPage + SoftwareSourceCode for now (HowTo reserved) |
+| [Install](./install.md) | 同上 | 同上 |
+| [API](./api.md) | 同上 | 同上 |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | 現状 WebPage + SoftwareSourceCode（HowTo は予約） |
 | [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |

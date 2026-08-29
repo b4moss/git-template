@@ -1,43 +1,59 @@
 ---
 # =============================================================================
-# What this page should emit (#40)
+# 【このページで出したいもの】（#40 推奨）
 #   @graph = WebPage + FAQPage + SoftwareSourceCode
 # =============================================================================
 #
-# Where to write what (four places)
+# 【どこに何を書くか】覚えるのは次の4つ
 #
-#   (A) OSS info       → site.meta.yaml software.*
-#   (B) Page role      → schemaRole: FAQPage  (required to emit FAQPage)
-#   (C) Page name/blurb→ title / description → WebPage
-#   (D) Q/A content    → body MDC (not frontmatter)
+#   (A) OSS 情報         → site.meta.yaml の software.*（全ページ共通）
+#   (B) ページの役割     → 下の schemaRole: FAQPage  （これがないと FAQPage が出ない）
+#   (C) ページ名・説明   → 下の title / description → WebPage 用
+#   (D) 質問と回答の中身 → 本文の MDC（frontmatter には書かない）
 #
+# -----------------------------------------------------------------------------
+# (B)(C) このファイルの frontmatter（↓が実体）
+# -----------------------------------------------------------------------------
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
 #
-# (D) In the body below, write:
+# -----------------------------------------------------------------------------
+# (D) 本文にこう書く（このファイルの下のほう）
+# -----------------------------------------------------------------------------
 #   ::faq-list
-#   :::faq-item{question="Put the question here"}
-#   Put the answer here (Markdown ok)
+#   :::faq-item{question="質問文はここに書く"}
+#   回答文はここに書く（Markdown 可）
 #   :::
 #   ::
 #
-#   question="…" → Question.name
-#   slot body    → Answer.text
+#   question="…"  → Question.name（アコーディオン見出しにもなる）
+#   スロット本文   → Answer.text（JSON-LD ではプレーンテキスト化）
 #
-# Resulting JSON-LD (sketch):
+# -----------------------------------------------------------------------------
+# 出る JSON-LD（イメージ）
+# -----------------------------------------------------------------------------
 # {
 #   "@context": "https://schema.org",
 #   "@graph": [
-#     { "@type": "WebPage", "@id": "https://example.com/en/faq", "name": "FAQ" },
+#     {
+#       "@type": "WebPage",
+#       "@id": "https://example.com/en/faq",
+#       "name": "FAQ",
+#       "about": { "@id": "https://example.com/#software" }
+#     },
 #     {
 #       "@type": "FAQPage",
 #       "@id": "https://example.com/en/faq#faq",
+#       "isPartOf": { "@id": "https://example.com/en/faq" },
 #       "mainEntity": [
 #         {
 #           "@type": "Question",
-#           "name": "Put the question here",
-#           "acceptedAnswer": { "@type": "Answer", "text": "Put the answer here…" }
+#           "name": "質問文はここに書く",
+#           "acceptedAnswer": {
+#             "@type": "Answer",
+#             "text": "回答文はここに書く…"
+#           }
 #         }
 #       ]
 #     },
@@ -56,7 +72,7 @@ schemaRole: FAQPage
 
 This page demonstrates the FAQ accordion and `FAQPage` JSON-LD.
 
-**Recipe:** frontmatter `schemaRole: FAQPage`, Q/A via `::faq-item` below, OSS meta in `site.meta.yaml`.
+**出し方:** frontmatter で `schemaRole: FAQPage`、Q/A は下の `::faq-item`、OSS 情報は `site.meta.yaml`。
 
 ::faq-list
 :::faq-item{question="Where do I put site.meta.yaml?"}

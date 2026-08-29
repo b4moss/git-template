@@ -1,5 +1,5 @@
-# Copy to site.meta.yaml and edit for your project.
-# site.meta.yaml is gitignored; if missing, this example is used as fallback.
+# このファイルを site.meta.yaml にコピーして、プロジェクト向けに編集してください。
+# site.meta.yaml は gitignore 済み。無い場合はこの example がフォールバックになります。
 #
 # =============================================================================
 # 【ここで書くもの】サイト共通 → 全ページの SoftwareSourceCode（#40）
@@ -20,13 +20,13 @@
 #
 # フィールド:
 #   siteName / siteUrl / githubUrl … UI・URL 生成・フォールバックにも使う
-#   software.name                 → SoftwareSourceCode.name（省略時 siteName）
-#   software.codeRepository       → codeRepository（省略時 githubUrl）
+#   software.name                 → SoftwareSourceCode.name（省略時は siteName）
+#   software.codeRepository       → codeRepository（省略時は githubUrl）
 #   software.license              → license（例: MIT）
-#   software.programmingLanguage  → string[]（空 [] なら JSON-LD に出さない）
+#   software.programmingLanguage  → 文字列の配列（空 [] なら JSON-LD に出さない）
 #
 # ページ役割（TechArticle / FAQPage / HowTo）は各 Markdown の schemaRole 側。
-# FAQ の Q/A は本文の ::faq-item。詳細は content/*/overview.md や faq.md のコメントへ。
+# FAQ の Q/A は本文の ::faq-item。詳細は content/ja/overview.md や faq.md のコメントへ。
 # =============================================================================
 
 siteName: Doc Site
@@ -37,11 +37,11 @@ githubUrl: https://github.com/b4moss/git-template
 footerText: "MIT License · 2026 Bicycle for Mind LLC."
 
 software:
-  # → SoftwareSourceCode.name（omit to use siteName）
+  # → SoftwareSourceCode.name（省略時は siteName）
   name: Doc Site
-  # → SoftwareSourceCode.codeRepository（omit to use githubUrl）
+  # → SoftwareSourceCode.codeRepository（省略時は githubUrl）
   codeRepository: https://github.com/b4moss/git-template
   # → SoftwareSourceCode.license
   license: MIT
-  # → SoftwareSourceCode.programmingLanguage（e.g. [ TypeScript, Vue ]）
+  # → SoftwareSourceCode.programmingLanguage（例: [ TypeScript, Vue ]）
   programmingLanguage: []
