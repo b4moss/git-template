@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { withLeadingSlash } from "ufo";
 import type { Collections } from "@nuxt/content";
+import type { SchemaRole } from "~/composables/useJsonLd";
 
 const route = useRoute();
 const { locale } = useI18n();
@@ -45,10 +46,35 @@ if (!page.value) {
   });
 }
 
+const pageTitle = computed(
+  () => page.value?.title || String(config.public.siteName || "Doc Site"),
+);
+
 useSeoMeta({
-  title: () =>
-    page.value?.title || String(config.public.siteName || "Doc Site"),
+  title: () => pageTitle.value,
   description: () => page.value?.description || undefined,
+});
+
+const siteUrl = computed(() =>
+  String(config.public.siteUrl || "https://example.com").replace(/\/$/, ""),
+);
+
+const pageUrl = computed(() => {
+  const path =
+    slug.value === "/" ? `/${locale.value}` : `/${locale.value}${slug.value}`;
+  return `${siteUrl.value}${path}`;
+});
+
+const schemaRole = computed(() => {
+  const role = (page.value as { schemaRole?: SchemaRole } | null)?.schemaRole;
+  return role;
+});
+
+useJsonLd({
+  pageUrl,
+  title: pageTitle,
+  description: () => page.value?.description || undefined,
+  schemaRole,
 });
 </script>
 

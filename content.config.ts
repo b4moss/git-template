@@ -1,4 +1,8 @@
-import { defineContentConfig, defineCollection } from "@nuxt/content";
+import { defineContentConfig, defineCollection, z } from "@nuxt/content";
+
+const pageSchema = z.object({
+  schemaRole: z.enum(["TechArticle", "HowTo", "FAQPage"]).optional(),
+});
 
 export default defineContentConfig({
   collections: {
@@ -8,6 +12,7 @@ export default defineContentConfig({
         include: "ja/**",
         prefix: "",
       },
+      schema: pageSchema,
     }),
     content_en: defineCollection({
       type: "page",
@@ -15,6 +20,7 @@ export default defineContentConfig({
         include: "en/**",
         prefix: "",
       },
+      schema: pageSchema,
     }),
   },
 });

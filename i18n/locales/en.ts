@@ -2,6 +2,7 @@ export default {
   "nav": {
     "home": "Home",
     "gettingStarted": "Getting started",
+    "faq": "FAQ",
     "language": "Language",
     "prefs": "Display settings",
     "menu": "Menu",
@@ -20,5 +21,9 @@ export default {
   "collapseBox": {
     "expand": "Show more",
     "collapse": "Show less"
+  },
+  "faq": {
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all"
   }
 }
