@@ -1,18 +1,17 @@
 ---
-# JSON-LD サンプル（#40）: インストール
-# 推奨: WebPage + TechArticle + SoftwareSourceCode（サイト共通）
+# @graph: WebPage + WebSite + TechArticle + SoftwareSourceCode
+# 書く場所: site.meta.yaml（共通）/ schemaRole: TechArticle / title・description
+# 詳細: docs/jsonld_ja.md
 title: インストール
 description: インストール手順のダミーページ（JSON-LD TechArticle サンプル）
 schemaRole: TechArticle
-# 記述例:
-# schemaRole: TechArticle
-# title: インストール
-# description: 環境構築とインストールの手順
 ---
 
 # インストール
 
-ダミーのインストールページです。`schemaRole: TechArticle` のサンプル。
+ダミーのインストールページです。
+
+**出し方:** `schemaRole: TechArticle` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 ```bash
 npm install your-package

@@ -1,18 +1,17 @@
 ---
-# JSON-LD sample (#40): installation
-# Recommended: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# @graph: WebPage + WebSite + TechArticle + SoftwareSourceCode
+# Write in: site.meta.yaml (shared) / schemaRole: TechArticle / title・description
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: Install
 description: Dummy installation page (JSON-LD TechArticle sample)
 schemaRole: TechArticle
-# Examples:
-# schemaRole: TechArticle
-# title: Install
-# description: Environment setup and installation steps
 ---
 
 # Install
 
-Dummy installation page demonstrating `schemaRole: TechArticle`.
+Dummy installation page.
+
+**How:** `schemaRole: TechArticle` + `title` / `description` (this file) and `software.*` in `site.meta.yaml`.
 
 ```bash
 npm install your-package

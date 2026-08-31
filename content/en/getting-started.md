@@ -1,13 +1,10 @@
 ---
-# JSON-LD sample (#40): technical article (scaffold guide)
-# Recommended: WebPage + TechArticle + SoftwareSourceCode (site-wide)
+# @graph: WebPage + WebSite + TechArticle + SoftwareSourceCode
+# Write in: site.meta.yaml (shared) / schemaRole: TechArticle / title・description
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: Getting started
 description: How to use this documentation site scaffold
 schemaRole: TechArticle
-# Examples:
-# schemaRole: TechArticle
-# title: Getting started
-# description: How to use this documentation site scaffold
 ---
 
 # Getting started
@@ -31,14 +28,21 @@ Output goes to `.output/public`.
 
 | Location | Purpose |
 | --- | --- |
-| `site.meta.yaml` (from `.example`) | Site name, URL, GitHub, SoftwareSourceCode meta |
-| `nuxt.config.ts` | Loads YAML into `runtimeConfig.public`, prerender routes |
+| `site.meta.yaml` (from `.example`) | Site name, URL, GitHub, **SoftwareSourceCode** |
+| Each Markdown frontmatter | `title` / `description` / **`schemaRole`** or **`jsonLd`** |
+| FAQ body `::faq-item` | **FAQPage** Question / Answer |
 | `app/config/docsNav.ts` | Sidebar / pager |
-| `content/{ja,en}/` | Markdown pages (`schemaRole` for JSON-LD role) |
 | `i18n/locales/` | UI copy (including nav labels) |
 
-## JSON-LD
+## JSON-LD — what you write vs what you get
 
-- Set frontmatter `schemaRole` to `TechArticle`, `FAQPage`, or `HowTo` (reserved)
-- Each page gets `WebPage` + optional role + `SoftwareSourceCode` in `@graph`
-- Role samples: [Overview](./overview.md) / [Install](./install.md) / [API](./api.md) / [Tutorial](./tutorial.md) / [FAQ](./faq.md)
+See the repo file `docs/jsonld.md` for the full authoring guide (Japanese canonical: `docs/jsonld_ja.md`).
+
+| Page | What to write | Resulting `@graph` |
+| --- | --- | --- |
+| [Home](./index.md) | No `schemaRole` | WebPage + SoftwareSourceCode |
+| [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [Install](./install.md) | Same | Same |
+| [API](./api.md) | `jsonLd` (full form) | WebPage + TechArticle + BreadcrumbList + … |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |

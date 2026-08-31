@@ -1,13 +1,9 @@
 ---
-# JSON-LD sample (#40): OSS top
-# Recommended: WebPage + SoftwareSourceCode (site-wide) only
-# Omit schemaRole (no page-role schema)
+# @graph: WebPage + WebSite + SoftwareSourceCode (no schemaRole)
+# Write in: site.meta.yaml (shared) / title・description (this page)
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: Home
 description: Scaffold for a Nuxt Content documentation site
-# Examples (home usually omits schemaRole):
-# title: Home
-# description: Product documentation site
-# schemaRole: TechArticle   # ← usually not used on the top page
 ---
 
 # Doc Site
@@ -21,14 +17,15 @@ This branch is a Nuxt Content documentation site starter.
 3. Add Markdown under `content/{ja,en}/` (set `schemaRole` when needed)
 4. Keep `nav.*` labels in `i18n/locales/` in sync
 
-## JSON-LD dummy pages (#40)
+## JSON-LD sample pages (#40) — what you write vs what you get
 
-| Page | `schemaRole` |
-| --- | --- |
-| [Overview](./overview.md) | `TechArticle` |
-| [Install](./install.md) | `TechArticle` |
-| [API](./api.md) | `TechArticle` |
-| [Tutorial](./tutorial.md) | `HowTo` (reserved) |
-| [FAQ](./faq.md) | `FAQPage` |
+| Page | What to write | Resulting `@graph` |
+| --- | --- | --- |
+| This page (top) | No `schemaRole` + `site.meta.yaml` | WebPage + SoftwareSourceCode |
+| [Overview](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [Install](./install.md) | `schemaRole: TechArticle` | Same |
+| [API](./api.md) | `jsonLd` (full form) | WebPage + TechArticle + BreadcrumbList + … |
+| [Tutorial](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
-See [Getting started](./getting-started.md) for details.
+See [Getting started](./getting-started.md) and the repo file `docs/jsonld.md` for details.

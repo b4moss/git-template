@@ -1,21 +1,17 @@
 ---
-# JSON-LD サンプル（#40）: チュートリアル
-# 推奨: WebPage + HowTo + SoftwareSourceCode（サイト共通）
-# 注: HowTo のエンティティ出力は予約のみ（本文からの step 抽出は未実装）
+# @graph: WebPage + WebSite + HowTo + SoftwareSourceCode
+# 書く場所: site.meta.yaml（共通）/ schemaRole: HowTo / title・description
+# 詳細: docs/jsonld_ja.md
 title: チュートリアル
-description: チュートリアルのダミーページ（JSON-LD HowTo ロール予約サンプル）
+description: チュートリアルのダミーページ（JSON-LD HowTo サンプル）
 schemaRole: HowTo
-# 記述例:
-# schemaRole: HowTo
-# title: はじめてのセットアップ
-# description: 5 分で動かす手順
 ---
 
 # チュートリアル
 
-ダミーのチュートリアルページです。frontmatter で `schemaRole: HowTo` を指定するサンプルです。
+ダミーのチュートリアルページです。
 
-現状、`HowTo` はロール予約のみで、手順エンティティの自動生成は行いません（`WebPage` + `SoftwareSourceCode` は出力されます）。
+**出し方:** `schemaRole: HowTo` + `title` / `description`（このファイル）と `site.meta.yaml` の `software.*`。
 
 1. リポジトリを clone する
 2. 依存関係を入れる

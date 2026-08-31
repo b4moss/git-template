@@ -1,28 +1,65 @@
-import type { FaqQa } from "./useFaqItems";
+import type { FaqQa } from "~/utils/extractFaq";
+import type { SiteSoftwareMeta } from "~/utils/siteMeta";
+import {
+  buildJsonLdEntity,
+  buildOrganization,
+  buildWebPage,
+  resolveEntityInputs,
+  sanitizeExtraEntities,
+  type JsonLdObject,
+  type PageJsonLdInput,
+} from "~/utils/jsonLdEntities";
 
 export type SchemaRole = "TechArticle" | "HowTo" | "FAQPage";
-
-type JsonLdObject = Record<string, unknown>;
 
 type UseJsonLdOptions = {
   pageUrl: MaybeRefOrGetter<string>;
   title: MaybeRefOrGetter<string>;
   description?: MaybeRefOrGetter<string | undefined>;
   schemaRole?: MaybeRefOrGetter<SchemaRole | undefined>;
+  jsonLd?: MaybeRefOrGetter<PageJsonLdInput | undefined>;
+  /** Q/A extracted from the page body; feeds FAQPage.mainEntity. */
+  faqItems?: MaybeRefOrGetter<FaqQa[] | undefined>;
 };
 
-function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeConfig>) {
-  const software = (config.public.software || {}) as {
-    name?: string;
-    codeRepository?: string;
-    license?: string;
-    programmingLanguage?: string[];
+/**
+ * Site-level WebSite node. Every WebPage points at it via isPartOf, so it has
+ * to exist in the graph for that reference to resolve.
+ */
+function webSiteEntity(
+  siteUrl: string,
+  config: ReturnType<typeof useRuntimeConfig>,
+  languages: string[],
+  organizationId?: string,
+) {
+  const entity: JsonLdObject = {
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: `${siteUrl}/`,
+    name: config.public.siteName,
+    about: { "@id": `${siteUrl}/#software` },
   };
+  if (organizationId) {
+    entity.publisher = { "@id": organizationId };
+  }
+  const description = config.public.description;
+  if (description) {
+    entity.description = description;
+  }
+  if (languages.length) {
+    entity.inLanguage = languages;
+  }
+  return entity;
+}
+
+/** Values are already resolved by normalizeSiteMeta(), so no fallbacks here. */
+function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeConfig>) {
+  const software = config.public.software as SiteSoftwareMeta;
   const entity: JsonLdObject = {
     "@type": "SoftwareSourceCode",
     "@id": `${siteUrl}/#software`,
-    name: software.name || config.public.siteName || "Doc Site",
-    codeRepository: software.codeRepository || config.public.githubUrl,
+    name: software.name,
+    codeRepository: software.codeRepository,
   };
   if (software.license) {
     entity.license = software.license;
@@ -33,7 +70,8 @@ function softwareEntity(siteUrl: string, config: ReturnType<typeof useRuntimeCon
   return entity;
 }
 
-function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
+/** Q/A pairs collected from MDC, deduplicated by question text. */
+function faqQuestions(faqs: FaqQa[]): JsonLdObject[] {
   const seen = new Set<string>();
   const mainEntity: JsonLdObject[] = [];
 
@@ -54,72 +92,100 @@ function faqPageEntity(pageUrl: string, faqs: FaqQa[]): JsonLdObject | null {
     });
   }
 
-  if (mainEntity.length === 0) {
-    return null;
-  }
-
-  return {
-    "@type": "FAQPage",
-    "@id": `${pageUrl}#faq`,
-    isPartOf: { "@id": pageUrl },
-    mainEntity,
-  };
+  return mainEntity;
 }
+
+type LocaleEntry = { code: string; language?: string };
 
 export function useJsonLd(options: UseJsonLdOptions) {
   const config = useRuntimeConfig();
-  const { items: faqItems } = useFaqItems();
+  const { locale, locales } = useI18n();
 
-  const siteUrl = String(config.public.siteUrl || "https://example.com").replace(
-    /\/$/,
-    "",
+  // Guards against a trailing slash arriving from an env override, which
+  // normalizeSiteMeta() does not see.
+  const siteUrl = String(config.public.siteUrl).replace(/\/$/, "");
+
+  /** BCP 47 tags (e.g. ja-JP) from the i18n locale config, code as fallback. */
+  const localeEntries = computed(() =>
+    (locales.value as Array<string | LocaleEntry>).map((entry) =>
+      typeof entry === "string" ? { code: entry } : entry,
+    ),
   );
+
+  const languages = computed(() =>
+    localeEntries.value.map((entry) => entry.language || entry.code),
+  );
+
+  const inLanguage = computed(() => {
+    const current = localeEntries.value.find(
+      (entry) => entry.code === locale.value,
+    );
+    return current?.language || String(locale.value);
+  });
 
   const graph = computed(() => {
     const pageUrl = toValue(options.pageUrl);
     const title = toValue(options.title);
     const description = toValue(options.description);
     const schemaRole = toValue(options.schemaRole);
+    const jsonLd = toValue(options.jsonLd);
 
-    const webPage: JsonLdObject = {
-      "@type": "WebPage",
-      "@id": pageUrl,
-      url: pageUrl,
-      name: title,
-      isPartOf: { "@id": `${siteUrl}/#website` },
-      about: { "@id": `${siteUrl}/#software` },
-    };
-    if (description) {
-      webPage.description = description;
-    }
+    const organization = buildOrganization(
+      config.public.organization as Record<string, unknown> | null,
+      siteUrl,
+      String(config.public.siteName),
+    );
+    const organizationId = organization
+      ? String(organization["@id"])
+      : undefined;
+
+    const webPage = buildWebPage(
+      {
+        pageUrl,
+        siteUrl,
+        title,
+        description,
+        inLanguage: inLanguage.value,
+        organizationId,
+      },
+      jsonLd?.webPage,
+    );
+
+    // Authored props may override the page @id, so resolve it before the role
+    // entities that reference it.
+    const resolvedPageUrl = String(webPage["@id"] || pageUrl);
 
     const entities: JsonLdObject[] = [
       webPage,
+      webSiteEntity(siteUrl, config, languages.value, organizationId),
       softwareEntity(siteUrl, config),
     ];
 
-    if (schemaRole === "TechArticle") {
-      const article: JsonLdObject = {
-        "@type": "TechArticle",
-        "@id": `${pageUrl}#article`,
-        headline: title,
-        isPartOf: { "@id": pageUrl },
-        about: { "@id": `${siteUrl}/#software` },
-      };
-      if (description) {
-        article.description = description;
-      }
-      entities.push(article);
+    if (organization) {
+      entities.push(organization);
     }
 
-    // HowTo: type reserved on frontmatter only; entity emission deferred.
+    const entityContext = {
+      pageUrl: resolvedPageUrl,
+      siteUrl,
+      title,
+      description,
+      inLanguage: inLanguage.value,
+      faqMainEntity: faqQuestions(toValue(options.faqItems) || []),
+      organizationId,
+    };
 
-    if (schemaRole === "FAQPage") {
-      const faq = faqPageEntity(pageUrl, faqItems.value);
-      if (faq) {
-        entities.push(faq);
+    for (const input of resolveEntityInputs(schemaRole, jsonLd)) {
+      const entity = buildJsonLdEntity(input, entityContext);
+      if (entity) {
+        entities.push(entity);
       }
     }
+
+    entities.push(
+      ...sanitizeExtraEntities(config.public.jsonLdExtra, "site.meta.yaml jsonLdExtra"),
+      ...sanitizeExtraEntities(jsonLd?.extra, "frontmatter jsonLd.extra"),
+    );
 
     return {
       "@context": "https://schema.org",

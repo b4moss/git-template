@@ -1,13 +1,9 @@
 ---
-# JSON-LD サンプル（#40）: OSS トップ
-# 推奨: WebPage + SoftwareSourceCode（サイト共通）のみ
-# schemaRole は付けない（ページ役割スキーマなし）
+# @graph: WebPage + WebSite + SoftwareSourceCode（schemaRole なし）
+# 書く場所: site.meta.yaml（共通）/ title・description（このページ）
+# 詳細: docs/jsonld_ja.md
 title: ホーム
 description: Nuxt Content ドキュメントサイトのスキャフォールド
-# 記述例（トップでは通常 schemaRole を省略）:
-# title: ホーム
-# description: プロダクトのドキュメントサイト
-# schemaRole: TechArticle   # ← トップでは通常使わない
 ---
 
 # Doc Site
@@ -21,14 +17,15 @@ description: Nuxt Content ドキュメントサイトのスキャフォールド
 3. `content/{ja,en}/` に Markdown を追加する（必要なら `schemaRole`）
 4. `i18n/locales/` の `nav.*` ラベルを揃える
 
-## JSON-LD ダミーページ（#40）
+## JSON-LD ダミーページ（#40）— 何を書くと何が出るか
 
-| ページ | `schemaRole` |
-| --- | --- |
-| [概要](./overview.md) | `TechArticle` |
-| [インストール](./install.md) | `TechArticle` |
-| [API](./api.md) | `TechArticle` |
-| [チュートリアル](./tutorial.md) | `HowTo`（予約） |
-| [FAQ](./faq.md) | `FAQPage` |
+| ページ | 書く場所の要点 | 出る `@graph` |
+| --- | --- | --- |
+| このページ（トップ） | `schemaRole` なし + `site.meta.yaml` | WebPage + SoftwareSourceCode |
+| [概要](./overview.md) | `schemaRole: TechArticle` | WebPage + TechArticle + SoftwareSourceCode |
+| [インストール](./install.md) | `schemaRole: TechArticle` | 同上 |
+| [API](./api.md) | `jsonLd`（詳細記法） | WebPage + TechArticle + BreadcrumbList + … |
+| [チュートリアル](./tutorial.md) | `schemaRole: HowTo` | WebPage + HowTo + SoftwareSourceCode |
+| [FAQ](./faq.md) | `schemaRole: FAQPage` + `::faq-item` | WebPage + FAQPage + SoftwareSourceCode |
 
-詳しくは [はじめに](./getting-started.md) を参照してください。
+詳しくは [はじめに](./getting-started.md) とリポジトリの `docs/jsonld_ja.md` を参照してください。

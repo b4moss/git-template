@@ -45,6 +45,8 @@ export default defineNuxtConfig({
       githubUrl: siteMeta.githubUrl,
       footerText: siteMeta.footerText,
       software: siteMeta.software,
+      organization: siteMeta.organization,
+      jsonLdExtra: siteMeta.jsonLdExtra,
     },
   },
   // GTM: set NUXT_PUBLIC_SCRIPTS_GOOGLE_TAG_MANAGER_ID=GTM-XXXXXXX (build-time for SSG).
@@ -85,6 +87,8 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
+    // Absolute URLs for canonical / hreflang come from site.meta.yaml.
+    baseUrl: siteMeta.siteUrl,
     locales: [
       { code: "ja", name: "日本語", language: "ja-JP", file: "ja.ts" },
       { code: "en", name: "English", language: "en-US", file: "en.ts" },

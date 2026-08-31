@@ -1,19 +1,17 @@
 ---
-# JSON-LD サンプル（#40）: FAQ
-# 推奨: WebPage + FAQPage + SoftwareSourceCode（サイト共通）
-# Q/A 本体は frontmatter ではなく ::faq-list / ::faq-item（MDC）
+# @graph: WebPage + WebSite + FAQPage + SoftwareSourceCode
+# 書く場所: schemaRole: FAQPage / Q/A は本文 MDC（::faq-item）/ 共通は site.meta.yaml
+# 詳細: docs/jsonld_ja.md
 title: FAQ
 description: よくある質問のサンプル（MDC アコーディオンと FAQPage JSON-LD）
 schemaRole: FAQPage
-# 記述例:
-# schemaRole: FAQPage
-# title: FAQ
-# description: よくある質問
 ---
 
 # FAQ
 
 このページは FAQ アコーディオンと `FAQPage` JSON-LD のサンプルです。
+
+**出し方:** frontmatter で `schemaRole: FAQPage`、Q/A は下の `::faq-item`、OSS 情報は `site.meta.yaml`。
 
 ::faq-list
 :::faq-item{question="site.meta.yaml はどこに置きますか？"}

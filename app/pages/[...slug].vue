@@ -2,25 +2,35 @@
 import { withLeadingSlash } from "ufo";
 import type { Collections } from "@nuxt/content";
 import type { SchemaRole } from "~/composables/useJsonLd";
-import { extractFaqFromBody } from "~/utils/extractFaq";
+import { extractFaqFromBody, type FaqQa } from "~/utils/extractFaq";
+import {
+  includesEntityType,
+  type PageJsonLdInput,
+} from "~/utils/jsonLdEntities";
 
 const route = useRoute();
 const { locale } = useI18n();
 const config = useRuntimeConfig();
-const { clearFaqItems, upsertFaqItem } = useFaqItems();
 
+/**
+ * Content paths and useAsyncData keys must not depend on whether the static
+ * host served `/ja/faq` or `/ja/faq/`. Trailing-slash drift after hydration
+ * remounts the page with a new key, misses the payload cache, and throws 404 —
+ * which removes the FAQ DOM (and looks like "tap does nothing" on mobile).
+ */
 const slug = computed(() => {
   const raw = route.params.slug;
   if (!raw || (Array.isArray(raw) && raw.length === 0)) {
     return "/";
   }
   const joined = Array.isArray(raw) ? raw.join("/") : String(raw);
-  return withLeadingSlash(joined);
+  const withSlash = withLeadingSlash(joined);
+  return withSlash === "/" ? "/" : withSlash.replace(/\/+$/, "");
 });
 
 /** Ignore browser / tooling asset probes (e.g. manifest.webmanifest). */
 const isAssetPath = computed(() =>
-  /\.[a-z0-9]{2,8}$/i.test(slug.value.replace(/\/$/, "")),
+  /\.[a-z0-9]{2,8}$/i.test(slug.value),
 );
 
 if (isAssetPath.value) {
@@ -72,20 +82,22 @@ const schemaRole = computed(() => {
   return role;
 });
 
-// Seed FAQ Q/A from the content AST so FAQPage JSON-LD is fixed at SSG time.
-watch(
-  () => [page.value?.body, schemaRole.value, pageUrl.value] as const,
-  () => {
-    clearFaqItems();
-    if (schemaRole.value !== "FAQPage" || !page.value?.body) {
-      return;
-    }
-    for (const item of extractFaqFromBody(page.value.body)) {
-      upsertFaqItem(item);
-    }
-  },
-  { immediate: true },
+const jsonLd = computed(
+  () => (page.value as { jsonLd?: PageJsonLdInput } | null)?.jsonLd,
 );
+
+const hasFaqEntity = computed(() =>
+  includesEntityType("FAQPage", schemaRole.value, jsonLd.value),
+);
+
+// Read from the content AST, not from rendered components, so the JSON-LD is
+// per-page and settled before render.
+const faqItems = computed<FaqQa[]>(() => {
+  if (!hasFaqEntity.value || !page.value?.body) {
+    return [];
+  }
+  return extractFaqFromBody(page.value.body);
+});
 </script>
 
 <template>
@@ -98,6 +110,8 @@ watch(
       :title="pageTitle"
       :description="page?.description || undefined"
       :schema-role="schemaRole"
+      :json-ld="jsonLd"
+      :faq-items="faqItems"
     />
     <DocsPager />
   </div>

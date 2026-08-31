@@ -1,19 +1,17 @@
 ---
-# JSON-LD sample (#40): FAQ
-# Recommended: WebPage + FAQPage + SoftwareSourceCode (site-wide)
-# Q/A bodies live in ::faq-list / ::faq-item (MDC), not frontmatter
+# @graph: WebPage + WebSite + FAQPage + SoftwareSourceCode
+# Write in: schemaRole: FAQPage / Q/A in body MDC (::faq-item) / shared: site.meta.yaml
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: FAQ
 description: Sample FAQ page (MDC accordion and FAQPage JSON-LD)
 schemaRole: FAQPage
-# Examples:
-# schemaRole: FAQPage
-# title: FAQ
-# description: Frequently asked questions
 ---
 
 # FAQ
 
 This page demonstrates the FAQ accordion and `FAQPage` JSON-LD.
+
+**How:** `schemaRole: FAQPage` in frontmatter, Q/A via `::faq-item` below, OSS info in `site.meta.yaml`.
 
 ::faq-list
 :::faq-item{question="Where do I put site.meta.yaml?"}

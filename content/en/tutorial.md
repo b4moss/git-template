@@ -1,21 +1,17 @@
 ---
-# JSON-LD sample (#40): tutorial
-# Recommended: WebPage + HowTo + SoftwareSourceCode (site-wide)
-# Note: HowTo entity emission is reserved only (no step extraction yet)
+# @graph: WebPage + WebSite + HowTo + SoftwareSourceCode
+# Write in: site.meta.yaml (shared) / schemaRole: HowTo / title・description
+# See: docs/jsonld.md (full: docs/jsonld_ja.md)
 title: Tutorial
-description: Dummy tutorial page (JSON-LD HowTo role reserved sample)
+description: Dummy tutorial page (JSON-LD HowTo sample)
 schemaRole: HowTo
-# Examples:
-# schemaRole: HowTo
-# title: First-time setup
-# description: Get running in five minutes
 ---
 
 # Tutorial
 
-Dummy tutorial page with frontmatter `schemaRole: HowTo`.
+Dummy tutorial page.
 
-`HowTo` is reserved for now: the role is accepted, but HowTo entities are not emitted yet (`WebPage` + `SoftwareSourceCode` still are).
+**How:** `schemaRole: HowTo` + `title` / `description` (this file) and `software.*` in `site.meta.yaml`.
 
 1. Clone the repository
 2. Install dependencies
