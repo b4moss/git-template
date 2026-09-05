@@ -12,6 +12,7 @@ export default {
     "prefs": "表示設定",
     "menu": "メニュー",
     "github": "GitHub",
+    "npm": "npm",
     "prev": "前へ",
     "next": "次へ",
     "pager": "ページナビゲーション",

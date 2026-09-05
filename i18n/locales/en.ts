@@ -12,6 +12,7 @@ export default {
     "prefs": "Display settings",
     "menu": "Menu",
     "github": "GitHub",
+    "npm": "npm",
     "prev": "Previous",
     "next": "Next",
     "pager": "Page navigation",

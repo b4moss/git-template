@@ -19,7 +19,7 @@
 #   各ページの WebPage / TechArticle は about: { "@id": "…/#software" } で参照する。
 #
 # フィールド:
-#   siteName / siteUrl / githubUrl … UI・URL 生成・フォールバックにも使う
+#   siteName / siteUrl / githubUrl / npmUrl … UI・URL 生成・フォールバックにも使う
 #   software.name                 → SoftwareSourceCode.name（省略時は siteName）
 #   software.codeRepository       → codeRepository（省略時は githubUrl）
 #   software.license              → license（例: MIT）
@@ -34,6 +34,8 @@ siteUrl: https://example.com
 siteVersion: "0.9.0"
 description: Nuxt Content documentation site scaffold
 githubUrl: https://github.com/b4moss/git-template
+# ヘッダー右端の npm アイコン。空 / 未設定なら非表示。
+npmUrl: ""
 footerText: "MIT License · 2026 Bicycle for Mind LLC."
 
 software:
