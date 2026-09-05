@@ -8,14 +8,26 @@ export type DocsNavItem = {
 };
 
 /**
+ * Accordion behaviour for nested sidebar groups.
+ * - expandable: false → children always visible (legacy indent only)
+ * - defaultOpen: initial open state when expandable
+ * - persist: remember open/closed per parent key in localStorage
+ */
+export const docsNavAccordion = {
+  expandable: true,
+  defaultOpen: false,
+  persist: true,
+} as const;
+
+/**
  * Edit this list to shape the docs sidebar / pager.
  * Labels come from `i18n/locales/{ja,en}.ts` → `nav.<labelKey>`.
  */
 export const docsNavItems: DocsNavItem[] = [
   { key: "home", path: "/", labelKey: "home" },
   { key: "gettingStarted", path: "/getting-started", labelKey: "gettingStarted" },
-  { key: "overview", path: "/overview", labelKey: "overview" },
-  { key: "install", path: "/install", labelKey: "install" },
+  { key: "overview", path: "/overview", labelKey: "overview", parent: "gettingStarted" },
+  { key: "install", path: "/install", labelKey: "install", parent: "gettingStarted" },
   { key: "api", path: "/api", labelKey: "api" },
   { key: "tutorial", path: "/tutorial", labelKey: "tutorial" },
   { key: "faq", path: "/faq", labelKey: "faq" },

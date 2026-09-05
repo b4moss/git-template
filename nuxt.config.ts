@@ -43,6 +43,7 @@ export default defineNuxtConfig({
       siteVersion: siteMeta.siteVersion,
       description: siteMeta.description,
       githubUrl: siteMeta.githubUrl,
+      npmUrl: siteMeta.npmUrl,
       footerText: siteMeta.footerText,
       software: siteMeta.software,
       organization: siteMeta.organization,
