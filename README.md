@@ -7,7 +7,7 @@ Stack-specific Git starter templates for [b4moss](https://github.com/b4moss) / [
 Clone the branch you need — that directory is the project root.
 
 Versioning and release notes: [CHANGELOG.md](./CHANGELOG.md).  
-Cross-branch sync (shell cherry-pick vs spec → re-implement): [docs/sync-policy.md](./docs/sync-policy.md).  
+Cross-branch sync (shell cherry-pick vs spec → re-implement): [docs/specs/sync-policy.md](./docs/specs/sync-policy.md).  
 Feature work targets a **purpose branch** via `dev-vX.Y.Z-*` PRs; `main` gets inventory / CHANGELOG follow-ups, then tags.
 
 ## Branches
@@ -165,7 +165,7 @@ Orphan branches do not share history like a monorepo. Summary:
 3. **Canonical meta docs** (inventory, CHANGELOG, sync policy) live on **`main`**
 4. Tags are cut from **`main`**; doc-only bumps use `vX.Y.Z-doc.n`
 
-Full checklist: [docs/sync-policy.md](./docs/sync-policy.md) ([日本語](./docs/sync-policy_ja.md)).
+Full checklist: [docs/specs/sync-policy.md](./docs/specs/sync-policy.md) ([日本語](./docs/specs/sync-policy_ja.md)).
 
 ## License
 
