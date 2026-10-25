@@ -86,7 +86,6 @@ Vite library mode の npm パッケージと、`kitchen-sink/` デモ（vituum-t
 ├── src/                  # ライブラリ本体
 ├── vite.config.ts        # build.lib
 ├── kitchen-sink/         # Vituum + Twig デモ（ローカルパッケージを alias）
-├── docs/charter/
 └── scripts/
 ```
 
@@ -98,7 +97,6 @@ Chrome MV3 拡張雛形です（Vue 3 + Vue Router + Pinia + CRXJS）。
 .
 ├── Makefile
 ├── README.md / README_ja.md
-├── docs/charter/
 ├── scripts/                  # ruleset ヘルパー
 └── dev/                      # 拡張プロジェクト（manifest, Vite, Vue）
     ├── manifest.json

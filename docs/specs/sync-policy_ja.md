@@ -23,7 +23,7 @@ charter のバージョニング（`-{slug}.n`、例: `-doc.1`）と、用途ブ
 
 ブランチ間で同じであるべきファイル:
 
-- `docs/charter/**`
+- 憲章本体は外部（AGENTS.md 経由の `b4moss/charter` v1）。ローカル `docs/charter/**` コピーは同期しない。変更時は用途ブランチ間で `AGENTS.md` の charter 節と `docs/override-charter.md` を揃える
 - `.github/rulesets/**`
 - `scripts/apply-rulesets.sh`、`scripts/create-repo-with-rulesets.sh`
 - 意図が変わらない Make の ruleset ヘルパー塊（`ruleset-*` / `RULESET_*`）

@@ -86,7 +86,6 @@ Vite library-mode npm package plus a `kitchen-sink/` demo (vituum-twig based; no
 ├── src/                  # library source
 ├── vite.config.ts        # build.lib
 ├── kitchen-sink/         # Vituum + Twig demo (aliases local package)
-├── docs/charter/
 └── scripts/
 ```
 
@@ -98,7 +97,6 @@ Chrome MV3 extension scaffold (Vue 3 + Vue Router + Pinia + CRXJS).
 .
 ├── Makefile
 ├── README.md / README_ja.md
-├── docs/charter/
 ├── scripts/                  # ruleset helpers
 └── dev/                      # extension project (manifest, Vite, Vue)
     ├── manifest.json
