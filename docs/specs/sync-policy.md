@@ -23,7 +23,7 @@ Aligned with charter versioning (`-{slug}.n`, e.g. `-doc.1`) and the purpose-bra
 
 Safe when the file is meant to be the same across branches:
 
-- `docs/charter/**` (charter body)
+- Charter is external (`b4moss/charter` v1 via AGENTS.md); do not sync a local `docs/charter/**` copy. Keep `AGENTS.md` charter section and `docs/override-charter.md` aligned across purpose branches when they change
 - `.github/rulesets/**`
 - `scripts/apply-rulesets.sh`, `scripts/create-repo-with-rulesets.sh`
 - Shared Make ruleset helper block (`ruleset-*` / `RULESET_*`) when unchanged in intent
